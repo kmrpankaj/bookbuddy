@@ -6,10 +6,10 @@ const bcrypt = require('bcryptjs');
 const JWT_SECRET = 'Myapplication1sNi$e'
 var jwt = require('jsonwebtoken')
 var fetchuser = require('../middleware/fetchuser');
-
+const generateUsername = require('./uidgenerate')
 
 // Getting all
-router.get('/', fetchuser, async (req, res) => {
+router.get('/showall/', fetchuser, async (req, res) => {
     try{
         if (req.students.role !== "Admin") {
             return res.status(403).send({ error: "Unauthorized access" });
@@ -21,23 +21,36 @@ router.get('/', fetchuser, async (req, res) => {
     }
 })
 // Getting one
-router.get('/:id', getStudents, (req, res) => {
+router.get('/show/:id', getStudents, (req, res) => {
     res.send(res.students.name)
 })
 // Route 2: Creating one
-router.post('/', async (req, res) => {
+router.post('/create/', async (req, res) => {
+    let newUsername;
+    // Loop until a unique username is found
+    while (true) {
+        newUsername = generateUsername(); // Generate a potential username
+
+        // Check if the generated username is unique in the database
+        const existingUser = await Students.findOne({ uid: newUsername });
+        if (!existingUser) {
+            // Unique username found, break the loop
+            break;
+        }
+    }
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(req.body.password, salt);
     const students = new Students({
         name: req.body.name,
         email: req.body.email,
+        gender: req.body.gender,
         password: secPass,
         address: req.body.address,
         phone: req.body.phone,
         parentsphone: req.body.parentsphone,
         photo: req.body.photo,
         documentid: req.body.documentid,
-        uid: req.body.uid,
+        uid: newUsername,
         regisDate: req.body.regisDate,
         role: req.body.role
     })
@@ -59,7 +72,7 @@ router.post('/', async (req, res) => {
     }
 })
 // Updating one
-router.patch('/:id', getStudents, async (req, res) => {
+router.patch('/update/:id', getStudents, async (req, res) => {
 
     if(req.body.name != null) {
         res.students.name = req.body.name
@@ -83,7 +96,7 @@ router.patch('/:id', getStudents, async (req, res) => {
     }
 })
 // Deleting one
-router.delete('/:id', fetchuser, getStudents, async (req, res) => {
+router.delete('/delete/:id', fetchuser, getStudents, async (req, res) => {
     try{
         if (req.students.role !== "Admin") {
             return res.status(403).send({ error: "Unauthorized access" });
