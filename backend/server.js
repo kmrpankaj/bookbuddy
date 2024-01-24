@@ -1,5 +1,5 @@
 require('dotenv').config()
-
+var cors = require('cors')
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -9,7 +9,7 @@ const db = mongoose.connection
 const port = 3001
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database')) // always use mongod --dbpath /srv/mongodb/
-
+app.use(cors())
 app.use(express.json())
 
 // Available Routes

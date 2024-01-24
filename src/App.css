@@ -1,3 +1,7 @@
+body {
+  font-size: 15px;
+  color: #595c5f;
+}
 
 .form-control-lg {
   font-size: .92rem;
