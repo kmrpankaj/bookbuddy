@@ -14,7 +14,7 @@ const getAllStudents = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1OWM3MWU3ZmE2YjI4YTBhY2U1YzllNiIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYxMzAxNDl9.RWFbVyihu8pMVGn7gq4D-KQQXD-ME8cmVRBTbTVleQU", // Replace with your actual auth token
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1YjBlM2FkNzg2OThjYWI0M2YxMWViNSIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYzOTUzNzJ9.pox5iE4Jb94W725Mt6j2ePFzqq8Y_ZAch_vmiis9I54", // Replace with your actual auth token
       },
     });
     const json = await response.json();
@@ -26,14 +26,14 @@ const getAllStudents = async () => {
 };
 
 // Add a student
-const addStudent = async (name, email, gender, password, address, phone, parentsphone, photo, documentid) => {
+const addStudent = async (name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
   try {
     const response = await fetch(`${host}/students/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid }),
+      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
     });
     const json = await response.json();
     const student = {
@@ -45,14 +45,15 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       "phone": phone,
       "parentsphone": parentsphone,
       "photo": photo,
-      "documentid": documentid
+      "documentid": documentid,
+      "role": role
     };
     setStudents([...students, student]);
   } catch (error) {
     console.error("Error adding student:", error);
     // Handle the error
   }
-};
+}
 
       // Delete a student
       const deleteStudent = async (id) => {
@@ -61,7 +62,7 @@ const addStudent = async (name, email, gender, password, address, phone, parents
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
-              "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1OWM3MWU3ZmE2YjI4YTBhY2U1YzllNiIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYxMzAxNDl9.RWFbVyihu8pMVGn7gq4D-KQQXD-ME8cmVRBTbTVleQU", // Replace with your actual auth token
+              "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1YjBlM2FkNzg2OThjYWI0M2YxMWViNSIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYzOTUzNzJ9.pox5iE4Jb94W725Mt6j2ePFzqq8Y_ZAch_vmiis9I54", // Replace with your actual auth token
             },
           });
           const json = response.json();
@@ -76,20 +77,21 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       }
 
 // Edit a student
-const editStudent = async (id, name, email, gender, password, address, phone, parentsphone, photo, documentid) => {
+const editStudent = async (id, name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
   try {
     const response = await fetch(`${host}/students/update/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1OWM3MWU3ZmE2YjI4YTBhY2U1YzllNiIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYxMzAxNDl9.RWFbVyihu8pMVGn7gq4D-KQQXD-ME8cmVRBTbTVleQU", // Replace with your actual auth token
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1YjBlM2FkNzg2OThjYWI0M2YxMWViNSIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYzOTUzNzJ9.pox5iE4Jb94W725Mt6j2ePFzqq8Y_ZAch_vmiis9I54", // Replace with your actual auth token
       },
-      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid }),
+      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
     });
     const json = await response.json();
+    let newStudents = JSON.parse(JSON.stringify(students))
     // Logic to edit in client
     for (let index = 0; index < students.length; index++) {
-      const element = students[index];
+      const element = newStudents[index];
       if (element._id === id) {
         element.name = name;
         element.email = email;
@@ -100,8 +102,11 @@ const editStudent = async (id, name, email, gender, password, address, phone, pa
         element.parentsphone = parentsphone;
         element.photo = photo;
         element.documentid = documentid;
+        element.rol = role;
+        break;
       }
     }
+    setStudents(newStudents)
   } catch (error) {
     console.error("Error editing student:", error);
     // Handle the error

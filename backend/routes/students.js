@@ -72,7 +72,7 @@ router.post('/create/', async (req, res) => {
     }
 })
 // Updating one
-router.patch('/update/:id', getStudents, async (req, res) => {
+router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {
 
     if(req.body.name != null) {
         res.students.name = req.body.name

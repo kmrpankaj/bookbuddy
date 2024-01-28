@@ -22,7 +22,7 @@ const Navbar = () => {
               <Link className={`nav-link ${location.pathname === "/account" ? "active" : ""}`} to="/account">Account</Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} to="/">Contact</Link>
+              <Link className={`nav-link ${location.pathname === "/allstudents" ? "active" : ""}`} to="/allstudents">Students</Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/profile" ? "active" : ""}`} to="/profile">Profile</Link>

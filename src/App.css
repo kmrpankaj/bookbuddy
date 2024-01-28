@@ -6,3 +6,7 @@ body {
 .form-control-lg {
   font-size: .92rem;
 }
+
+.sidebar a.nav-link svg {
+  padding-right: 7px;
+}

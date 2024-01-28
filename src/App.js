@@ -12,7 +12,7 @@ import StudentState from './context/StudentState';
 
 function App() {
   return (
-    <div className="App" data-bs-theme="light">
+    <div className="App">
       <StudentState>
       <BrowserRouter>
         <Navbar />

@@ -6,10 +6,11 @@ const Signup = () => {
 	const context = useContext(StudentContext)
 	const { addStudent } = context;
 
-	const [students, setstudents] = useState({name: "", email: "", password: "", gender: "", phone: NaN, parentsphone: NaN, photo: "", documentid: "" })
+	const [students, setstudents] = useState({name: "", email: "",  gender: "", password: "", address: "", phone: "", parentsphone: "", photo: "", documentid: "", role: "Student" })
 	const handleClick = (e) => {
 		e.preventDefault();
-		addStudent(students.name, students.email, students.password, students.gender, students.phone, students.parentsphone, students.photo, students.documentid)
+		addStudent(students.name, students.email, students.gender, students.password, students.address, students.phone, students.parentsphone, students.photo, students.documentid, students.role)
+		setstudents({name: "", email: "", gender: "", password: "", address: "", phone: "", parentsphone: "", photo: "", documentid: "", role: "" })
 	}
 	const onChange = (e) => {
 		setstudents({...students, [e.target.name]: e.target.value})
@@ -35,36 +36,41 @@ const Signup = () => {
 										<form>
 											<div className="mb-3">
 												<label className="form-label">Full name</label>
-												<input className="form-control form-control-lg" type="text" name="name" placeholder="Enter your name" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.name} type="text" name="name" placeholder="Enter your name" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Email</label>
-												<input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.email} type="email" name="email" placeholder="Enter your email" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Password</label>
-												<input className="form-control form-control-lg" type="password" name="password" placeholder="Enter password" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.password} type="password" name="password" placeholder="Enter password" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Gender</label>
-												<input className="form-control form-control-lg" type="text" name="gender" placeholder="Enter your gender" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.gender} type="text" name="gender" placeholder="Enter your gender" onChange={onChange}/>
+											</div>
+											<div className="mb-3">
+												<label className="form-label">Address</label>
+												<input className="form-control form-control-lg" value={students.address} type="text" name="address" placeholder="Enter your address" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Phone</label>
-												<input className="form-control form-control-lg" type="text" name="phone" placeholder="Your phone number" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.phone} type="text" name="phone" placeholder="Your phone number" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Alternate No</label>
-												<input className="form-control form-control-lg" type="text" name="parentsphone" placeholder="Guiardian or relative number" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.parentsphone} type="text" name="parentsphone" placeholder="Guiardian or relative number" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Photo</label>
-												<input className="form-control form-control-lg" type="text" name="photo" placeholder="Upload your photo" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.photo} type="text" name="photo" placeholder="Upload your photo" onChange={onChange}/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Document</label>
-												<input className="form-control form-control-lg" type="text" name="documentid" placeholder="Upload your document" onChange={onChange}/>
+												<input className="form-control form-control-lg" value={students.documentid} type="text" name="documentid" placeholder="Upload your document" onChange={onChange}/>
 											</div>
+
 											<div className="d-grid gap-2 mt-3">
 												<button onClick={handleClick} className="btn btn-lg btn-primary">Sign up</button>
 											</div>

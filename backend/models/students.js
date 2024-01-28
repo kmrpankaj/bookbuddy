@@ -22,11 +22,11 @@ const studentsSchema = new mongoose.Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
     parentsphone: {
-        type: Number,
+        type: String,
         required: true
     },
     photo: {
