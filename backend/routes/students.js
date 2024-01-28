@@ -26,6 +26,7 @@ router.get('/show/:id', getStudents, (req, res) => {
 })
 // Route 2: Creating one
 router.post('/create/', async (req, res) => {
+
     let newUsername;
     // Loop until a unique username is found
     while (true) {
@@ -169,6 +170,71 @@ router.post('/getuser', fetchuser, async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 })
+
+// Route 4: Creating multiple students /students/addmultiple. Requires Admin login
+router.post('/addmultiple/', async (req, res) => {
+    const studentsArray = req.body; // Assuming an array of students is sent in the request body
+
+    // Array to store the created students
+    const createdStudents = [];
+
+    for (const studentData of studentsArray) {
+        let newUsername;
+
+        // Loop until a unique username is found
+        while (true) {
+            newUsername = generateUsername(); // Generate a potential username
+
+            // Check if the generated username is unique in the database
+            const existingUser = await Students.findOne({ uid: newUsername });
+            if (!existingUser) {
+                // Unique username found, break the loop
+                break;
+            }
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const secPass = await bcrypt.hash(studentData.password, salt);
+
+        const students = new Students({
+            name: studentData.name,
+            email: studentData.email,
+            gender: studentData.gender,
+            password: secPass,
+            address: studentData.address,
+            phone: studentData.phone,
+            parentsphone: studentData.parentsphone,
+            photo: studentData.photo,
+            documentid: studentData.documentid,
+            uid: newUsername,
+            regisDate: studentData.regisDate,
+            role: studentData.role
+        });
+
+        try {
+            // Check if a user with the same email or phone already exists
+            const [user, phone] = await Promise.all([
+                Students.findOne({ email: studentData.email }),
+                Students.findOne({ phone: studentData.phone })
+            ]);
+
+            if (user || phone) {
+                return user
+                    ? res.status(400).json({ error: "Sorry, a user with this email already exists." })
+                    : phone
+                    ? res.status(400).json({ error: "Sorry, a user with this phone number already exists." })
+                    : "";
+            }
+
+            const newStudent = await students.save();
+            createdStudents.push(newStudent); // Add the created student to the array
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
+    }
+
+    res.status(201).json(createdStudents);
+});
 
 
 

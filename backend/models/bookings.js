@@ -21,6 +21,14 @@ const bookingsSchema = new mongoose.Schema({
     endDate: {
         type: String,
         required: true,
+    },
+    transactionNum: {
+        type: String,
+        required: true,
+    },
+    lockerNum: {
+        type: String,
+        required: true,
     }
 })
 

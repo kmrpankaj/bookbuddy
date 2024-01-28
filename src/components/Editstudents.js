@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react'
+import generateStrongPassword from './Strongpassword'
 
 
 const Editstudents = forwardRef((props, ref) => {
@@ -33,9 +34,20 @@ const Editstudents = forwardRef((props, ref) => {
                                                 <input className="form-control form-control-lg" type="email" value={student.eemail} name="eemail" placeholder="Enter your email" onChange={onChangeEdit} />
                                             </div>
                                             <div className="mb-3">
-                                                <label className="form-label">Gender</label>
-                                                <input className="form-control form-control-lg" type="text" value={student.egender} name="egender" placeholder="Enter your gender" onChange={onChangeEdit} />
-                                            </div>
+												<label className="form-label">Gender</label>
+												<div className="form-check form-check-inline mx-2">
+												<input className="form-check-input" value="Male" type="radio" name="egender" id="flexRadioDefault1" checked={student.egender === 'Male'} onChange={onChangeEdit}/>
+												<label className="form-check-label" htmlFor="Male">
+													Male
+												</label>
+												</div>
+												<div className="form-check form-check-inline">
+												<input className="form-check-input" value="Female" type="radio" name="egender" id="flexRadioDefault2" checked={student.egender === 'Female'}  onChange={onChangeEdit}/>
+												<label className="form-check-label" htmlFor="Female">
+													Female
+												</label>
+												</div>
+											</div>
                                             <div className="mb-3">
 												<label className="form-label">Address</label>
 												<input className="form-control form-control-lg" type="text" value={student.eaddress} name="eaddress" placeholder="Enter your address" onChange={onChangeEdit}/>
