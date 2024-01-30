@@ -6,18 +6,18 @@ const Navbar = () => {
   const {showAlert} = useContext(AlertContext)
   const history = useNavigate()
   let location = useLocation();
-  const userLoggedIn = sessionStorage.getItem('token');
-  const adminLoggedIn = sessionStorage.getItem('role')
+  const userLoggedIn = localStorage.getItem('token');
+  const adminLoggedIn = localStorage.getItem('role')
   const handleLogout = (e) => {
     e.preventDefault();
     // props.showAlert("Logged out successfully", "success bg-green-100");
         // Clear stored credentials and token from localStorage
-        sessionStorage.removeItem('rememberMe');
-        sessionStorage.removeItem('email');
-        sessionStorage.removeItem('password');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('expiryTime')
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('expiryTime')
     showAlert("Logout successful!", "info");
     history('/login')
 

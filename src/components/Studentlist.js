@@ -33,7 +33,7 @@ const Studentlist = (props) => {
     }
     return (
         <>
-            <div className="container-fluid">
+            <div className="container-fluid mt-5 pt-2">
                 <div className="row">
                     <Sidedash />
                     

@@ -14,7 +14,7 @@ const getAllStudents = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": sessionStorage.getItem('token'), // Replace with your actual auth token
+        "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
       },
     });
     const json = await response.json();
@@ -83,7 +83,7 @@ const editStudent = async (id, name, email, gender, password, address, phone, pa
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": sessionStorage.getItem('token'), // Replace with your actual auth token
+        "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
       },
       body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
     });

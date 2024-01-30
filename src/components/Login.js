@@ -29,14 +29,14 @@ const Login = () => {
       if (rememberMe) {
         // Set expiry time to 1 hour (3600000 milliseconds) for 30 days (30 * 24 * 60 * 60 * 1000)
         const expiryTime = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
-        sessionStorage.setItem('rememberMe', true);
-        sessionStorage.setItem('email', credentials.email);
-        sessionStorage.setItem('password', credentials.password);
-        sessionStorage.setItem('expiryTime', expiryTime);
+        localStorage.setItem('rememberMe', true);
+        localStorage.setItem('email', credentials.email);
+        localStorage.setItem('password', credentials.password);
+        localStorage.setItem('expiryTime', expiryTime);
       }
       //save the authtoken and redirect
-      sessionStorage.setItem('token', json.authToken)
-      sessionStorage.setItem('role', json.therole)
+      localStorage.setItem('token', json.authToken)
+      localStorage.setItem('role', json.therole)
       if (json.therole === "Admin") {
         history("/allstudents");
       }else{
@@ -54,9 +54,9 @@ const Login = () => {
     setRememberMe(e.target.checked);
   }
   useEffect(() => {
-  const storedToken = sessionStorage.getItem('token');
-  const rememberMe = sessionStorage.getItem('rememberMe');
-  const storedExpiryTime = sessionStorage.getItem('expiryTime');
+  const storedToken = localStorage.getItem('token');
+  const rememberMe = localStorage.getItem('rememberMe');
+  const storedExpiryTime = localStorage.getItem('expiryTime');
     const host = "http://localhost:3001";
 
      // Declare the response variable outside the try block
@@ -66,8 +66,8 @@ const Login = () => {
       try {
         if (storedToken && rememberMe && parseInt(storedExpiryTime, 10) > new Date().getTime()) {
           // Get stored credentials from localStorage
-          const storedEmail = sessionStorage.getItem('email');
-          const storedPassword = sessionStorage.getItem('password');
+          const storedEmail = localStorage.getItem('email');
+          const storedPassword = localStorage.getItem('password');
           setStoredCredentials({ email: storedEmail, password: storedPassword });
   
           const response = await fetch(`${host}/students/login/`, {
