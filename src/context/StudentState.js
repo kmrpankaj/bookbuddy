@@ -14,7 +14,7 @@ const getAllStudents = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1YjBlM2FkNzg2OThjYWI0M2YxMWViNSIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYzOTUzNzJ9.pox5iE4Jb94W725Mt6j2ePFzqq8Y_ZAch_vmiis9I54", // Replace with your actual auth token
+        "auth-token": sessionStorage.getItem('token'), // Replace with your actual auth token
       },
     });
     const json = await response.json();
@@ -83,7 +83,7 @@ const editStudent = async (id, name, email, gender, password, address, phone, pa
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1YjBlM2FkNzg2OThjYWI0M2YxMWViNSIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYzOTUzNzJ9.pox5iE4Jb94W725Mt6j2ePFzqq8Y_ZAch_vmiis9I54", // Replace with your actual auth token
+        "auth-token": sessionStorage.getItem('token'), // Replace with your actual auth token
       },
       body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
     });

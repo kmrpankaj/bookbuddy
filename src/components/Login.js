@@ -1,7 +1,109 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useContext, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import AlertContext from '../context/AlertContext'
 
 const Login = () => {
+  const [credentials, setCredentials] = useState({email: "", password: ""})
+  const {showAlert} = useContext(AlertContext)
+  const [rememberMe, setRememberMe] = useState(false);
+  const [storedCredentials, setStoredCredentials] = useState({ email: "", password: "" });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  const history = useNavigate()
+  const handleSubmit = async (e) => {
+    const host = "http://localhost:3001"
+    e.preventDefault()
+    const response = await fetch(`${host}/students/login/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: credentials.email, password: credentials.password})
+    })
+    const json = await response.json()
+    // console.log(json)
+    if(json.success){
+      showAlert("Login successful!", "success");
+// Set session if remember me is checked
+      if (rememberMe) {
+        // Set expiry time to 1 hour (3600000 milliseconds) for 30 days (30 * 24 * 60 * 60 * 1000)
+        const expiryTime = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
+        sessionStorage.setItem('rememberMe', true);
+        sessionStorage.setItem('email', credentials.email);
+        sessionStorage.setItem('password', credentials.password);
+        sessionStorage.setItem('expiryTime', expiryTime);
+      }
+      //save the authtoken and redirect
+      sessionStorage.setItem('token', json.authToken)
+      sessionStorage.setItem('role', json.therole)
+      if (json.therole === "Admin") {
+        history("/allstudents");
+      }else{
+        history("/account"); // Redirect to allstudents page for admin
+      }
+    } else {
+      alert("Invalid credentials")
+    }
+
+  }
+  const onChange = (e) => {
+    setCredentials({...credentials, [e.target.name]: e.target.value})
+  }
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  }
+  useEffect(() => {
+  const storedToken = sessionStorage.getItem('token');
+  const rememberMe = sessionStorage.getItem('rememberMe');
+  const storedExpiryTime = sessionStorage.getItem('expiryTime');
+    const host = "http://localhost:3001";
+
+     // Declare the response variable outside the try block
+    let response;
+  
+    const fetchData = async () => {
+      try {
+        if (storedToken && rememberMe && parseInt(storedExpiryTime, 10) > new Date().getTime()) {
+          // Get stored credentials from localStorage
+          const storedEmail = sessionStorage.getItem('email');
+          const storedPassword = sessionStorage.getItem('password');
+          setStoredCredentials({ email: storedEmail, password: storedPassword });
+  
+          const response = await fetch(`${host}/students/login/`, {
+            headers: { Authorization: `Bearer ${storedToken}` },
+            method: "POST",
+            body: JSON.stringify({ email: storedEmail, password: storedPassword }),
+          });
+  
+          const data = await response.json();
+  
+          setIsAuthenticated(true);
+          setUserData(data);
+  
+          if (data.role === 'Admin') {
+            history('/allstudents');
+          } else {
+            history('/account');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        // Handle error scenarios, such as clearing stored token and flag
+      }
+    };
+  
+    fetchData(); // Call the fetchData function
+  
+    // Cleanup function
+    return () => {
+      // If any ongoing fetch happens in this effect, cancel it here
+      // Note: The response variable is already declared inside the try block
+      if (response) {
+        response.abort();
+      }
+    };
+  }, []); // Empty dependency array means this effect runs once on mount
   return (
     <>
       <div className="container d-flex flex-column">
@@ -21,33 +123,33 @@ const Login = () => {
                   <div className="m-sm-3">
                     <div className="row">
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="mb-3">
                         <label className="form-label">Email</label>
-                        <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email"/>
+                        <input className="form-control form-control-lg" value={credentials.email} type="email" name="email" placeholder="Enter your email" onChange={onChange}/>
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Password</label>
-                        <input className="form-control form-control-lg" type="password" name="password" placeholder="Enter your password"/>
+                        <input className="form-control form-control-lg" value={credentials.password} type="password" name="password" placeholder="Enter your password" onChange={onChange}/>
                           <small>
                             <a href="/pages-reset-password">Forgot password?</a>
                           </small>
                       </div>
                       <div>
                         <div className="form-check align-items-center">
-                          <input id="customControlInline" type="checkbox" className="form-check-input" value="remember-me" name="remember-me" checked=""/>
+                          <input id="customControlInline" type="checkbox" className="form-check-input" value="remember-me" name="remember-me" onChange={handleRememberMeChange} checked={rememberMe} />
                             <label className="form-check-label text-small" htmlFor="customControlInline">Remember me</label>
                         </div>
                       </div>
                       <div className="d-grid gap-2 mt-3">
-                        <button className="btn btn-lg btn-primary">Sign in</button>
+                        <button type="submit" className="btn btn-lg btn-primary">Sign in</button>
                       </div>
                     </form>
                   </div>
                 </div>
               </div>
               <div className="text-center mb-3">
-                Don't have an account? <a href="/signup">Sign up</a>
+                Don't have an account? <Link to="/signup">Sign up</Link>
               </div>
             </div>
           </div>

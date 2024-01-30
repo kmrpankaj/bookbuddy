@@ -38,6 +38,7 @@ const Studentlist = (props) => {
                     <Sidedash />
                     
                     <div className="col-md-9"><div className="row">
+                        {students.length===0 && "No user found lol! WTF!!!"}
                         {students.map((student) => {
                             const dateString = student.regisDate;
                             const date = new Date(dateString);

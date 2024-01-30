@@ -51,7 +51,7 @@ const Signup = () => {
 							<div className="card">
 								<div className="card-body">
 									<div className="m-sm-3">
-										<form>
+										<form className="needs-validation novalidate">
 											<div className="mb-3">
 												<label className="form-label">Full name</label>
 												<input className="form-control form-control-lg" value={students.name} type="text" name="name" placeholder="Enter your name" onChange={onChange}/>
@@ -105,7 +105,7 @@ const Signup = () => {
 											</div>
 
 											<div className="d-grid gap-2 mt-3">
-												<button onClick={handleClick} className="btn btn-lg btn-primary">Sign up</button>
+												<button onClick={handleClick} disabled={students.password.length<4 || students.phone.length<10||students.email.length<6||students.name.length<2 } className="btn btn-lg btn-primary">Sign up</button>
 											</div>
 										</form>
 									</div>

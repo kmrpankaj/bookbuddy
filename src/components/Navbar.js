@@ -1,8 +1,27 @@
-import React, { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useEffect, useContext } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import AlertContext from '../context/AlertContext'
 
 const Navbar = () => {
+  const {showAlert} = useContext(AlertContext)
+  const history = useNavigate()
   let location = useLocation();
+  const userLoggedIn = sessionStorage.getItem('token');
+  const adminLoggedIn = sessionStorage.getItem('role')
+  const handleLogout = (e) => {
+    e.preventDefault();
+    // props.showAlert("Logged out successfully", "success bg-green-100");
+        // Clear stored credentials and token from localStorage
+        sessionStorage.removeItem('rememberMe');
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('password');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('expiryTime')
+    showAlert("Logout successful!", "info");
+    history('/login')
+
+}
   useEffect(() => {
 
   }, [location]);
@@ -21,16 +40,19 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/account" ? "active" : ""}`} to="/account">Account</Link>
             </li>
+            {adminLoggedIn==="Admin" ?
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/allstudents" ? "active" : ""}`} to="/allstudents">Students</Link>
             </li>
+            : "" }
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/profile" ? "active" : ""}`} to="/profile">Profile</Link>
             </li>
           </ul>
+          {!userLoggedIn? <>
           <button type="button" className="btn btn-info"><Link className={`link-light ${location.pathname === "/login" ? "active" : ""} text-decoration-none`} to="/login">Login</Link></button>
-          <button type="button" className="btn btn-primary mx-2"><Link className={`link-light ${location.pathname === "/signup" ? "active" : ""} text-decoration-none`} to="/signup">Register</Link></button>
-          <button type="button" className="btn btn-primary"><Link className="link-light text-decoration-none" to="/logout">Logout</Link></button>
+          <button type="button" className="btn btn-primary mx-2"><Link className={`link-light ${location.pathname === "/signup" ? "active" : ""} text-decoration-none`} to="/signup">Register</Link></button></>:
+          <button type="button" className="btn btn-primary"><Link className="link-light text-decoration-none" onClick={handleLogout} to="/login">Logout</Link></button> }
         </div>
       </div>
     </nav>
