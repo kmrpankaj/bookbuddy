@@ -1,18 +1,31 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import StudentContext from '../context/StudentContext'
 import getRandomAvatar from './uidGen'
 import Sidedash from './Sidedash'
 import Editstudents from './Editstudents'
+import AlertContext from '../context/AlertContext'
 
 const Studentlist = (props) => {
     const context = useContext(StudentContext)
+    const {showAlert} = useContext(AlertContext)
     const { students, deleteStudent, getAllStudents, editStudent } = context;
     const editModalRef = useRef(null);
     const closeModalRef = useRef(null)
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
+    const history = useNavigate()
 
     useEffect(() => {
-        getAllStudents()
+        if(localStorage.getItem('token') && localStorage.getItem('role') === 'Admin' ){
+            getAllStudents()
+        } else if (localStorage.getItem('role') === 'Student') {
+            showAlert("You aren't allowed to be here", "danger")
+            history("/account");
+        } else {
+            showAlert("Please login to continue", "warning")
+            history("/login");
+        }
+        
     }, [])
     const updateStudents = (currentStudent) => {
                // in order to ref the modal from another component
