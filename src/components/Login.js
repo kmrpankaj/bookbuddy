@@ -43,7 +43,7 @@ const Login = () => {
         history("/account"); // Redirect to allstudents page for admin
       }
     } else {
-      alert("Invalid credentials")
+      showAlert("Invalid credentials", "danger")
     }
 
   }

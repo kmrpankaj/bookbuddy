@@ -69,7 +69,7 @@ const Studentlist = (props) => {
                                                 <div>
                                                     <button className="btn btn-primary btn-sm" onClick={()=>{updateStudents(student)}}>Edit</button>
                                                     <button className="btn btn-primary btn-sm mx-1" href="#">Disable</button>
-                                                    <button className="btn btn-primary btn-sm" onClick={() => { deleteStudent(student._id) }}>Delete</button>
+                                                    <button className="btn btn-primary btn-sm" onClick={(e) => { deleteStudent(student._id); showAlert(`${student.name} deleted successfully`, "danger") }}>Delete</button>
                                                 </div>
                                             </div>
                                             <hr className="my-0" />

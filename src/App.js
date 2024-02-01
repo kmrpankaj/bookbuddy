@@ -7,9 +7,11 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
 import Studentlist from './components/Studentlist';
+import Seatsall from './components/Seatsall';
 import StudentState from './context/StudentState';
 import AlertState from './context/AlertState';
 import Alerts from './components/Alerts';
+import SeatState from './context/SeatState';
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
     <div className="App">
       <StudentState>
         <AlertState>
+          <SeatState>
           <BrowserRouter>
             <Navbar />
             <Alerts />
@@ -27,9 +30,11 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/allstudents" element={<Studentlist />} />
+              <Route path="/allseats" element={<Seatsall />} />
             </Routes>
 
           </BrowserRouter>
+          </SeatState>
         </AlertState>
       </StudentState>
     </div>

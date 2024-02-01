@@ -1,22 +1,36 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
+const slotSchema = new mongoose.Schema({
+    status: {
+        type: Boolean,
+        default: false,
+    },
+    bookedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Students',
+    },
+});
 
 const seatsSchema = new mongoose.Schema({
     seatNumber: {
         type: String,
-        required: true
+        required: true,
     },
     seatLocation: {
         type: String,
-        required: true
+        required: true,
     },
     seatStatus: {
-        type: Boolean,
-        required: true
+        morning: slotSchema,
+        afternoon: slotSchema,
+        evening: slotSchema,
+        night: slotSchema,
     },
-    slot: {
-        type: String,
-        required: true,
-    }
-})
+});
 
-module.exports = mongoose.model('seats', seatsSchema)
+const Seat = mongoose.model('seats', seatsSchema);
+
+module.exports = {
+    Seat,
+    slotSchema,
+};

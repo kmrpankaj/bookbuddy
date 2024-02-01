@@ -6,7 +6,7 @@ const Alerts = () => {
   return (
 
     alert.visible && 
-    <div className={`alert position-absolute w-100 z-1 alert-${alert.type}`} role="alert">
+    <div className={`alert position-absolute fixed-top w-100 z-1 alert-${alert.type}`} role="alert">
         {alert.message}
     </div>
 
