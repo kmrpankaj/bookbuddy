@@ -135,87 +135,81 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 
-    // Create a newSeat object
-    const newSeat = {};
-
-    if (seatNumber) {
-        newSeat.seatNumber = seatNumber;
-    }
-
-    if (seatLocation) {
-        newSeat.seatLocation = seatLocation;
-    }
-
-    if (seatStatus) {
-        newSeat.seatStatus = {};
-        // Assuming seatStatus is an object with properties morning, afternoon, evening, night
-        newSeat.seatStatus = { ...newSeat.seatStatus, ...seatStatus };
-        // Define an array of time slots
-        const timeSlots = ['morning', 'afternoon', 'evening', 'night'];
-
-        // Loop through each time slot and update status if bookedBy is null
-        timeSlots.forEach(slot => {
-            if (!newSeat.seatStatus[slot]) {
-                newSeat.seatStatus[slot] = {};
-            }
-            if (newSeat.seatStatus && newSeat.seatStatus[slot] && newSeat.seatStatus[slot].bookedBy === null) {
-                newSeat.seatStatus[slot].status = false;
-            } else {
-                newSeat.seatStatus[slot].status = true;
-            }
-        });
-    }
-
     try {
+        // Fetch the existing seat data from the database
+        const existingSeat = await Seat.findById(req.params.id);
+
+        // Create a newSeat object
+        const newSeat = {};
+
+        if (seatNumber) {
+            newSeat.seatNumber = seatNumber;
+        }
+
+        if (seatLocation) {
+            newSeat.seatLocation = seatLocation;
+        }
+
+        if (seatStatus) {
+            // Retain existing seatStatus properties and update the specified ones
+            newSeat.seatStatus = Object.assign({}, existingSeat.seatStatus, seatStatus);
+
+            // Update 'status' based on 'bookedBy'
+            Object.keys(newSeat.seatStatus).forEach(slot => {
+                const { bookedBy } = newSeat.seatStatus[slot];
+                newSeat.seatStatus[slot].status = bookedBy !== null;
+            });
+        }
+
+        // Update the seat in the database
         const seat = await Seat.findByIdAndUpdate(req.params.id, { $set: newSeat }, { new: true });
         console.log(newSeat);
-    
+
         // Update Students schema with seatAssigned property
-       // Update Students schema with seatAssigned property
-if (seat && seat.seatStatus) {
-    const timeSlots = ['morning', 'afternoon', 'evening', 'night'];
-  
-    // Map bookedBy values to corresponding timeSlots
-    const bookedByValuesWithSlots = timeSlots.map(slot => ({
-      uid: seat.seatStatus[slot]?.bookedBy,
-      slot,
-    })).filter(Boolean);
-  
-    // Update corresponding students in the Students model
-    if (bookedByValuesWithSlots.length > 0) {
-      const studentUpdates = bookedByValuesWithSlots.map(({ uid, slot }) => ({
-        uid,
-        update: {
-          $push: {
-            'seatAssigned.bookedShifts': {
-              seatNumber: seat.seatNumber,
-              slot, // Use the extracted slot name here
-            },
-          },
-        },
-      }));
-  
-      try {
-        const updatedStudents = await Promise.all(
-          studentUpdates.map(async ({ uid, update }) => {
-            const student = await Students.findOneAndUpdate(
-              { uid },
-              update,
-              { new: true }
-            );
-            return student;
-          })
-        );
-  
-        res.json({ seat, updatedStudents });
-      } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Internal Server Error");
-      }
-    } else {
-      res.json({ seat });
-    }
-  }
+        if (seat && seat.seatStatus) {
+            const timeSlots = ['morning', 'afternoon', 'evening', 'night'];
+
+            // Map bookedBy values to corresponding timeSlots
+            const bookedByValuesWithSlots = timeSlots.map(slot => ({
+                uid: seat.seatStatus[slot]?.bookedBy,
+                slot,
+            })).filter(Boolean);
+
+            // Update corresponding students in the Students model
+            if (bookedByValuesWithSlots.length > 0) {
+                const studentUpdates = bookedByValuesWithSlots.map(({ uid, slot }) => ({
+                    uid,
+                    update: {
+                        $push: {
+                            'seatAssigned.bookedShifts': {
+                                seatNumber: seat.seatNumber,
+                                slot, // Use the extracted slot name here
+                            },
+                        },
+                    },
+                }));
+
+                try {
+                    const updatedStudents = await Promise.all(
+                        studentUpdates.map(async ({ uid, update }) => {
+                            const student = await Students.findOneAndUpdate(
+                                { uid },
+                                update,
+                                { new: true }
+                            );
+                            return student;
+                        })
+                    );
+
+                    res.json({ seat, updatedStudents });
+                } catch (error) {
+                    console.error(error.message);
+                    res.status(500).send("Internal Server Error");
+                }
+            } else {
+                res.json({ seat });
+            }
+        }
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
