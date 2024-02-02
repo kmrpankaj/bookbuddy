@@ -165,51 +165,7 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
         const seat = await Seat.findByIdAndUpdate(req.params.id, { $set: newSeat }, { new: true });
         console.log(newSeat);
 
-        // Update Students schema with seatAssigned property
-        if (seat && seat.seatStatus) {
-            const timeSlots = ['morning', 'afternoon', 'evening', 'night'];
-
-            // Map bookedBy values to corresponding timeSlots
-            const bookedByValuesWithSlots = timeSlots.map(slot => ({
-                uid: seat.seatStatus[slot]?.bookedBy,
-                slot,
-            })).filter(Boolean);
-
-            // Update corresponding students in the Students model
-            if (bookedByValuesWithSlots.length > 0) {
-                const studentUpdates = bookedByValuesWithSlots.map(({ uid, slot }) => ({
-                    uid,
-                    update: {
-                        $push: {
-                            'seatAssigned.bookedShifts': {
-                                seatNumber: seat.seatNumber,
-                                slot, // Use the extracted slot name here
-                            },
-                        },
-                    },
-                }));
-
-                try {
-                    const updatedStudents = await Promise.all(
-                        studentUpdates.map(async ({ uid, update }) => {
-                            const student = await Students.findOneAndUpdate(
-                                { uid },
-                                update,
-                                { new: true }
-                            );
-                            return student;
-                        })
-                    );
-
-                    res.json({ seat, updatedStudents });
-                } catch (error) {
-                    console.error(error.message);
-                    res.status(500).send("Internal Server Error");
-                }
-            } else {
-                res.json({ seat });
-            }
-        }
+        res.json({ seat });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");

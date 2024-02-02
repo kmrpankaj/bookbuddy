@@ -52,12 +52,8 @@ const studentsSchema = new mongoose.Schema({
         default: "Student"
     },
     seatAssigned: {
-        bookedShifts: [
-            {
-                seatNumber: String,
-                slot: String, // You can use 'morning', 'afternoon', 'evening', 'night', or an enum if you prefer
-            },
-        ],
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'seats'
     },
 })
 
