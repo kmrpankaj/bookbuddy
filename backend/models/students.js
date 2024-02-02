@@ -50,7 +50,15 @@ const studentsSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: "Student"
-    }
+    },
+    seatAssigned: {
+        bookedShifts: [
+            {
+                seatNumber: String,
+                slot: String, // You can use 'morning', 'afternoon', 'evening', 'night', or an enum if you prefer
+            },
+        ],
+    },
 })
 
 module.exports = mongoose.model('Students', studentsSchema)

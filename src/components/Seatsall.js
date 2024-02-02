@@ -3,6 +3,7 @@ import SeatContext from '../context/SeatContext'
 import { useNavigate } from 'react-router-dom'
 import AlertContext from '../context/AlertContext'
 import Sidedash from './Sidedash'
+import { Tooltip } from 'bootstrap'
 
 const Seatsall = (props) => {
     const context = useContext(SeatContext)
@@ -11,7 +12,7 @@ const Seatsall = (props) => {
     const { showAlert } = useContext(AlertContext)
 
     useEffect(() => {
-        if (localStorage.getItem('token') && localStorage.getItem('role') === 'Admin') {
+      if (localStorage.getItem('token') && localStorage.getItem('role') === 'Admin') {
             getAllSeats()
         } else if (localStorage.getItem('role') === 'Student') {
             showAlert("You aren't allowed to be here", "danger")
@@ -31,54 +32,25 @@ const Seatsall = (props) => {
                     <div className="col-md-9"><div className="row">
                         {seats.length === 0 && "No user found lol! WTF!!!"}
                         {seats.map((seat) => {
-                            return <div className='col-md-3 col-xl-3'>
-
-                                
-                                <div className="card">
-                                    <div className="content">
-                                        <div className="back">
-                                            <div className="back-content">
-                                                <svg stroke="#ffffff" xmlnsXlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" height="50px" width="50px" fill="#ffffff">
-                                                    {/* SVG content */}
-                                                </svg>
-                                                <strong>{seat.seatNumber}</strong>
-                                                <strong>{seat.seatLocation}</strong>
-                                                
+                            return <div className="col-lg-6 col-xl-3 mb-4">
+                                <div className="card bg-primary text-white h-100">
+                                    <div className="card-body">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div className="me-3">
+                                                <div className="text-white-75 small">Edit</div>
+                                                <div className="text-lg fw-bold">{seat.seatLocation}</div>
                                             </div>
-                                        </div>
-                                        <div className="front">
-                                            <div className="img">
-                                                <div className="circle"></div>
-                                                <div className="circle" id="right"></div>
-                                                <div className="circle" id="bottom"></div>
-                                            </div>
-                                            <div className="front-content">
-                                                <small className="badge">Pasta</small>
-                                                <div className="description">
-                                                    <div className="title">
-                                                        <p className="title">
-                                                            <strong>Spaguetti Bolognese</strong>
-                                                        </p>
-                                                        <svg fillRule="nonzero" height="15px" width="15px" viewBox="0,0,256,256" xmlnsXlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                                            <g style={{ mixBlendMode: 'normal' }} textAnchor="none" fontSize="none" fontWeight="none" fontFamily="none" strokeDashoffset="0" strokeDasharray="" strokeMiterlimit="10" strokeLinejoin="miter" strokeLinecap="butt" strokeWidth="1" stroke="none" fillRule="nonzero" fill="#20c997">
-                                                                <g transform="scale(8,8)">
-                                                                    <path d="M25,27l-9,-6.75l-9,6.75v-23h18z"></path>
-                                                                </g>
-                                                            </g>
-                                                        </svg>
-                                                    </div>
-                                                    <p className="card-footer">
-                                                        30 Mins &nbsp; | &nbsp; 1 Serving
-                                                    </p>
-                                                </div>
-                                            </div>
+                                            {/* <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="#37adff" className="bi bi-laptop" viewBox="0 0 16 16"><path d="M13.5 3a.5.5 0 0 1 .5.5V11H2V3.5a.5.5 0 0 1 .5-.5zm-11-1A1.5 1.5 0 0 0 1 3.5V12h14V3.5A1.5 1.5 0 0 0 13.5 2zM0 12.5h16a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5"/><text x="50%" y="50%" font-size="8" text-anchor="middle" dy=".3em" fill="#c2e6ff">{seat.seatNumber}</text></svg> */}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#ffffff5e" className="bi bi-shield" viewBox="0 0 16 16"><path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/><text x="50%" y="50%" font-size="7" text-anchor="middle" dy=".3em" fill="#c2e6ff">{seat.seatNumber}</text></svg>
                                         </div>
                                     </div>
+                                    <div className="card-footer d-flex align-items-center justify-content-between small">
+                                        <svg className='chair-svg' width="30" height="30" fill={seat.seatStatus.morning.status ? "#0b59ca" : "#c4d8f3"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /><title>Morning slot {seat.seatStatus.morning.status ? "booked" : "available"}</title></svg>
+                                        <svg className='chair-svg' width="30" height="30" fill={seat.seatStatus.afternoon.status ? "#0b59ca" : "#c4d8f3"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /><title>Afternoon slot {seat.seatStatus.afternoon.status ? "booked" : "available"}</title></svg>
+                                        <svg className='chair-svg' width="30" height="30" fill={seat.seatStatus.evening.status ? "#0b59ca" : "#c4d8f3"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /><title>Evening slot {seat.seatStatus.evening.status ? "booked" : "available"}</title></svg>
+                                        <svg className='chair-svg' width="30" height="30" fill={seat.seatStatus.night.status ? "#0b59ca" : "#c4d8f3"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /><title>Night slot {seat.seatStatus.night.status ? "booked" : "available"}</title></svg>       
+                                    </div>
                                 </div>
-                                <svg data-toggle="tooltip" data-placement="top" title={seat.seatStatus.morning.status ? "Booked" : "Available"} className='chair-svg' width="16" height="16" fill={seat.seatStatus.morning.status ? "currentColor" : "#20c997"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /></svg>
-                                <svg data-toggle="tooltip" data-placement="top" title={seat.seatStatus.afternoon.status ? "Booked" : "Available"} className='chair-svg' width="16" height="16" fill={seat.seatStatus.afternoon.status ? "currentColor" : "#20c997"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /></svg>
-                                <svg data-toggle="tooltip" data-placement="top" title={seat.seatStatus.evening.status ? "Booked" : "Available"} className='chair-svg' width="16" height="16" fill={seat.seatStatus.evening.status ? "currentColor" : "#20c997"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /></svg>
-                                <svg data-toggle="tooltip" data-placement="top" title={seat.seatStatus.night.status ? "Booked" : "Available"} className='chair-svg' width="16" height="16" fill={seat.seatStatus.night.status ? "currentColor" : "#20c997"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" /></svg>
                             </div>
                         })
                         }
@@ -88,3 +60,4 @@ const Seatsall = (props) => {
 }
 
 export default Seatsall
+

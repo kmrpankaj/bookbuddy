@@ -75,7 +75,18 @@ const Studentlist = (props) => {
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <h5 className="h6 card-title">Seat Details</h5>
-                                                <a href="#" className="badge bg-primary me-1 my-1">25</a>
+                                                {
+                                                    //show booked shifts
+                                                    student.seatAssigned && student.seatAssigned.bookedShifts && student.seatAssigned.bookedShifts.length > 0 ? (
+                                                        student.seatAssigned.bookedShifts.map((shift, index) => (
+                                                        <li key={index}>
+                                                            Seat: {shift.seatNumber}  Slot: {shift.slot}
+                                                        </li>
+                                                        ))
+                                                    ) : (
+                                                        <p>No booked shifts</p>
+                                                    )
+                                                }
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">

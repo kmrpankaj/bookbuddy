@@ -6,7 +6,7 @@ const slotSchema = new mongoose.Schema({
         default: false,
     },
     bookedBy: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'Students',
     },
 });
