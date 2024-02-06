@@ -274,7 +274,7 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
 });
 
 // Router 5 when json has empty bookedBy field
-router.patch('/updateseatsempty/:id', fetchuser, async (req, res) => {
+router.patch('/emptyseat/:id', fetchuser, async (req, res) => {
     const { seatStatus } = req.body;
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
     const userId = slotData.bookedBy; // This can be an empty string for removal
@@ -284,29 +284,42 @@ router.patch('/updateseatsempty/:id', fetchuser, async (req, res) => {
     }
 
     try {
+        // Fetch the seat to update
         const seat = await Seat.findById(req.params.id);
         if (!seat) {
             return res.status(404).send({ error: "Seat not found" });
         }
 
-        // Update or clear the booking based on whether userId is provided
         if (userId) {
-            // Assign seat to new student as before
+            // Process to assign seat to new student as before
             seat.seatStatus[bookedSlotName].bookedBy = userId;
             seat.seatStatus[bookedSlotName].status = true;
+            await seat.save();
+            // Additional logic to handle seat assignment (not shown for brevity)
         } else {
             // Clear the booking for the slot
             seat.seatStatus[bookedSlotName].bookedBy = null;
             seat.seatStatus[bookedSlotName].status = false;
+            await seat.save();
 
-            // Additionally, remove this seat assignment from any student who currently has it
-            await Students.updateMany(
-                { 'seatAssigned': { $elemMatch: { seatNumber: seat.seatNumber, slot: bookedSlotName } } },
-                { $pull: { 'seatAssigned': { seatNumber: seat.seatNumber, slot: bookedSlotName } } }
-            );
+            // Remove this seat and slot assignment from any student who currently has it
+            const affectedStudents = await Students.find({
+                'seatAssigned': {
+                    $elemMatch: {
+                        'seatNumber': seat.seatNumber,
+                        'slot': bookedSlotName
+                    }
+                }
+            });
+
+            console.log(affectedStudents, "affacted student")
+
+            for (let student of affectedStudents) {
+                student.seatAssigned = student.seatAssigned.filter(assignment => 
+                    !(assignment.seatNumber === seat.seatNumber && assignment.slot === bookedSlotName));
+                await student.save();
+            }
         }
-        
-        await seat.save();
 
         res.json({ seat });
     } catch (error) {
