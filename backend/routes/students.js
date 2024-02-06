@@ -142,6 +142,11 @@ router.post('/login', [
             return res.status(400).json({error: "Please try to login with correct credentials."})
         }
 
+        // Check if the user's accountStatus is false
+        if (user.accountStatus === false) {
+            return res.status(401).json({success, error: "Login is disabled for this account."});
+        }
+
         const passwordCompare = await bcrypt.compare(password, user.password);
         if(!passwordCompare){
             success = false

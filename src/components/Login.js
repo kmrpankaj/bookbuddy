@@ -11,7 +11,7 @@ const Login = () => {
   const [userData, setUserData] = useState({});
 
   const history = useNavigate()
-  const handleSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     const host = "http://localhost:3001"
     e.preventDefault()
     const response = await fetch(`${host}/students/login/`, {
@@ -22,7 +22,7 @@ const Login = () => {
         body: JSON.stringify({ email: credentials.email, password: credentials.password})
     })
     const json = await response.json()
-    // console.log(json)
+    // console.log(json, "Whats inside json at login")
     if(json.success){
       showAlert("Login successful!", "success");
 // Set session if remember me is checked
@@ -43,7 +43,8 @@ const Login = () => {
         history("/account"); // Redirect to allstudents page for admin
       }
     } else {
-      showAlert("Invalid credentials", "danger")
+
+      showAlert(json.error, "danger")
     }
 
   }
@@ -123,7 +124,7 @@ const Login = () => {
                   <div className="m-sm-3">
                     <div className="row">
                     </div>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleLoginSubmit}>
                       <div className="mb-3">
                         <label className="form-label">Email</label>
                         <input className="form-control form-control-lg" value={credentials.email} type="email" name="email" placeholder="Enter your email" onChange={onChange}/>

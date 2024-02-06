@@ -57,6 +57,11 @@ const studentsSchema = new mongoose.Schema({
             slot: String, // This should be a string rather than a nested object
         }
     ],
+    accountStatus: {
+        type: Boolean,
+        required: true,
+        default: true
+    }
 })
 
 module.exports = mongoose.model('Students', studentsSchema)

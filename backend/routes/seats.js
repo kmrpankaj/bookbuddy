@@ -273,6 +273,49 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     }
 });
 
+// Router 5 when json has empty bookedBy field
+router.patch('/updateseatsempty/:id', fetchuser, async (req, res) => {
+    const { seatStatus } = req.body;
+    const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
+    const userId = slotData.bookedBy; // This can be an empty string for removal
+
+    if (req.students.role !== "Admin") {
+        return res.status(403).send({ error: "Unauthorized access" });
+    }
+
+    try {
+        const seat = await Seat.findById(req.params.id);
+        if (!seat) {
+            return res.status(404).send({ error: "Seat not found" });
+        }
+
+        // Update or clear the booking based on whether userId is provided
+        if (userId) {
+            // Assign seat to new student as before
+            seat.seatStatus[bookedSlotName].bookedBy = userId;
+            seat.seatStatus[bookedSlotName].status = true;
+        } else {
+            // Clear the booking for the slot
+            seat.seatStatus[bookedSlotName].bookedBy = null;
+            seat.seatStatus[bookedSlotName].status = false;
+
+            // Additionally, remove this seat assignment from any student who currently has it
+            await Students.updateMany(
+                { 'seatAssigned': { $elemMatch: { seatNumber: seat.seatNumber, slot: bookedSlotName } } },
+                { $pull: { 'seatAssigned': { seatNumber: seat.seatNumber, slot: bookedSlotName } } }
+            );
+        }
+        
+        await seat.save();
+
+        res.json({ seat });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
 
 
 
