@@ -113,8 +113,43 @@ const editStudent = async (id, name, email, gender, password, address, phone, pa
   }
 };
 
+// Edit a student's account status
+const editStudentAccountStatus = async (id, accountStatus) => {
+  try {
+    const response = await fetch(`${host}/students/update/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
+      },
+      body: JSON.stringify({ accountStatus }), // Send only the accountStatus field
+    });
+
+    if (response.ok) {
+      // Assuming the response is successful, you can update the client-side state
+      let newStudents = JSON.parse(JSON.stringify(students));
+
+      for (let index = 0; index < students.length; index++) {
+        const element = newStudents[index];
+        if (element._id === id) {
+          element.accountStatus = accountStatus; // Update only the accountStatus field
+          break;
+        }
+      }
+
+      setStudents(newStudents);
+    } else {
+      console.error("Error editing student:", response.statusText);
+      // Handle the error
+    }
+  } catch (error) {
+    console.error("Error editing student:", error);
+    // Handle the error
+  }
+};
+
   return (
-    <StudentContext.Provider value={{students, addStudent, deleteStudent, editStudent, getAllStudents}}>
+    <StudentContext.Provider value={{students, addStudent, deleteStudent, editStudent, getAllStudents, editStudentAccountStatus}}>
         {props.children}
     </StudentContext.Provider>
   )

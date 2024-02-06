@@ -18,7 +18,9 @@ const getAllSeats = async () => {
       },
     });
     const json = await response.json();
-    setSeats(json);
+    // Sort the data by seatNumber
+    const sortedSeats = json.sort((a, b) => a.seatNumber - b.seatNumber);
+    setSeats(sortedSeats);
   } catch (error) {
     console.error("Error fetching all students:", error);
     // Handle the error, you might want to set an error state or display a message to the user

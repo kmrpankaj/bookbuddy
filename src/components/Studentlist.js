@@ -9,7 +9,7 @@ import AlertContext from '../context/AlertContext'
 const Studentlist = (props) => {
     const context = useContext(StudentContext)
     const {showAlert} = useContext(AlertContext)
-    const { students, deleteStudent, getAllStudents, editStudent } = context;
+    const { students, deleteStudent, getAllStudents, editStudent, editStudentAccountStatus } = context;
     const editModalRef = useRef(null);
     const closeModalRef = useRef(null)
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
@@ -38,8 +38,15 @@ const Studentlist = (props) => {
     const handleClickEdit = (e) => {
         e.preventDefault()
         editStudent(student.id, student.ename, student.eemail, student.egender, student.password, student.eaddress, student.ephone, student.eparentsphone, student.ephoto, student.edocumentid, student.erole)
-        console.log("updating the student", student)
+        // console.log("updating the student", student)
     }
+
+    const toggleAccountStatus = (e, id, currentAccountStatus) => {
+        e.preventDefault();
+        const newAccountStatus = currentAccountStatus === true ? false : true;
+        editStudentAccountStatus(id, newAccountStatus);
+        console.log("Updating account status to:", newAccountStatus);
+      };
 
     const onChangeEdit = (e) => {
         setStudent({...student, [e.target.name]: e.target.value })
@@ -68,7 +75,7 @@ const Studentlist = (props) => {
                                                
                                                 <div>
                                                     <button className="btn btn-primary btn-sm" onClick={()=>{updateStudents(student)}}>Edit</button>
-                                                    <button className="btn btn-primary btn-sm mx-1" href="#">Disable</button>
+                                                    <button className="btn btn-primary btn-sm mx-1" onClick={(e) => toggleAccountStatus(e, student._id, student.accountStatus)}>{student.accountStatus?"Active": "Inactive"}</button>
                                                     <button className="btn btn-primary btn-sm" onClick={(e) => { deleteStudent(student._id); showAlert(`${student.name} deleted successfully`, "danger") }}>Delete</button>
                                                 </div>
                                             </div>
