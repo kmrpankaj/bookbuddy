@@ -222,6 +222,57 @@ router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
 })
 
 
+// Router 4: New patch request to update seats and delete the previous one.
+router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
+    const { seatStatus } = req.body;
+    const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
+    const newUserId = slotData.bookedBy;
+
+    if (req.students.role !== "Admin") {
+        return res.status(403).send({ error: "Unauthorized access" });
+    }
+
+    try {
+        // Update the seat in the database
+        const seat = await Seat.findById(req.params.id);
+        const updatedSeatStatus = { ...seat.seatStatus, ...seatStatus };
+        updatedSeatStatus[bookedSlotName].status = true;
+        seat.seatStatus = updatedSeatStatus;
+        await seat.save();
+
+        // Check all students to find any existing assignment for this seat and slot
+        const studentsWithSeat = await Students.find({
+            'seatAssigned.seatNumber': seat.seatNumber,
+            'seatAssigned.slot': bookedSlotName,
+        });
+
+        // Remove this seat and slot assignment from any student who isn't the new assignee
+        await Promise.all(studentsWithSeat.map(async (student) => {
+            if (student.uid !== newUserId) {
+                student.seatAssigned = student.seatAssigned.filter(assignment => !(assignment.seatNumber === seat.seatNumber && assignment.slot === bookedSlotName));
+                await student.save();
+            }
+        }));
+
+        // Assign the seat to the new student, ensuring to update if already exists or add if not
+        const newStudent = await Students.findOne({ uid: newUserId });
+        if (newStudent) {
+            const assignmentIndex = newStudent.seatAssigned.findIndex(assignment => assignment.slot === bookedSlotName);
+            if (assignmentIndex !== -1) {
+                newStudent.seatAssigned[assignmentIndex].seatNumber = seat.seatNumber;
+            } else {
+                newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName });
+            }
+            await newStudent.save();
+        }
+
+        res.json({ seat, updatedStudent: newStudent });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 
 
 
