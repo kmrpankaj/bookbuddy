@@ -126,9 +126,11 @@ for (const slotKey in seatStatus) {
 //     res.json({seat});
 // })
 
-// Route 3: Update seats using: PATCH /seats/updateseats. Requires login
 router.patch('/updateseats/:id', fetchuser, async (req, res) => {
     const { seatNumber, seatLocation, seatStatus } = req.body;
+
+    // Extract the slot information from seatStatus
+    const slot = Object.keys(seatStatus)[0]; // Assuming only one slot is provided in the request
 
     // Check if the user is an admin
     if (req.students.role !== "Admin") {
@@ -165,7 +167,31 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
         const seat = await Seat.findByIdAndUpdate(req.params.id, { $set: newSeat }, { new: true });
         console.log(newSeat);
 
-        res.json({ seat });
+
+        // Find the slot with bookedBy not null
+        const [bookedSlotName, slotData] = Object.entries(seatStatus)[0]; // Destructure the first entry
+        const userId = slotData.bookedBy;
+        console.log(userId)
+        console.log(bookedSlotName)
+
+
+
+        // First, find the student to see if there's an existing assignment for the slot
+        const student = await Students.findOne({ uid: userId });
+        if (student) {
+            const assignmentIndex = student.seatAssigned.findIndex((assignment) => assignment.slot === bookedSlotName);
+            if (assignmentIndex !== -1) {
+                // Update existing assignment
+                student.seatAssigned[assignmentIndex].seatNumber = seat.seatNumber;
+            } else {
+                // Add new assignment
+                student.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName });
+            }
+            const updatedStudent = await student.save(); // Save the updated student document
+            res.json({ seat, updatedStudent });
+        } else {
+            res.json({ seat });
+        }
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -194,6 +220,8 @@ router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
         res.status(500).json({message: err.message})
     }
 })
+
+
 
 
 

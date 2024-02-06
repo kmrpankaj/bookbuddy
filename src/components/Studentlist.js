@@ -77,8 +77,8 @@ const Studentlist = (props) => {
                                                 <h5 className="h6 card-title">Seat Details</h5>
                                                 {
                                                     //show booked shifts
-                                                    student.seatAssigned && student.seatAssigned.bookedShifts && student.seatAssigned.bookedShifts.length > 0 ? (
-                                                        student.seatAssigned.bookedShifts.map((shift, index) => (
+                                                    student.seatAssigned && student.seatAssigned.length > 0 ? (
+                                                        student.seatAssigned.map((shift, index) => (
                                                         <li key={index}>
                                                             Seat: {shift.seatNumber}  Slot: {shift.slot}
                                                         </li>

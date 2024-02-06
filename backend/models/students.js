@@ -51,10 +51,12 @@ const studentsSchema = new mongoose.Schema({
         required: true,
         default: "Student"
     },
-    seatAssigned: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'seats'
-    },
+    seatAssigned: [
+        {
+            seatNumber: String,
+            slot: String, // This should be a string rather than a nested object
+        }
+    ],
 })
 
 module.exports = mongoose.model('Students', studentsSchema)
