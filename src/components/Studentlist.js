@@ -124,7 +124,7 @@ const Studentlist = (props) => {
                     </div>
                 </div>
             </div>
-            <Editstudents key={student._id} ref={editModalRef} student={student} onChangeEdit = {onChangeEdit} handleClickEdit={handleClickEdit} />
+            <Editstudents key={student._id} ref={editModalRef} student={student} onChangeEdit={onChangeEdit} handleClickEdit={handleClickEdit} />
         </>
     )
 }

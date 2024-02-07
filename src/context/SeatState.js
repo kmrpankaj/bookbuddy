@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 const SeatState = (props) => {
   const host = "http://localhost:3001"
     const seatsdata = []
-
       const [seats, setSeats] = useState(seatsdata)
 
 // Get all seats
@@ -27,9 +26,43 @@ const getAllSeats = async () => {
   }
 }
 
+const  updateSeatStatus = async (seatId, slotName, bookedBy) => {
+  const seatStatusUpdate = {
+      seatStatus: {
+          [slotName]: { bookedBy }
+      }
+  };
+
+  try {
+      const response = await fetch(`${host}/seats/updateseatsdelete/${seatId}`, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+              "auth-token": localStorage.getItem('token'), // Authorization token
+          },
+          body: JSON.stringify(seatStatusUpdate),
+      });
+
+      if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return response; // Return the fetch response for further processing
+
+  } catch (error) {
+      console.error('Failed to update seat status:', error);
+      throw error; // Rethrow to handle in the calling function
+  }
+};
+
+
 
   return (
-    <SeatContext.Provider value={{seats, getAllSeats}}>
+    <SeatContext.Provider value={{seats, setSeats, getAllSeats, updateSeatStatus}}>
         {props.children}
     </SeatContext.Provider>
   )
