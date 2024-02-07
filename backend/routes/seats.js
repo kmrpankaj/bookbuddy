@@ -233,6 +233,12 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     }
 
     try {
+        // First, check if newUserId corresponds to a valid student
+        const newStudent = await Students.findOne({ uid: newUserId });
+        if (!newStudent) {
+            // If no student found, return an error response
+            return res.status(404).send({ error: "No student with this user id found" });
+        }
         // Update the seat in the database
         const seat = await Seat.findById(req.params.id);
         const updatedSeatStatus = { ...seat.seatStatus, ...seatStatus };
@@ -255,8 +261,7 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
         }));
 
         // Assign the seat to the new student, ensuring to update if already exists or add if not
-        const newStudent = await Students.findOne({ uid: newUserId });
-        if (newStudent) {
+        // Since newStudent is already found, no need to find it again. Just update or add the seat assignment
             const assignmentIndex = newStudent.seatAssigned.findIndex(assignment => assignment.slot === bookedSlotName);
             if (assignmentIndex !== -1) {
                 newStudent.seatAssigned[assignmentIndex].seatNumber = seat.seatNumber;
@@ -264,7 +269,6 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
                 newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName });
             }
             await newStudent.save();
-        }
 
         res.json({ seat, updatedStudent: newStudent });
     } catch (error) {

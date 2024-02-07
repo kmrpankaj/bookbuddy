@@ -5,6 +5,7 @@ const SeatState = (props) => {
   const host = "http://localhost:3001"
     const seatsdata = []
       const [seats, setSeats] = useState(seatsdata)
+      const [loading, setLoading] = useState(false);
 
 // Get all seats
 const getAllSeats = async () => {
@@ -60,9 +61,45 @@ const  updateSeatStatus = async (seatId, slotName, bookedBy) => {
 };
 
 
+// Removes assgined seat
+const removeAssignedSlot = async (seatId, slotName) => {
+  setLoading(true);
+  const seatStatusUpdate = {
+    seatStatus: {
+      [slotName]: { bookedBy: "" } // Set bookedBy to an empty string to indicate removal
+    }
+  };
+
+  try {
+    const response = await fetch(`${host}/seats/emptyseat/${seatId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": localStorage.getItem('token'), // Authorization token
+      },
+      body: JSON.stringify(seatStatusUpdate),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    // Assuming the backend returns the updated seat object, refresh seat status in state
+    const updatedSeat = await response.json();
+    setSeats(prevSeats => prevSeats.map(seat => seat._id === seatId ? updatedSeat.seat : seat));
+  } catch (error) {
+    console.error('Failed to remove assigned slot:', error);
+    // Optionally handle the error, e.g., by setting an error state or displaying a message
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
 
   return (
-    <SeatContext.Provider value={{seats, setSeats, getAllSeats, updateSeatStatus}}>
+    <SeatContext.Provider value={{seats, setSeats, getAllSeats, updateSeatStatus, removeAssignedSlot}}>
         {props.children}
     </SeatContext.Provider>
   )

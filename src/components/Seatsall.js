@@ -7,7 +7,7 @@ import Editslot from './Editslot'
 
 const Seatsall = (props) => {
     const context = useContext(SeatContext)
-    const { seats, setSeats, getAllSeats, updateSeatStatus } = context;
+    const { seats, setSeats, getAllSeats, updateSeatStatus, removeAssignedSlot } = context;
     const history = useNavigate()
     const slotModalRef = useRef(null);
     const { showAlert } = useContext(AlertContext)
@@ -83,7 +83,17 @@ const Seatsall = (props) => {
           }
         }
       };
-      
+     
+    const makeSeatAvailable = async () => {
+        const slotName = slot.slotName;
+        const seatID = slot.seatId;
+        try {
+            await removeAssignedSlot(seatID, slotName);
+            showAlert("Seat removed successfully", "success");
+          } catch (error) {
+            showAlert("Failed to remove the seat", "error");
+          }
+    }
 
     
 
@@ -119,7 +129,7 @@ const Seatsall = (props) => {
                         })
                         }
                     </div></div></div></div>
-                    <Editslot ref={slotModalRef} slot={slot} onChangeEdit={onChangeEdit} slotUpdate={slotUpdate} />
+                    <Editslot ref={slotModalRef} slot={slot} onChangeEdit={onChangeEdit} slotUpdate={slotUpdate} makeSeatAvailable={makeSeatAvailable} />
 
 
         </>
