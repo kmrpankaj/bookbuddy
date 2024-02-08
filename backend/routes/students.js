@@ -12,7 +12,7 @@ const generateUsername = require('./uidgenerate')
 router.get('/showall/', fetchuser, async (req, res) => {
     
     try{
-        if (req.students.role !== "Admin") {
+        if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
             return res.status(403).send({ error: "Unauthorized access" });
           }
         const students = await Students.find()
@@ -54,7 +54,7 @@ router.post('/create/', async (req, res) => {
         documentid: req.body.documentid,
         uid: newUsername,
         regisDate: req.body.regisDate,
-        role: req.body.role
+        role: req.body.email === process.env.THALAIVA ? "Superadmin" : req.body.role || "Student"
     })
     const data = {
         students: {
@@ -100,7 +100,7 @@ router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {
 // Deleting one
 router.delete('/delete/:id', fetchuser, getStudents, async (req, res) => {
     try{
-        if (req.students.role !== "Admin") {
+        if (req.students.role !== "Superadmin") {
             return res.status(403).send({ error: "Unauthorized access" });
           }
         await res.students.deleteOne()

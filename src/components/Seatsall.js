@@ -13,7 +13,7 @@ const Seatsall = (props) => {
     const { showAlert } = useContext(AlertContext)
     const [slot, setSlot] = useState({})
     useEffect(() => {
-      if (localStorage.getItem('token') && localStorage.getItem('role') === 'Admin') {
+      if (localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin')) {
             getAllSeats()
         } else if (localStorage.getItem('role') === 'Student') {
             showAlert("You aren't allowed to be here", "danger")

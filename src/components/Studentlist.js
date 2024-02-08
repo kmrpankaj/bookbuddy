@@ -11,12 +11,11 @@ const Studentlist = (props) => {
     const {showAlert} = useContext(AlertContext)
     const { students, deleteStudent, getAllStudents, editStudent, editStudentAccountStatus } = context;
     const editModalRef = useRef(null);
-    const closeModalRef = useRef(null)
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
     const history = useNavigate()
 
     useEffect(() => {
-        if(localStorage.getItem('token') && localStorage.getItem('role') === 'Admin' ){
+        if(localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin') ){
             getAllStudents()
         } else if (localStorage.getItem('role') === 'Student') {
             showAlert("You aren't allowed to be here", "danger")

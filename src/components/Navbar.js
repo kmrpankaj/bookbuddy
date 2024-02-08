@@ -40,7 +40,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/account" ? "active" : ""}`} to="/account">Account</Link>
             </li>
-            {adminLoggedIn==="Admin" ?
+            {(adminLoggedIn === "Admin" || adminLoggedIn === "Superadmin") ?
             <><li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/allstudents" ? "active" : ""}`} to="/allstudents">Students</Link>
             </li>

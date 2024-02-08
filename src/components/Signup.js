@@ -2,9 +2,12 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import StudentContext from '../context/StudentContext'
 import generateStrongPassword from './Strongpassword'
+import { copyToClipboard } from './Utilsfunc'
+import AlertContext from '../context/AlertContext'
 
 const Signup = () => {
 	const context = useContext(StudentContext)
+	const {showAlert} = useContext(AlertContext)
 	const { addStudent } = context;
 	const [students, setstudents] = useState({name: "", email: "",  gender: "", password: "", address: "", phone: "", parentsphone: "", photo: "", documentid: "", role: "Student" })
 	
@@ -62,6 +65,9 @@ const Signup = () => {
 		const generatedPassword = generateStrongPassword();
 		document.getElementById(inputId).value = generatedPassword;
 		setstudents({ ...students, password: generatedPassword });
+		copyToClipboard("passwordInput")
+		showAlert('Strong password generated and copied to clipboard!', "success")
+
 	}
 	function togglePasswordVisibility(inputId) {
 		const passwordInput = document.getElementById(inputId);

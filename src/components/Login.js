@@ -37,13 +37,12 @@ const Login = () => {
       //save the authtoken and redirect
       localStorage.setItem('token', json.authToken)
       localStorage.setItem('role', json.therole)
-      if (json.therole === "Admin") {
+      if (json.therole === "Admin" || json.therole === "Superadmin") {
         history("/allstudents");
       }else{
         history("/account"); // Redirect to allstudents page for admin
       }
     } else {
-
       showAlert(json.error, "danger")
     }
 

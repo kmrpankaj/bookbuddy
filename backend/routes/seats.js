@@ -8,7 +8,7 @@ const Students = require('../models/students')
 // Route 1: Get all the seats using: GET /seats/getseats. Requires login
 router.get('/fetchallseats', fetchuser, async (req, res)=> {
     try {
-        if (req.students.role !== "Admin") {
+        if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
             return res.status(403).send({ error: "Unauthorized access" });
           }
     const seat = await Seat.find();
@@ -60,7 +60,7 @@ router.post('/addaseat', fetchuser, [
             return res.status(400).json({ errors: errors.array() });
         }
 
-        if (req.students.role !== "Admin") {
+        if (req.students.role !== "Superadmin") {
             return res.status(403).send({ error: "Unauthorized access" });
         }
 
@@ -133,7 +133,7 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
     const slot = Object.keys(seatStatus)[0]; // Assuming only one slot is provided in the request
 
     // Check if the user is an admin
-    if (req.students.role !== "Admin") {
+    if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 
@@ -205,21 +205,21 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
 
 
   // Route 3: Delete seats using: DELETE /seats/deleteseats. Requires login
-router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
-    try{
-        if (req.students.role !== "Admin") {
-            return res.status(403).send({ error: "Unauthorized access" });
-          }
-          let seat = await seats.findById(req.params.id)
-          if(seat == null) {
-              return res.status(404).json({ message: 'Cannot find seat'})
-          }
-       seat = await seats.deleteOne()
-        res.json({message: 'Seat Deleted', seat: seat})
-    } catch (err) {
-        res.status(500).json({message: err.message})
-    }
-})
+// router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
+//     try{
+//         if (req.students.role !== "Admin") {
+//             return res.status(403).send({ error: "Unauthorized access" });
+//           }
+//           let seat = await seats.findById(req.params.id)
+//           if(seat == null) {
+//               return res.status(404).json({ message: 'Cannot find seat'})
+//           }
+//        seat = await seats.deleteOne()
+//         res.json({message: 'Seat Deleted', seat: seat})
+//     } catch (err) {
+//         res.status(500).json({message: err.message})
+//     }
+// })
 
 
 // Router 4: New patch request to update seats and delete the previous one.
@@ -228,7 +228,7 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
     const newUserId = slotData.bookedBy;
 
-    if (req.students.role !== "Admin") {
+    if (req.students.role !== "Admin" || req.students.role !== "Superadmin") {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 
@@ -283,7 +283,7 @@ router.patch('/emptyseat/:id', fetchuser, async (req, res) => {
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
     const userId = slotData.bookedBy; // This can be an empty string for removal
 
-    if (req.students.role !== "Admin") {
+    if (req.students.role !== "Admin" || req.students.role !== "Superadmin") {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 
