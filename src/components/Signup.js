@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import StudentContext from '../context/StudentContext'
 import generateStrongPassword from './Strongpassword'
 import { copyToClipboard } from './Utilsfunc'
 import AlertContext from '../context/AlertContext'
 
 const Signup = () => {
+	const history = useNavigate()
 	const context = useContext(StudentContext)
 	const {showAlert} = useContext(AlertContext)
 	const { addStudent } = context;
@@ -15,10 +16,11 @@ const Signup = () => {
 		e.preventDefault();
 		try {
 			const response = await addStudent(students.name, students.email, students.gender, students.password, students.address, students.phone, students.parentsphone, students.photo, students.documentid, students.role);
-		
+
 			if (response.status === 201) {
 			  // Handle success
-			  console.log('Student added successfully!');
+			  // console.log('Student added successfully!');
+				showAlert("Signup successful!", "success");
 			} else if (response.status === 400) {
 			  // Handle specific error for duplicate email
 			  const errorData = await response.json();
@@ -50,8 +52,10 @@ const Signup = () => {
 			parentsphone: "",
 			photo: "",
 			documentid: "",
-			role: "",
+			role: ""
 		  });
+		  history("/login"); // redirect to login page
+
 	}
 	const onChange = (e) => {
 		if (e.target.name === 'gender') {

@@ -74,8 +74,13 @@ const Studentlist = (props) => {
                                                
                                                 <div>
                                                     <button className="btn btn-primary btn-sm" onClick={()=>{updateStudents(student)}}>Edit</button>
+                                                    
+                                                    {(student.role==="Superadmin" )?"":
+                                                    <>
                                                     <button className="btn btn-primary btn-sm mx-1" onClick={(e) => toggleAccountStatus(e, student._id, student.accountStatus)}>{student.accountStatus?"Active": "Inactive"}</button>
                                                     <button className="btn btn-primary btn-sm" onClick={(e) => { deleteStudent(student._id); showAlert(`${student.name} deleted successfully`, "danger") }}>Delete</button>
+                                                    </>
+                                                    }
                                                 </div>
                                             </div>
                                             <hr className="my-0" />

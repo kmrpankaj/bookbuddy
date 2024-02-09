@@ -35,7 +35,11 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       },
       body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
     });
+    if (!response.ok) { // Check if the response status code is not successful
+      throw new Error(`HTTP error! status: ${response.status}`); // Throw an error with the status
+    }
     const json = await response.json();
+
     const student = {
       "name": name,
       "email": email,
@@ -46,12 +50,13 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       "parentsphone": parentsphone,
       "photo": photo,
       "documentid": documentid,
-      "role": role
+      "role": role,
     };
     setStudents([...students, student]);
+    return response;
   } catch (error) {
     console.error("Error adding student:", error);
-    // Handle the error
+    return { success: false, message: error.message };
   }
 }
 
@@ -62,7 +67,7 @@ const addStudent = async (name, email, gender, password, address, phone, parents
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
-              "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50cyI6eyJpZCI6IjY1YjBlM2FkNzg2OThjYWI0M2YxMWViNSIsInJvbGUiOiJBZG1pbiJ9LCJpYXQiOjE3MDYzOTUzNzJ9.pox5iE4Jb94W725Mt6j2ePFzqq8Y_ZAch_vmiis9I54", // Replace with your actual auth token
+              "auth-token": localStorage.getItem('token')
             },
           });
           const json = response.json();
@@ -77,7 +82,7 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       }
 
 // Edit a student
-const editStudent = async (id, name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
+const editStudent = async (id, name, email, gender, password, address, phone, parentsphone, photo, documentid, role, accountStatus) => {
   try {
     const response = await fetch(`${host}/students/update/${id}`, {
       method: "PATCH",
@@ -85,7 +90,7 @@ const editStudent = async (id, name, email, gender, password, address, phone, pa
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
       },
-      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
+      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role, accountStatus }),
     });
     const json = await response.json();
     let newStudents = JSON.parse(JSON.stringify(students))
@@ -102,7 +107,8 @@ const editStudent = async (id, name, email, gender, password, address, phone, pa
         element.parentsphone = parentsphone;
         element.photo = photo;
         element.documentid = documentid;
-        element.rol = role;
+        element.role = role;
+        element.accountStatus = accountStatus;
         break;
       }
     }

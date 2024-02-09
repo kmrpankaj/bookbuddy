@@ -1,7 +1,7 @@
 const express = require('express');
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router();
-const { Seat, slotSchema } = require('../models/seats');
+const { Seat } = require('../models/seats');
 const { body, validationResult } = require('express-validator');
 const Students = require('../models/students')
 
@@ -228,7 +228,7 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
     const newUserId = slotData.bookedBy;
 
-    if (req.students.role !== "Admin" || req.students.role !== "Superadmin") {
+    if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 
@@ -283,7 +283,7 @@ router.patch('/emptyseat/:id', fetchuser, async (req, res) => {
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
     const userId = slotData.bookedBy; // This can be an empty string for removal
 
-    if (req.students.role !== "Admin" || req.students.role !== "Superadmin") {
+    if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 

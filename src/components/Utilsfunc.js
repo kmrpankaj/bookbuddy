@@ -28,7 +28,7 @@ export const copyToClipboard = (elementId) => {
       // Copy the text inside the temporary input to the clipboard
       const successful = document.execCommand('copy');
       if (successful) {
-        console.log('Text copied to clipboard');
+        //console.log('Text copied to clipboard');
       } else {
         console.error('Failed to copy text');
       }

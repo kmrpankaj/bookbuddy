@@ -27,7 +27,7 @@ router.get('/show/:id', getStudents, (req, res) => {
 })
 // Route 2: Creating one
 router.post('/create/', async (req, res) => {
-
+    let success=false;
     let newUsername;
     // Loop until a unique username is found
     while (true) {
@@ -68,14 +68,16 @@ router.post('/create/', async (req, res) => {
             return user ? res.status(400).json({ error: "Sorry, a user with this email already exists." }) : phone ? res.status(400).json({ error: "Sorry, a user with this phone number already exists." }) : "";
         }
         const newStudents = await students.save()
-        res.status(201).json(newStudents)
+        success=true;
+        res.status(201).json({success, newStudents})
     } catch (err){
-        res.status(400).json({message: err.message})
+        success=false;
+        res.status(400).json({success, message: err.message})
     }
 })
 // Updating one
 router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {
-
+    let success=false;
     if(req.body.name != null) {
         res.students.name = req.body.name
     }
@@ -92,21 +94,27 @@ router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {
             req.body,
             { new: true }
         )
-        res.json(updatedStudents)
+        success=true;
+        res.json({success, updatedStudents})
+        
     } catch (err) {
         res.status(400).json({message: err.message})
+        success=false
     }
 })
 // Deleting one
 router.delete('/delete/:id', fetchuser, getStudents, async (req, res) => {
+    let success=false
     try{
         if (req.students.role !== "Superadmin") {
             return res.status(403).send({ error: "Unauthorized access" });
           }
         await res.students.deleteOne()
-        res.json({message: 'Deleted Student'})
+        success=true
+        res.json({success, message: 'Deleted Student'})
     } catch (err) {
-        res.status(500).json({message: err.message})
+        success=false
+        res.status(500).json({success, message: err.message})
     }
 })
 
@@ -156,7 +164,7 @@ router.post('/login', [
         const data = {
             students: {
                 id: user.id,
-                role: user.role
+                role: user.role,
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);

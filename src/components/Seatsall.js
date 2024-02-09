@@ -73,7 +73,7 @@ const Seatsall = (props) => {
       
               handleCloseModal(); // Close the modal
               setSlot({}); // Reset slot state
-              showAlert("Seat updated successfully", "success");
+              showAlert(`Seat updated successfully`, "success");
             } else {
               throw new Error('Failed to update the seat.');
             }

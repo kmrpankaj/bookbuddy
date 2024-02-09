@@ -13,7 +13,7 @@ const fetchuser = (req, res, next) => {
         }
         const data = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] });
         req.students = data.students;
-        console.log("Student Role:", req.students.role); // Log the role here
+        //console.log("Student Role:", req.students.role); // Log the role here
         next();
     } catch (error) {
         console.error(error); // Log error for debugging
