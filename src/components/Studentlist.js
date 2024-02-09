@@ -8,8 +8,8 @@ import AlertContext from '../context/AlertContext'
 
 const Studentlist = (props) => {
     const context = useContext(StudentContext)
-    const {showAlert} = useContext(AlertContext)
     const { students, deleteStudent, getAllStudents, editStudent, editStudentAccountStatus } = context;
+    const {showAlert} = useContext(AlertContext)
     const editModalRef = useRef(null);
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
     const history = useNavigate()
@@ -52,11 +52,11 @@ const Studentlist = (props) => {
     }
     return (
         <>
-            <div className="container-fluid mt-5 pt-2">
+            <div className="container-fluid">
                 <div className="row">
                     <Sidedash />
                     
-                    <div className="col-md-9"><div className="row">
+                    <div className="col-md-9 pt-3"><div className="row">
                         {students.length===0 && "No user found lol! WTF!!!"}
                         {students.map((student) => {
                             const dateString = student.regisDate;

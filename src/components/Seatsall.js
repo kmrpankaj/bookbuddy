@@ -99,11 +99,11 @@ const Seatsall = (props) => {
 
     return (
         <>
-            <div className="container-fluid mt-5 pt-2 seatsall">
+            <div className="container-fluid seatsall">
                 <div className="row">
                     <Sidedash />
 
-                    <div className="col-md-9"><div className="row">
+                    <div className="col-md-9 pt-3"><div className="row">
                         {seats.length === 0 && "No user found lol! WTF!!!"}
                         {seats.map((seat) => {
                             return <div className="col-lg-6 col-xl-3 mb-4">

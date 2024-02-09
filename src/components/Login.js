@@ -40,7 +40,7 @@ const Login = () => {
       if (json.therole === "Admin" || json.therole === "Superadmin") {
         history("/allstudents");
       }else{
-        history("/account"); // Redirect to allstudents page for admin
+        history("/profile"); // Redirect to allstudents page for admin
       }
     } else {
       showAlert(json.error, "danger")
@@ -57,7 +57,7 @@ const Login = () => {
   const storedToken = localStorage.getItem('token');
   const rememberMe = localStorage.getItem('rememberMe');
   const storedExpiryTime = localStorage.getItem('expiryTime');
-    const host = "http://localhost:3001";
+  const host = "http://localhost:3001";
 
      // Declare the response variable outside the try block
     let response;
@@ -84,7 +84,7 @@ const Login = () => {
           if (data.role === 'Admin') {
             history('/allstudents');
           } else {
-            history('/account');
+            history('/profile');
           }
         }
       } catch (error) {
@@ -108,7 +108,7 @@ const Login = () => {
     <>
       <div className="container d-flex flex-column">
         <div className="row h-100">
-          <div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
+          <div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table pt-3 h-100">
             <div className="d-table-cell align-middle">
 
               <div className="text-center mt-4">

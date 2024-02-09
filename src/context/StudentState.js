@@ -25,6 +25,24 @@ const getAllStudents = async () => {
   }
 };
 
+// get one studentprofile
+const getOneStudent = async () => {
+  try {
+    const response = await fetch(`${host}/students/student-data/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
+      },
+    });
+    const studentsData = await response.json();
+    return studentsData;
+  } catch (error) {
+    console.error("Error fetching all students:", error);
+    // Handle the error, you might want to set an error state or display a message to the user
+  }
+};
+
 // Add a student
 const addStudent = async (name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
   try {
@@ -155,7 +173,7 @@ const editStudentAccountStatus = async (id, accountStatus) => {
 };
 
   return (
-    <StudentContext.Provider value={{students, addStudent, deleteStudent, editStudent, getAllStudents, editStudentAccountStatus}}>
+    <StudentContext.Provider value={{students, addStudent, deleteStudent, editStudent, getAllStudents, editStudentAccountStatus, getOneStudent}}>
         {props.children}
     </StudentContext.Provider>
   )

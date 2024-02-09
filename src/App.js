@@ -21,8 +21,8 @@ function App() {
         <AlertState>
           <SeatState>
           <BrowserRouter>
-            <Navbar />
-            <Alerts />
+          <Alerts />
+            <Navbar /> 
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<Account />} />

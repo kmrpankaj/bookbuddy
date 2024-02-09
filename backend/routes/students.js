@@ -23,8 +23,29 @@ router.get('/showall/', fetchuser, async (req, res) => {
 })
 // Getting one
 router.get('/show/:id', getStudents, (req, res) => {
-    res.send(res.students.name)
+    res.send(res.students)
 })
+
+// Updated GET request to get logged-in student's data
+router.get('/student-data/', fetchuser, async (req, res) => {
+    try {
+        // Now, req.students contains the student data from the JWT token.
+        const studentId = req.students.id; // Assuming 'id' is stored in the token payload.
+        
+        // Fetch student data directly using the studentId obtained from the token
+        const student = await Students.findById(studentId).select('-password'); // Exclude password from the result
+        
+        if (!student) {
+            return res.status(404).json({ error: "Student not found" });
+        }
+
+        res.send(student); // Send the found student data back
+    } catch (error) {
+        console.error(error.message); // Log the detailed error message
+        res.status(500).send("Internal server error"); // Send a generic error message
+    }
+});
+
 // Route 2: Creating one
 router.post('/create/', async (req, res) => {
     let success=false;

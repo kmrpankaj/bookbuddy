@@ -90,7 +90,7 @@ const Signup = () => {
     <>
       <div className="container d-flex flex-column">
 				<div className="row h-100">
-					<div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
+					<div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto pt-3 d-table h-100">
 						<div className="d-table-cell align-middle">
 
 							<div className="text-center mt-4">

@@ -7,7 +7,31 @@ body {
   font-size: .92rem;
 }
 
-.sidebar a.nav-link svg {
+.sidebar .nav-link svg {
   padding-right: 7px;
 }
+.sidebar .nav-link {
+  color:#575757;
+}
+.sidebar .nav-link.active {
+  color:#000;
+}
 
+/* Profile page */
+.gradient-custom {
+  /* fallback for old browsers */
+  background: #f6d365;
+  
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
+  
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
+  }
+
+  .gradient-background {
+    background: #0A2342; /* Fallback for older browsers */
+    background: -webkit-linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
+    background: linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
+
+}
