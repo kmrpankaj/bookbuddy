@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AlertContext from '../context/AlertContext'
 import Sidedash from './Sidedash'
 import Editslot from './Editslot'
+import { copyToClipboard } from './Utilsfunc'
 
 const Seatsall = (props) => {
     const context = useContext(SeatContext)
@@ -45,7 +46,8 @@ const Seatsall = (props) => {
             ...slot,
             seatId: currentSeat._id,
             slotName: slotName,
-            bookedBy: currentSeat.seatStatus[slotName].bookedBy // This will be the old value
+            bookedBy: currentSeat.seatStatus[slotName].bookedBy, // This will be the old value
+            seatNumber: currentSeat.seatNumber
         })
         } else {
              // Handle cases where slot data is missing, perhaps initializing with default values or showing an error/alert

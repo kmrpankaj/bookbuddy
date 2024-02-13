@@ -28,7 +28,7 @@ export const copyToClipboard = (elementId) => {
       // Copy the text inside the temporary input to the clipboard
       const successful = document.execCommand('copy');
       if (successful) {
-        //console.log('Text copied to clipboard');
+        console.log('Text copied to clipboard');
       } else {
         console.error('Failed to copy text');
       }
@@ -39,3 +39,8 @@ export const copyToClipboard = (elementId) => {
     // Remove the temporary input from the document
     document.body.removeChild(temporaryInput);
   };
+
+  export const capitalizeFirstLetter = (word) => {
+    if (!word) return word; // Return the original word if it's empty or undefined
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}

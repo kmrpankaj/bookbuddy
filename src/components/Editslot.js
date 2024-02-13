@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-
+import { capitalizeFirstLetter } from './Utilsfunc'
 
 const Editslot = forwardRef((props, ref) => {
     const { slot, onChangeEdit, slotUpdate, makeSeatAvailable } = props
@@ -15,7 +15,7 @@ const Editslot = forwardRef((props, ref) => {
   <div className="modal-dialog modal-dialog-centered" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLongTitle">Assign {slot.slotName} slot</h5>
+        <h5 className="modal-title" id="exampleModalLongTitle">Seat Number {slot.seatNumber}: {capitalizeFirstLetter(slot.slotName)} Slot</h5>
         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
           {/* <span aria-hidden="true">&times;</span> */}
         </button>

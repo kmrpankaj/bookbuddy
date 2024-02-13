@@ -35,3 +35,8 @@ body {
     background: linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
 
 }
+
+/* svg adjustment css*/
+svg.bi-house, svg.bi.envelope, svg.bi.phone {
+  margin-bottom: 2px;
+}

@@ -5,6 +5,8 @@ import getRandomAvatar from './uidGen'
 import Sidedash from './Sidedash'
 import Editstudents from './Editstudents'
 import AlertContext from '../context/AlertContext'
+import { capitalizeFirstLetter } from './Utilsfunc'
+import { copyToClipboard } from './Utilsfunc'
 
 const Studentlist = (props) => {
     const context = useContext(StudentContext)
@@ -50,6 +52,10 @@ const Studentlist = (props) => {
     const onChangeEdit = (e) => {
         setStudent({...student, [e.target.name]: e.target.value })
     }
+    const copyTheUid = (uid) => {
+        copyToClipboard(`studentuid-${uid}`)
+        showAlert("UID copied to clipboard", "success")
+    }
     return (
         <>
             <div className="container-fluid">
@@ -70,7 +76,7 @@ const Studentlist = (props) => {
                                             <div className="card-body text-center">
                                                 <img src={`/images/${avatarFilename}.jpg`} alt="Stacie Hall" className="img-fluid rounded-circle mb-2" width="128" height="128" />
                                                 <h5 className="card-title mb-0">{student.name}</h5>
-                                                <div className="text-muted mb-2">{student.uid}</div>
+                                                <div className="text-muted mb-2 position-relative"><span id={`studentuid-${student.uid}`}>{student.uid}</span> <svg className='position-absolute' width="16" height="16" onClick={()=> copyTheUid(student.uid)} style={{cursor: "pointer", top: "2px", paddingLeft: "5px"}} fill="#212529 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"/><title>Copy to clipboard</title></svg></div>
                                                
                                                 <div>
                                                     <button className="btn btn-primary btn-sm" onClick={()=>{updateStudents(student)}}>Edit</button>
@@ -86,26 +92,28 @@ const Studentlist = (props) => {
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <h5 className="h6 card-title">Seat Details</h5>
-                                                {
-                                                    //show booked shifts
-                                                    student.seatAssigned && student.seatAssigned.length > 0 ? (
-                                                        student.seatAssigned.map((shift, index) => (
-                                                        <li key={index}>
-                                                            Seat: {shift.seatNumber}  Slot: {shift.slot}
-                                                        </li>
-                                                        ))
-                                                    ) : (
-                                                        <p>No booked shifts</p>
-                                                    )
-                                                }
+                                                <ul className='list-group'>
+                                                    {
+                                                        //show booked shifts
+                                                        student.seatAssigned && student.seatAssigned.length > 0 ? (
+                                                            student.seatAssigned.map((shift, index) => (
+                                                            <li className='list-group-item' key={index}>
+                                                                Seat No.: {shift.seatNumber} | Slot: {capitalizeFirstLetter(shift.slot)}
+                                                            </li>
+                                                            ))
+                                                        ) : (
+                                                            <p>No booked shifts</p>
+                                                        )
+                                                    }
+                                                </ul>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <h5 className="h6 card-title">About</h5>
                                                 <ul className="list-unstyled mb-0">
-                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-house" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z" /></svg> Lives in: <span>{student.address}</span></li>
-                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-envelope" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" /></svg> Email: <span>{student.email}</span></li>
-                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-phone" viewBox="0 0 16 16"><path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" /><path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg> Phone: <span>{student.phone}</span></li>
+                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-house" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c.2 35.5-28.5 64.3-64 64.3H128.1c-35.3 0-64-28.7-64-64V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24zM352 224a64 64 0 1 0 -128 0 64 64 0 1 0 128 0zm-96 96c-44.2 0-80 35.8-80 80c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16c0-44.2-35.8-80-80-80H256z"/></svg> Lives in: <span>{student.address}</span></li>
+                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-envelope" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM218 271.7L64.2 172.4C66 156.4 79.5 144 96 144H352c16.5 0 30 12.4 31.8 28.4L230 271.7c-1.8 1.2-3.9 1.8-6 1.8s-4.2-.6-6-1.8zm29.4 26.9L384 210.4V336c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V210.4l136.6 88.2c7 4.5 15.1 6.9 23.4 6.9s16.4-2.4 23.4-6.9z"/></svg> Email: <span>{student.email}</span></li>
+                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-phone" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg> Phone: <span>{student.phone}</span></li>
                                                 </ul>
                                             </div>
                                             <hr className="my-0" />
