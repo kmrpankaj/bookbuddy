@@ -132,7 +132,7 @@ const Login = () => {
                         <label className="form-label">Password</label>
                         <input className="form-control form-control-lg" value={credentials.password} type="password" name="password" placeholder="Enter your password" onChange={onChange}/>
                           <small>
-                            <a href="/pages-reset-password">Forgot password?</a>
+                            <Link className='pt-2 d-block' to="/forgotpassword">Forgot password?</Link>
                           </small>
                       </div>
                       <div>

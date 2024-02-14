@@ -12,6 +12,9 @@ import StudentState from './context/StudentState';
 import AlertState from './context/AlertState';
 import Alerts from './components/Alerts';
 import SeatState from './context/SeatState';
+import { EmailProvider } from './context/EmailContext';
+import Forgotpassword from './components/Forgotpassword';
+import Passwordreset from './components/Passwordreset';
 
 
 function App() {
@@ -20,20 +23,23 @@ function App() {
       <StudentState>
         <AlertState>
           <SeatState>
-          <BrowserRouter>
-          <Alerts />
-            <Navbar /> 
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/account" element={<Account />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/allstudents" element={<Studentlist />} />
-              <Route path="/allseats" element={<Seatsall />} />
-            </Routes>
-
-          </BrowserRouter>
+            <BrowserRouter>
+              <EmailProvider>
+                <Alerts />
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/account" element={<Account />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/allstudents" element={<Studentlist />} />
+                  <Route path="/allseats" element={<Seatsall />} />
+                  <Route path="/forgotpassword" element={<Forgotpassword />} />
+                  <Route path="/resetpassword" element={<Passwordreset />} />
+                </Routes>
+              </EmailProvider>
+            </BrowserRouter>
           </SeatState>
         </AlertState>
       </StudentState>

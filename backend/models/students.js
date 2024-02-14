@@ -61,6 +61,14 @@ const studentsSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: true
+    },
+    resetPasswordToken: {
+        type: String,
+        required: false // This field is not always required, only when resetting password
+    },
+    resetPasswordExpires: {
+        type: Date,
+        required: false // This field is not always required, only when resetting password
     }
 })
 

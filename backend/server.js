@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 
+
 mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection
 const port = 3001
@@ -22,6 +23,8 @@ app.use('/seats', seatsRouter)
 const bookingRouter = require('./routes/bookings')
 app.use('/bookings', bookingRouter)
 'localhost:3001/bookings'
+const emailRoutes = require('./routes/email')
+app.use('/email', emailRoutes)
 
 
 app.listen(port, () => console.log(`server Started at http://localhost:${port}`));

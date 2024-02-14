@@ -4,6 +4,7 @@ import StudentContext from '../context/StudentContext'
 import generateStrongPassword from './Strongpassword'
 import { copyToClipboard } from './Utilsfunc'
 import AlertContext from '../context/AlertContext'
+import { useEmail } from '../context/EmailContext'
 
 const Signup = () => {
 	const history = useNavigate()
@@ -11,7 +12,8 @@ const Signup = () => {
 	const {showAlert} = useContext(AlertContext)
 	const { addStudent } = context;
 	const [students, setstudents] = useState({name: "", email: "",  gender: "", password: "", address: "", phone: "", parentsphone: "", photo: "", documentid: "", role: "Student" })
-	
+	const { sendEmail } = useEmail();
+
 	const handleClick = async (e) => {
 		e.preventDefault();
 		try {
@@ -40,6 +42,19 @@ const Signup = () => {
 			// Handle errors that occurred during the request
 			console.error('Error adding student:', error);
 		  }
+
+		  // Attempt to send the welcome email
+		  try {
+			await sendEmail({
+			  to: students.email, // Use the email provided by the student
+			  subject: 'Welcome to Bookbuddy!',
+			  html: `<h1>Welcome, ${students.name}!</h1><p>Thank you for signing up. We're thrilled to have you onboard.</p>`,
+			});
+			console.log('Welcome email sent successfully.');
+		  } catch (emailError) {
+			console.error('Failed to send welcome email:', emailError);
+			// Optionally handle email sending errors, e.g., by logging them or showing an alert
+		  }
 		
 		  // Reset the students state after handling the response
 		  setstudents({
@@ -57,6 +72,7 @@ const Signup = () => {
 		  history("/login"); // redirect to login page
 
 	}
+
 	const onChange = (e) => {
 		if (e.target.name === 'gender') {
 			// Handle gender separately

@@ -7,6 +7,9 @@ const JWT_SECRET = 'Myapplication1sNi$e'
 var jwt = require('jsonwebtoken')
 var fetchuser = require('../middleware/fetchuser');
 const generateUsername = require('./uidgenerate')
+const crypto = require('crypto');
+const { Resend } = require('resend');
+const resend = new Resend('re_KUJpjvYH_9M4jU7u1N25CKkAG4H8qRzmK');
 
 // Getting all
 router.get('/showall/', fetchuser, async (req, res) => {
@@ -276,7 +279,96 @@ router.post('/addmultiple/', async (req, res) => {
     res.status(201).json(createdStudents);
 });
 
+// Generate reset token for forgot password
+const generateResetToken = () => {
+    return crypto.randomBytes(20).toString('hex');
+  };
 
+  //send email
+
+  const sendResetEmail = async (to, resetLink) => {
+    const subject = "Password Reset Request";
+    const html = `<p>You requested to reset your password. Click the link below to set a new password:</p>
+                  <a href="${resetLink}">${resetLink}</a>
+                  <p>If you didn't request this, please ignore this email.</p>`;
+  
+    // Using the Resend client initialized in your email.js
+    const { data, error } = await resend.emails.send({
+      from: 'info@bookbuddy.co.in', // Sender email address
+      to: to, // Recipient email address
+      subject: subject,
+      html: html,
+    });
+  
+    if (error) {
+      console.error("Failed to send reset email:", error);
+      throw new Error("Email sending failed");
+    }
+  
+    console.log("Reset email sent successfully", data);
+  };
+
+// Route 5: forgot password
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    try {
+      let user = await Students.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "User not found." });
+      }
+  
+      // Generate reset token and expiry (implementation depends on your setup)
+      const resetToken = generateResetToken();
+      const expiryTime = Date.now() + (6 * 3600000); // 6 hour from now
+  
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = expiryTime;
+      await user.save();
+  
+      // Send email (implementation depends on your email service)
+      sendResetEmail(user.email, `http://localhost:3000/resetpassword?token=${resetToken}`);
+  
+      res.json({ success: true, message: "Reset link sent." });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal server error");
+    }
+  });
+
+
+// Route 6 /reset-password endpoint
+router.post('/reset-password', async (req, res) => {
+    const { token, password } = req.body;
+  
+    try {
+        // Find user by resetPasswordToken and ensure token hasn't expired
+        const user = await Students.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+  
+        if (!user) {
+            return res.status(400).json({ error: "Password reset token is invalid or has expired." });
+        }
+  
+        // Generate a new hash for the new password
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+  
+        // Clear the resetPasswordToken and resetPasswordExpires fields
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+  
+        await user.save();
+  
+        // Respond to the request indicating the password was reset successfully
+        res.json({ success: true, message: "Password has been reset successfully." });
+  
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal server error");
+    }
+});
 
 
 
