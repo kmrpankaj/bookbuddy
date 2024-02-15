@@ -27,6 +27,8 @@ const getAllSeats = async () => {
   }
 }
 
+
+// Assign seats
 const  updateSeatStatus = async (seatId, slotName, bookedBy) => {
   const seatStatusUpdate = {
       seatStatus: {

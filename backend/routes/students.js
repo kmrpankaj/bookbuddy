@@ -328,7 +328,7 @@ router.post('/forgot-password', async (req, res) => {
       // Send email (implementation depends on your email service)
       sendResetEmail(user.email, `http://localhost:3000/resetpassword?token=${resetToken}`);
   
-      res.json({ success: true, message: "Reset link sent." });
+      res.json({ success: true, message: "A reset link has been sent to your registered email." });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error");

@@ -9,6 +9,10 @@ const slotSchema = new mongoose.Schema({
         type: String,
         ref: 'Students',
     },
+    seatValidTill: {
+        type: Date,
+        required: false
+    }
 });
 
 const seatsSchema = new mongoose.Schema({

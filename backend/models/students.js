@@ -55,6 +55,7 @@ const studentsSchema = new mongoose.Schema({
         {
             seatNumber: String,
             slot: String, // This should be a string rather than a nested object
+            validityDate: String,
         }
     ],
     accountStatus: {
@@ -69,7 +70,7 @@ const studentsSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date,
         required: false // This field is not always required, only when resetting password
-    }
+    },
 })
 
 module.exports = mongoose.model('Students', studentsSchema)

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import AlertContext from '../context/AlertContext';
 
 const Passwordreset = () => {
+  const {showAlert} = useContext(AlertContext)
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [token, setToken] = useState("");
@@ -20,7 +22,8 @@ const Passwordreset = () => {
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      alert('Passwords do not match.');
+      //alert('Passwords do not match.');
+      showAlert("Passwords do not match.", "danger")
       return; // Stop the form submission
     }
 
@@ -34,11 +37,13 @@ const Passwordreset = () => {
 
     if (data.success) {
       // Redirect or show success message
-      alert('Password reset successfully.');
+      //alert('Password reset successfully.');
+      showAlert("Password reset successfully.", "success")
       navigate('/login');
     } else {
       // Handle error
-      alert(data.error);
+      //alert(data.error);
+      showAlert(data.error, "danger")
     }
   };
   return (

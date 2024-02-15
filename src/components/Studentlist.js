@@ -98,7 +98,7 @@ const Studentlist = (props) => {
                                                         student.seatAssigned && student.seatAssigned.length > 0 ? (
                                                             student.seatAssigned.map((shift, index) => (
                                                             <li className='list-group-item' key={index}>
-                                                                Seat No.: {shift.seatNumber} | Slot: {capitalizeFirstLetter(shift.slot)}
+                                                                <small>Seat: {shift.seatNumber} | {capitalizeFirstLetter(shift.slot)} | Valid: {shift.validityDate}</small>
                                                             </li>
                                                             ))
                                                         ) : (

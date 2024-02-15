@@ -59,7 +59,7 @@ const Navbar = () => {
           </ul>
           {!userLoggedIn ? <>
             <button type="button" className="btn btn-info"><Link className={`link-light ${location.pathname === "/login" ? "active" : ""} text-decoration-none`} to="/login">Login</Link></button>
-            <button type="button" className="btn btn-primary mx-2"><Link className={`link-light ${location.pathname === "/signup" ? "active" : ""} text-decoration-none`} to="/signup">Register</Link></button></> :
+            <button type="button" className="btn btn-primary mx-2"><Link className={`link-light ${location.pathname === "/signup" ? "active" : ""} text-decoration-none`} to="/signup">Sign Up</Link></button></> :
             <button type="button" className="btn btn-primary"><Link className="link-light text-decoration-none" onClick={handleLogout} to="/login">Logout</Link></button>
             }
         </div>

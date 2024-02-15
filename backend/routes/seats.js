@@ -199,11 +199,6 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
 });
 
 
-
-
-
-
-
   // Route 3: Delete seats using: DELETE /seats/deleteseats. Requires login
 // router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
 //     try{
@@ -221,6 +216,24 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
 //     }
 // })
 
+// Validity function
+function setOneMonthValidity() {
+    // Get the current date
+    const currentDate = new Date();
+  
+    // Add one month to the current date
+    // Note: The month in JavaScript Date is 0-indexed (0 for January, 1 for February, etc.)
+    currentDate.setMonth(currentDate.getMonth() + 1);
+
+    // Subtract one day to set the validity to the day before in the next month
+    currentDate.setDate(currentDate.getDate() - 1);
+  
+    // Convert the date to a string or any other format as per requirement
+    //const validityDate = currentDate.toISOString().substring(0, 10); // Format: YYYY-MM-DD
+  
+    // You can return this date or set it as validity date depending on your application's requirement
+    return currentDate;
+  }
 
 // Router 4: New patch request to update seats and delete the previous one.
 router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
@@ -233,17 +246,18 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     }
 
     try {
+        const newValidityDate = setOneMonthValidity(); // Get the new validity date
         // First, check if newUserId corresponds to a valid student
         const newStudent = await Students.findOne({ uid: newUserId });
         if (!newStudent) {
             // If no student found, return an error response
             return res.status(404).send({ error: "No student with this user id found" });
         }
-        // Update the seat in the database
+        // Update the seat in the database with new validity date
         const seat = await Seat.findById(req.params.id);
-        const updatedSeatStatus = { ...seat.seatStatus, ...seatStatus };
-        updatedSeatStatus[bookedSlotName].status = true;
-        seat.seatStatus = updatedSeatStatus;
+        seat.seatStatus[bookedSlotName].status = true;
+        seat.seatStatus[bookedSlotName].bookedBy = newUserId;
+        seat.seatStatus[bookedSlotName].seatValidTill = newValidityDate; // Update seatValidTill
         await seat.save();
 
         // Check all students to find any existing assignment for this seat and slot
@@ -265,8 +279,9 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
             const assignmentIndex = newStudent.seatAssigned.findIndex(assignment => assignment.slot === bookedSlotName);
             if (assignmentIndex !== -1) {
                 newStudent.seatAssigned[assignmentIndex].seatNumber = seat.seatNumber;
+                newStudent.seatAssigned[assignmentIndex].validityDate = newValidityDate.toISOString().substring(0, 10); // Update validityDate for existing assignment
             } else {
-                newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName });
+                newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName, validityDate: newValidityDate.toISOString().substring(0, 10), });
             }
             await newStudent.save();
 
@@ -277,7 +292,62 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     }
 });
 
-// Router 5 when json has empty bookedBy field
+// Router 4(Backup): New patch request to update seats and delete the previous one.
+// router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
+//     const { seatStatus } = req.body;
+//     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
+//     const newUserId = slotData.bookedBy;
+
+//     if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
+//         return res.status(403).send({ error: "Unauthorized access" });
+//     }
+
+//     try {
+//         // First, check if newUserId corresponds to a valid student
+//         const newStudent = await Students.findOne({ uid: newUserId });
+//         if (!newStudent) {
+//             // If no student found, return an error response
+//             return res.status(404).send({ error: "No student with this user id found" });
+//         }
+//         // Update the seat in the database
+//         const seat = await Seat.findById(req.params.id);
+//         const updatedSeatStatus = { ...seat.seatStatus, ...seatStatus };
+//         updatedSeatStatus[bookedSlotName].status = true;
+//         seat.seatStatus = updatedSeatStatus;
+//         await seat.save();
+
+//         // Check all students to find any existing assignment for this seat and slot
+//         const studentsWithSeat = await Students.find({
+//             'seatAssigned.seatNumber': seat.seatNumber,
+//             'seatAssigned.slot': bookedSlotName,
+//         });
+
+//         // Remove this seat and slot assignment from any student who isn't the new assignee
+//         await Promise.all(studentsWithSeat.map(async (student) => {
+//             if (student.uid !== newUserId) {
+//                 student.seatAssigned = student.seatAssigned.filter(assignment => !(assignment.seatNumber === seat.seatNumber && assignment.slot === bookedSlotName));
+//                 await student.save();
+//             }
+//         }));
+
+//         // Assign the seat to the new student, ensuring to update if already exists or add if not
+//         // Since newStudent is already found, no need to find it again. Just update or add the seat assignment
+//             const assignmentIndex = newStudent.seatAssigned.findIndex(assignment => assignment.slot === bookedSlotName);
+//             if (assignmentIndex !== -1) {
+//                 newStudent.seatAssigned[assignmentIndex].seatNumber = seat.seatNumber;
+//             } else {
+//                 newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName });
+//             }
+//             await newStudent.save();
+
+//         res.json({ seat, updatedStudent: newStudent });
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).send("Internal Server Error");
+//     }
+// });
+
+// Router 5 when json has empty bookedBy field -- this is being used
 router.patch('/emptyseat/:id', fetchuser, async (req, res) => {
     const { seatStatus } = req.body;
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
@@ -304,6 +374,7 @@ router.patch('/emptyseat/:id', fetchuser, async (req, res) => {
             // Clear the booking for the slot
             seat.seatStatus[bookedSlotName].bookedBy = null;
             seat.seatStatus[bookedSlotName].status = false;
+            seat.seatStatus[bookedSlotName].seatValidTill = null;
             await seat.save();
 
             // Remove this seat and slot assignment from any student who currently has it

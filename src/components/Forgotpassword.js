@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import AlertContext from '../context/AlertContext'
+
 
 const Forgotpassword = () => {
-
+    const {showAlert} = useContext(AlertContext)
     const [email, setEmail] = useState('');
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the form from submitting the traditional way
@@ -22,7 +24,8 @@ const Forgotpassword = () => {
 
       if (response.ok) {
         // Handle success scenario
-        alert(data.message); // Notify the user
+        //alert(data.message); // Notify the user
+        showAlert(data.message, "success")
         navigate('/login'); // Optionally redirect the user to login page
       } else {
         // Handle failure scenario
@@ -30,7 +33,8 @@ const Forgotpassword = () => {
       }
     } catch (error) {
       console.error('Failed to reset password:', error);
-      alert('Failed to send reset link. Please try again later.');
+      //alert('Failed to send reset link. Please try again later.');
+      showAlert('Failed to send reset link. Please try again later.', "danger")
     }
 }
   return (
