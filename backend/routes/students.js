@@ -294,7 +294,7 @@ const generateResetToken = () => {
   
     // Using the Resend client initialized in your email.js
     const { data, error } = await resend.emails.send({
-      from: 'info@bookbuddy.co.in', // Sender email address
+      from: '"BookBuddy" <info@bookbuddy.co.in>', // Sender email address
       to: to, // Recipient email address
       subject: subject,
       html: html,

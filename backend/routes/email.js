@@ -11,7 +11,7 @@ router.post('/send', async (req, res) => {
   const { to, subject, html } = req.body; // Assuming these details are passed in the request body
 
   const { data, error } = await resend.emails.send({
-    from: 'info@bookbuddy.co.in', // This can be customized or made dynamic
+    from: '"BookBuddy" <info@bookbuddy.co.in>', // This can be customized or made dynamic
     to: to,
     subject: subject,
     html: html,
