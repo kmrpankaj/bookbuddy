@@ -29,10 +29,10 @@ const getAllSeats = async () => {
 
 
 // Assign seats
-const  updateSeatStatus = async (seatId, slotName, bookedBy) => {
+const  updateSeatStatus = async (seatId, slotName, bookedBy, seatValidTill = null) => {
   const seatStatusUpdate = {
       seatStatus: {
-          [slotName]: { bookedBy }
+          [slotName]: { bookedBy, seatValidTill }
       }
   };
 

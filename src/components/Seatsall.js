@@ -34,10 +34,6 @@ const Seatsall = (props) => {
         // console.log(e.currentTarget); // Debug to see if this is the expected element
         // console.log(e.currentTarget.dataset.slot); 
         // Trigger modal or UI element that allows editing
-                if (slotModalRef.current) {
-                    slotModalRef.current.click();
-                }
-                //console.log(slotModalRef.current)
 
         const slotName = e.currentTarget.dataset.slot;
         // Pre-fill the slot state with the current seat information and the slot to be edited
@@ -47,8 +43,14 @@ const Seatsall = (props) => {
             seatId: currentSeat._id,
             slotName: slotName,
             bookedBy: currentSeat.seatStatus[slotName].bookedBy, // This will be the old value
+            seatValidTill: currentSeat.seatStatus[slotName].seatValidTill,
             seatNumber: currentSeat.seatNumber
         })
+        console.log("Updating slot state with: ", slot); // Debugging log
+        if (slotModalRef.current) {
+          slotModalRef.current.click();
+      }
+      //console.log(slotModalRef.current)
         } else {
              // Handle cases where slot data is missing, perhaps initializing with default values or showing an error/alert
         //console.log(`Slot data for '${slotName}' is missing in the current seat.`);
@@ -62,7 +64,7 @@ const Seatsall = (props) => {
     const slotUpdate = async () => {
         if (slot.seatId && slot.slotName && slot.bookedBy) {
           try {
-            const response = await updateSeatStatus(slot.seatId, slot.slotName, slot.bookedBy);
+            const response = await updateSeatStatus(slot.seatId, slot.slotName, slot.bookedBy, slot.seatValidTill || undefined);
             if(response.ok) {
               const { seat: updatedSeatData } = await response.json(); // Destructuring to get the updated seat directly
               // Assuming `seats` is the state you're using to render your seats

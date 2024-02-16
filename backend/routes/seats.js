@@ -240,13 +240,16 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
     const { seatStatus } = req.body;
     const [bookedSlotName, slotData] = Object.entries(seatStatus)[0];
     const newUserId = slotData.bookedBy;
+    const customValidityDate = slotData.seatValidTill;
 
     if (!(req.students.role === "Admin" || req.students.role === "Superadmin")) {
         return res.status(403).send({ error: "Unauthorized access" });
     }
 
     try {
-        const newValidityDate = setOneMonthValidity(); // Get the new validity date
+        // Calculate the new validity date based on user input or default function
+        const newValidityDate = customValidityDate ? new Date(customValidityDate) : setOneMonthValidity();
+
         // First, check if newUserId corresponds to a valid student
         const newStudent = await Students.findOne({ uid: newUserId });
         if (!newStudent) {
@@ -303,17 +306,18 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
 //     }
 
 //     try {
+//         const newValidityDate = setOneMonthValidity(); // Get the new validity date
 //         // First, check if newUserId corresponds to a valid student
 //         const newStudent = await Students.findOne({ uid: newUserId });
 //         if (!newStudent) {
 //             // If no student found, return an error response
 //             return res.status(404).send({ error: "No student with this user id found" });
 //         }
-//         // Update the seat in the database
+//         // Update the seat in the database with new validity date
 //         const seat = await Seat.findById(req.params.id);
-//         const updatedSeatStatus = { ...seat.seatStatus, ...seatStatus };
-//         updatedSeatStatus[bookedSlotName].status = true;
-//         seat.seatStatus = updatedSeatStatus;
+//         seat.seatStatus[bookedSlotName].status = true;
+//         seat.seatStatus[bookedSlotName].bookedBy = newUserId;
+//         seat.seatStatus[bookedSlotName].seatValidTill = newValidityDate; // Update seatValidTill
 //         await seat.save();
 
 //         // Check all students to find any existing assignment for this seat and slot
@@ -335,8 +339,9 @@ router.patch('/updateseatsdelete/:id', fetchuser, async (req, res) => {
 //             const assignmentIndex = newStudent.seatAssigned.findIndex(assignment => assignment.slot === bookedSlotName);
 //             if (assignmentIndex !== -1) {
 //                 newStudent.seatAssigned[assignmentIndex].seatNumber = seat.seatNumber;
+//                 newStudent.seatAssigned[assignmentIndex].validityDate = newValidityDate.toISOString().substring(0, 10); // Update validityDate for existing assignment
 //             } else {
-//                 newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName });
+//                 newStudent.seatAssigned.push({ seatNumber: seat.seatNumber, slot: bookedSlotName, validityDate: newValidityDate.toISOString().substring(0, 10), });
 //             }
 //             await newStudent.save();
 
