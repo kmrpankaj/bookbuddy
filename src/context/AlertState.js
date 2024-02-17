@@ -10,8 +10,9 @@ const AlertState = (props) => {
 
       const showAlert = (message, type) => {
         setAlert({ message, type, visible: true });
+        
         setTimeout(()=>{
-            setAlert({ msg: '', type: '', visible: false });
+            setAlert({ message: '', type: '', visible: false });
           }, 2000)
       };
 

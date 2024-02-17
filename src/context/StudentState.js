@@ -43,40 +43,85 @@ const getOneStudent = async () => {
   }
 };
 
-// Add a student
+
 const addStudent = async (name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('email', email);
+  formData.append('gender', gender);
+  formData.append('password', password);
+  formData.append('address', address);
+  formData.append('phone', phone);
+  formData.append('parentsphone', parentsphone);
+
+  // Check if photo and documentid are files and append them if they are
+  if (photo instanceof File) {
+    formData.append('photo', photo, photo.name);
+  }
+  if (documentid instanceof File) {
+    formData.append('documentid', documentid, documentid.name);
+  }
+
+  formData.append('role', role);
+
   try {
     const response = await fetch(`${host}/students/create/`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
+      body: formData, // No headers needed, FormData is automatically detected
     });
-    if (!response.ok) { // Check if the response status code is not successful
-      throw new Error(`HTTP error! status: ${response.status}`); // Throw an error with the status
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     const json = await response.json();
 
-    const student = {
-      "name": name,
-      "email": email,
-      "gender": gender,
-      "password": password,
-      "address": address,
-      "phone": phone,
-      "parentsphone": parentsphone,
-      "photo": photo,
-      "documentid": documentid,
-      "role": role,
-    };
-    setStudents([...students, student]);
+    // Since we cannot directly get the photo and documentid paths from the response here,
+    // assuming the server response includes the new student data with file paths
+    const student = json.newStudents; // Adjust based on actual response structure
+
+    setStudents(prevStudents => [...prevStudents, student]);
     return response;
   } catch (error) {
     console.error("Error adding student:", error);
     return { success: false, message: error.message };
   }
 }
+
+
+// Add a student copy
+// const addStudent = async (name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
+//   try {
+//     const response = await fetch(`${host}/students/create/`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role }),
+//     });
+//     if (!response.ok) { // Check if the response status code is not successful
+//       throw new Error(`HTTP error! status: ${response.status}`); // Throw an error with the status
+//     }
+//     const json = await response.json();
+
+//     const student = {
+//       "name": name,
+//       "email": email,
+//       "gender": gender,
+//       "password": password,
+//       "address": address,
+//       "phone": phone,
+//       "parentsphone": parentsphone,
+//       "photo": photo,
+//       "documentid": documentid,
+//       "role": role,
+//     };
+//     setStudents([...students, student]);
+//     return response;
+//   } catch (error) {
+//     console.error("Error adding student:", error);
+//     return { success: false, message: error.message };
+//   }
+// }
 
       // Delete a student
       const deleteStudent = async (id) => {

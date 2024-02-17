@@ -40,3 +40,50 @@ body {
 svg.bi-house, svg.bi.envelope, svg.bi.phone {
   margin-bottom: 2px;
 }
+
+.alert {
+  position: sticky;
+  top: 0;
+  /* other styles like width, z-index, etc. */
+}
+
+.alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
+  z-index: 100; /* Ensure overlay is above other content*/
+}
+
+/* Animations */ 
+@keyframes fadeInDown {
+  from {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+  }
+  to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
+  }
+}
+
+.fadeInDown {
+  animation: fadeInDown 0.5s forwards;
+}
+
+.fadeOutDown {
+  animation: fadeOutDown 0.5s forwards;
+}
+

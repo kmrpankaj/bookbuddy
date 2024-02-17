@@ -10,6 +10,8 @@ const generateUsername = require('./uidgenerate')
 const crypto = require('crypto');
 const { Resend } = require('resend');
 const resend = new Resend('re_KUJpjvYH_9M4jU7u1N25CKkAG4H8qRzmK');
+const multer = require('multer')
+const path = require('path')
 
 // Getting all
 router.get('/showall/', fetchuser, async (req, res) => {
@@ -28,6 +30,7 @@ router.get('/showall/', fetchuser, async (req, res) => {
 router.get('/show/:id', getStudents, (req, res) => {
     res.send(res.students)
 })
+
 
 // Updated GET request to get logged-in student's data
 router.get('/student-data/', fetchuser, async (req, res) => {
@@ -49,8 +52,33 @@ router.get('/student-data/', fetchuser, async (req, res) => {
     }
 });
 
-// Route 2: Creating one
-router.post('/create/', async (req, res) => {
+
+
+// Multer configurations
+// Configure Multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/') // Make sure this directory exists
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname)) // Naming the file uniquely
+    }
+  });
+
+  const fileFilter = (req, file, cb) => {
+    // Accept images only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|pdf|heic)$/)) {
+      req.fileValidationError = 'Only image and pdf files are allowed!';
+      return cb(new Error('Only image and pdf files are allowed!'), false);
+    }
+    cb(null, true);
+  };
+
+  const upload = multer({ storage: storage, fileFilter: fileFilter, limits: { fileSize: 1024 * 1024 * 5 } }); // Limit of 5MB
+
+
+// Route 2: Creating one with uploads
+router.post('/create/', upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'documentid', maxCount: 1 }]), async (req, res) => {
     let success=false;
     let newUsername;
     // Loop until a unique username is found
@@ -66,6 +94,11 @@ router.post('/create/', async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(req.body.password, salt);
+
+    // Access the files via req.files.photo[0] and req.files.documentid[0]
+    const photoPath = req.files.photo ? req.files.photo[0].path : '';
+    const documentPath = req.files.documentid ? req.files.documentid[0].path : '';
+
     const students = new Students({
         name: req.body.name,
         email: req.body.email,
@@ -74,8 +107,8 @@ router.post('/create/', async (req, res) => {
         address: req.body.address,
         phone: req.body.phone,
         parentsphone: req.body.parentsphone,
-        photo: req.body.photo,
-        documentid: req.body.documentid,
+        photo: photoPath,
+        documentid: documentPath,
         uid: newUsername,
         regisDate: req.body.regisDate,
         role: req.body.email === process.env.THALAIVA ? "Superadmin" : req.body.role || "Student"
@@ -99,6 +132,61 @@ router.post('/create/', async (req, res) => {
         res.status(400).json({success, message: err.message})
     }
 })
+
+
+// Route 2: Creating one copy
+// router.post('/create/', async (req, res) => {
+//     let success=false;
+//     let newUsername;
+//     // Loop until a unique username is found
+//     while (true) {
+//         newUsername = generateUsername(); // Generate a potential username
+
+//         // Check if the generated username is unique in the database
+//         const existingUser = await Students.findOne({ uid: newUsername });
+//         if (!existingUser) {
+//             // Unique username found, break the loop
+//             break;
+//         }
+//     }
+//     const salt = await bcrypt.genSalt(10);
+//     const secPass = await bcrypt.hash(req.body.password, salt);
+//     const students = new Students({
+//         name: req.body.name,
+//         email: req.body.email,
+//         gender: req.body.gender,
+//         password: secPass,
+//         address: req.body.address,
+//         phone: req.body.phone,
+//         parentsphone: req.body.parentsphone,
+//         photo: req.body.photo,
+//         documentid: req.body.documentid,
+//         uid: newUsername,
+//         regisDate: req.body.regisDate,
+//         role: req.body.email === process.env.THALAIVA ? "Superadmin" : req.body.role || "Student"
+//     })
+//     const data = {
+//         students: {
+//             id: students.id
+//         }
+//     }
+//     const authToken = jwt.sign(data, JWT_SECRET)
+//     try{
+//         const [user, phone] = await Promise.all([Students.findOne({ email: req.body.email }), Students.findOne({ phone: req.body.phone })]);
+//         if(user || phone) {
+//             return user ? res.status(400).json({ error: "Sorry, a user with this email already exists." }) : phone ? res.status(400).json({ error: "Sorry, a user with this phone number already exists." }) : "";
+//         }
+//         const newStudents = await students.save()
+//         success=true;
+//         res.status(201).json({success, newStudents})
+//     } catch (err){
+//         success=false;
+//         res.status(400).json({success, message: err.message})
+//     }
+// })
+
+
+
 // Updating one
 router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {
     let success=false;
@@ -126,6 +214,9 @@ router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {
         success=false
     }
 })
+
+
+
 // Deleting one
 router.delete('/delete/:id', fetchuser, getStudents, async (req, res) => {
     let success=false
@@ -155,6 +246,9 @@ async function getStudents(req, res, next) {
     res.students = students
     next()
 }
+
+
+
 
 // Route 2: Authenticate a user using /students/login
 router.post('/login', [
@@ -202,6 +296,8 @@ router.post('/login', [
     }
 })
 
+
+
 // Route 3: Get logged in user details /students/getuser. Requires login
 router.post('/getuser', fetchuser, async (req, res) => {
     try {
@@ -213,6 +309,8 @@ router.post('/getuser', fetchuser, async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 })
+
+
 
 // Route 4: Creating multiple students /students/addmultiple. Requires Admin login
 router.post('/addmultiple/', async (req, res) => {

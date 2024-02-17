@@ -31,11 +31,13 @@ const studentsSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        required: true
+        required: false,
+        default: "/uploads/default.jpg"
     },
     documentid: {
         type: String,
-        required: true
+        required: false,
+        default: "/uploads/default.jpg"
     },
     uid: {
         type: String,

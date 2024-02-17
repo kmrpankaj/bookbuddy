@@ -16,32 +16,28 @@ const Signup = () => {
 
 	const handleClick = async (e) => {
 		e.preventDefault();
-		try {
-			const response = await addStudent(students.name, students.email, students.gender, students.password, students.address, students.phone, students.parentsphone, students.photo, students.documentid, students.role);
 
-			if (response.status === 201) {
-			  // Handle success
-			  // console.log('Student added successfully!');
+		// Destructure the students state to pass individual values to addStudent
+		const { name, email, gender, password, address, phone, parentsphone, photo, documentid, role } = students;
+
+		try {
+			// Call addStudent from your context with all necessary parameters
+			const response = await addStudent(name, email, gender, password, address, phone, parentsphone, photo, documentid, role);
+	
+			if (response.ok) {
+				// Assuming response contains the JSON data directly if successful
 				showAlert("Signup successful!", "success");
-			} else if (response.status === 400) {
-			  // Handle specific error for duplicate email
-			  const errorData = await response.json();
-			  if (errorData.error === "Sorry, a user with this email already exists.") {
-				// Display an error message to the user
-				console.error('Error:', errorData.error);
-				// You can set an error state or display a message to the user
-			  } else {
-				// Handle other 400 status codes or unknown errors
-				console.error('Failed to add student. Status code:', response.status);
-			  }
+				// Optionally update any state or perform redirection
+				history("/login"); // Redirect to login page or dashboard as needed
 			} else {
-			  // Handle other status codes
-			  console.error('Failed to add student. Status code:', response.status);
+				// Handle HTTP errors
+				const errorData = await response.json();
+				showAlert(`Error: ${errorData.error || "Failed to sign up."}`, "error");
 			}
-		  } catch (error) {
-			// Handle errors that occurred during the request
-			console.error('Error adding student:', error);
-		  }
+		} catch (error) {
+			console.error("Error adding student:", error);
+			showAlert(`Error: ${error.message}`, "error");
+		}
 
 		  // Attempt to send the welcome email
 		  try {
@@ -67,20 +63,26 @@ const Signup = () => {
 			parentsphone: "",
 			photo: "",
 			documentid: "",
-			role: ""
+			role: "Student"
 		  });
 		  history("/login"); // redirect to login page
 
 	}
 
 	const onChange = (e) => {
-		if (e.target.name === 'gender') {
-			// Handle gender separately
-			setstudents({ ...students, gender: e.target.value, role: "Student" });
-		  } else {
-		setstudents({...students, [e.target.name]: e.target.value})
-		  }
-	}
+		if (e.target.type === 'file') {
+		  // Handle file inputs separately
+		  setstudents({ ...students, [e.target.name]: e.target.files[0] });
+		} else if (e.target.name === 'gender') {
+		  // Handle gender separately
+		  setstudents({ ...students, gender: e.target.value, role: "Student" });
+		} else {
+		  // Handle other inputs (text, email, etc.)
+		  setstudents({ ...students, [e.target.name]: e.target.value });
+		}
+	  };
+
+
 	const generatePassword = (inputId) => {
 		const generatedPassword = generateStrongPassword();
 		document.getElementById(inputId).value = generatedPassword;
@@ -166,11 +168,11 @@ const Signup = () => {
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Photo</label>
-												<input className="form-control form-control-lg" value={students.photo} type="text" name="photo" placeholder="Upload your photo" onChange={onChange} required/>
+												<input className="form-control form-control-lg" type="file" name="photo" placeholder="Upload your photo" onChange={onChange} required/>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Document</label>
-												<input className="form-control form-control-lg" value={students.documentid} type="text" name="documentid" placeholder="Upload your document" onChange={onChange} required/>
+												<input className="form-control form-control-lg" type="file" name="documentid" placeholder="Upload your document" onChange={onChange} required/>
 											</div>
 
 											<div className="d-grid gap-2 mt-3">

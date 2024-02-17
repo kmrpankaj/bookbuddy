@@ -25,6 +25,7 @@ app.use('/bookings', bookingRouter)
 'localhost:3001/bookings'
 const emailRoutes = require('./routes/email')
 app.use('/email', emailRoutes)
+app.use('/uploads', express.static('uploads'));
 
 
 app.listen(port, () => console.log(`server Started at http://localhost:${port}`));
