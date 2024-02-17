@@ -1,8 +1,9 @@
 const generateUsername = () => {
     // Get current date information
     const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+    const fullyear = currentDate.getFullYear();
+    const year = parseInt(fullyear.toString().slice(-2), 10);
+    // const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
     const day = String(currentDate.getDate()).padStart(2, '0');
    
     // Generate random letters (uppercase)
@@ -12,13 +13,19 @@ const generateUsername = () => {
     // Handle random numbering
     function getUniqueNumber() {
       // Generate a random number between 0 and 99 (inclusive)
-      const randomNum = Math.floor(Math.random() * 100);
+      const randomNum = Math.floor(Math.random() * 1000);
       // Add leading zero if needed
-      return randomNum < 10 ? `0${randomNum}` : randomNum;
+      if (randomNum < 10) {
+        return `00${randomNum}`;
+      } else if (randomNum < 100) {
+        return `0${randomNum}`;
+      } else {
+        return randomNum;
+      }
     }
    
     // Construct the username
-    const username = `${year}${month}${day}${randomLetters}${getUniqueNumber()}`;
+    const username = `${year}${day}${randomLetters}${getUniqueNumber()}`;
    
     return username;
    }

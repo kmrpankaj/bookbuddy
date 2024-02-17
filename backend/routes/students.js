@@ -129,8 +129,29 @@ router.post('/create/', upload.fields([{ name: 'photo', maxCount: 1 }, { name: '
         res.status(201).json({success, newStudents})
     } catch (err){
         success=false;
-        res.status(400).json({success, message: err.message})
+        next(err);
     }
+}, (error, req, res, next) => { // Error handling middleware
+    if (error instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        let message = 'An error occurred during the file upload.';
+        if (error.code === 'LIMIT_FILE_SIZE') {
+            message = 'File too large. Please upload a file smaller than 5MB.';
+        } else if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+            message = 'Too many files uploaded.';
+        } else {
+            message = error.message;
+        }
+        return res.status(400).json({ success: false, message: message });
+    } else if (req.fileValidationError) {
+        // An error occurred during file validation
+        return res.status(400).json({ success: false, message: req.fileValidationError });
+    } else if (error) {
+        // An unknown error occurred
+        return res.status(500).json({ success: false, message: error.message });
+    }
+    // If there's no error, pass control to the next handler (if any)
+    next();
 })
 
 

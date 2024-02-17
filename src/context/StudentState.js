@@ -7,6 +7,7 @@ const StudentState = (props) => {
 
       const [students, setStudents] = useState(studentsd)
 
+
 // Get all students
 const getAllStudents = async () => {
   try {
@@ -24,6 +25,8 @@ const getAllStudents = async () => {
     // Handle the error, you might want to set an error state or display a message to the user
   }
 };
+
+
 
 // get one studentprofile
 const getOneStudent = async () => {
@@ -43,6 +46,8 @@ const getOneStudent = async () => {
   }
 };
 
+
+// Add students
 
 const addStudent = async (name, email, gender, password, address, phone, parentsphone, photo, documentid, role) => {
   const formData = new FormData();
@@ -70,15 +75,16 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       body: formData, // No headers needed, FormData is automatically detected
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
     const json = await response.json();
 
+    if (!response.ok) {
+      console.log(response, 'hello res')
+      throw new Error(`HTTP error! status: ${response.status}, message: ${json.message}`);
+    }
+    
     // Since we cannot directly get the photo and documentid paths from the response here,
     // assuming the server response includes the new student data with file paths
     const student = json.newStudents; // Adjust based on actual response structure
-
     setStudents(prevStudents => [...prevStudents, student]);
     return response;
   } catch (error) {

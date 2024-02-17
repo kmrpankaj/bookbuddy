@@ -23,49 +23,47 @@ const Signup = () => {
 		try {
 			// Call addStudent from your context with all necessary parameters
 			const response = await addStudent(name, email, gender, password, address, phone, parentsphone, photo, documentid, role);
-	
+
 			if (response.ok) {
 				// Assuming response contains the JSON data directly if successful
 				showAlert("Signup successful!", "success");
+
+				// Attempt to send the welcome email
+				try {
+				await sendEmail({
+					to: students.email, // Use the email provided by the student
+					subject: 'Welcome to Bookbuddy!',
+					html: `<h1>Welcome, ${students.name}!</h1><p>Thank you for signing up. We're thrilled to have you onboard.</p>`,
+				});
+				console.log('Welcome email sent successfully.');
+				} catch (emailError) {
+				console.error('Failed to send welcome email:', emailError);
+				// Optionally handle email sending errors, e.g., by logging them or showing an alert
+				}
+				// Reset the students state after handling the response
+				setstudents({
+					name: "",
+					email: "",
+					gender: "",
+					password: "",
+					address: "",
+					phone: "",
+					parentsphone: "",
+					photo: "",
+					documentid: "",
+					role: "Student"
+				  });
 				// Optionally update any state or perform redirection
 				history("/login"); // Redirect to login page or dashboard as needed
 			} else {
-				// Handle HTTP errors
-				const errorData = await response.json();
-				showAlert(`Error: ${errorData.error || "Failed to sign up."}`, "error");
+				// Directly handle the response error
+			showAlert(response.message || 'Signup failed due to an unknown error', "danger");
+		   
 			}
 		} catch (error) {
 			console.error("Error adding student:", error);
-			showAlert(`Error: ${error.message}`, "error");
+        	showAlert(`Error: ${error instanceof Error ? error.message : "An unknown error occurred"}`, "danger");
 		}
-
-		  // Attempt to send the welcome email
-		  try {
-			await sendEmail({
-			  to: students.email, // Use the email provided by the student
-			  subject: 'Welcome to Bookbuddy!',
-			  html: `<h1>Welcome, ${students.name}!</h1><p>Thank you for signing up. We're thrilled to have you onboard.</p>`,
-			});
-			console.log('Welcome email sent successfully.');
-		  } catch (emailError) {
-			console.error('Failed to send welcome email:', emailError);
-			// Optionally handle email sending errors, e.g., by logging them or showing an alert
-		  }
-		
-		  // Reset the students state after handling the response
-		  setstudents({
-			name: "",
-			email: "",
-			gender: "",
-			password: "",
-			address: "",
-			phone: "",
-			parentsphone: "",
-			photo: "",
-			documentid: "",
-			role: "Student"
-		  });
-		  history("/login"); // redirect to login page
 
 	}
 
@@ -169,10 +167,12 @@ const Signup = () => {
 											<div className="mb-3">
 												<label className="form-label">Photo</label>
 												<input className="form-control form-control-lg" type="file" name="photo" placeholder="Upload your photo" onChange={onChange} required/>
+												<small className='px-1 bg-light'>Valid file types: jpg, jpeg, png, pdf, heic | Size: smaller than 5MB </small>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Document</label>
 												<input className="form-control form-control-lg" type="file" name="documentid" placeholder="Upload your document" onChange={onChange} required/>
+												<small className='px-1 bg-light'>Valid file types: jpg, jpeg, png, pdf, heic | Size: smaller than 5MB </small>
 											</div>
 
 											<div className="d-grid gap-2 mt-3">
