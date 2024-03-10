@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection
-const port = 3001
+const port = process.env.PORT
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database')) // always use mongod --dbpath /srv/mongodb/
 app.use(cors())

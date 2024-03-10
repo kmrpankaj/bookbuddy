@@ -155,58 +155,6 @@ router.post('/create/', upload.fields([{ name: 'photo', maxCount: 1 }, { name: '
 })
 
 
-// Route 2: Creating one copy
-// router.post('/create/', async (req, res) => {
-//     let success=false;
-//     let newUsername;
-//     // Loop until a unique username is found
-//     while (true) {
-//         newUsername = generateUsername(); // Generate a potential username
-
-//         // Check if the generated username is unique in the database
-//         const existingUser = await Students.findOne({ uid: newUsername });
-//         if (!existingUser) {
-//             // Unique username found, break the loop
-//             break;
-//         }
-//     }
-//     const salt = await bcrypt.genSalt(10);
-//     const secPass = await bcrypt.hash(req.body.password, salt);
-//     const students = new Students({
-//         name: req.body.name,
-//         email: req.body.email,
-//         gender: req.body.gender,
-//         password: secPass,
-//         address: req.body.address,
-//         phone: req.body.phone,
-//         parentsphone: req.body.parentsphone,
-//         photo: req.body.photo,
-//         documentid: req.body.documentid,
-//         uid: newUsername,
-//         regisDate: req.body.regisDate,
-//         role: req.body.email === process.env.THALAIVA ? "Superadmin" : req.body.role || "Student"
-//     })
-//     const data = {
-//         students: {
-//             id: students.id
-//         }
-//     }
-//     const authToken = jwt.sign(data, JWT_SECRET)
-//     try{
-//         const [user, phone] = await Promise.all([Students.findOne({ email: req.body.email }), Students.findOne({ phone: req.body.phone })]);
-//         if(user || phone) {
-//             return user ? res.status(400).json({ error: "Sorry, a user with this email already exists." }) : phone ? res.status(400).json({ error: "Sorry, a user with this phone number already exists." }) : "";
-//         }
-//         const newStudents = await students.save()
-//         success=true;
-//         res.status(201).json({success, newStudents})
-//     } catch (err){
-//         success=false;
-//         res.status(400).json({success, message: err.message})
-//     }
-// })
-
-
 
 // Updating one
 router.patch('/update/:id', fetchuser, getStudents, async (req, res) => {

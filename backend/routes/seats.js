@@ -200,21 +200,21 @@ router.patch('/updateseats/:id', fetchuser, async (req, res) => {
 
 
   // Route 3: Delete seats using: DELETE /seats/deleteseats. Requires login
-// router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
-//     try{
-//         if (req.students.role !== "Admin") {
-//             return res.status(403).send({ error: "Unauthorized access" });
-//           }
-//           let seat = await seats.findById(req.params.id)
-//           if(seat == null) {
-//               return res.status(404).json({ message: 'Cannot find seat'})
-//           }
-//        seat = await seats.deleteOne()
-//         res.json({message: 'Seat Deleted', seat: seat})
-//     } catch (err) {
-//         res.status(500).json({message: err.message})
-//     }
-// })
+router.delete('/deleteseats/:id', fetchuser, async (req, res) => {
+    try{
+        if (req.students.role !== "Superadmin") {
+            return res.status(403).send({ error: "Unauthorized access" });
+          }
+          let seat = await Seat.findById(req.params.id)
+          if(seat == null) {
+              return res.status(404).json({ message: 'Cannot find seat'})
+          }
+       seat = await seat.deleteOne()
+        res.json({message: 'Seat Deleted', seat: seat})
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+})
 
 // Validity function
 function setOneMonthValidity() {

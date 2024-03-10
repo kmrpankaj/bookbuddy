@@ -28,6 +28,29 @@ const getAllSeats = async () => {
 }
 
 
+// Delete a seat
+
+const deleteSeat = async (id) => {
+ try {
+  const response = await fetch(
+    `${host}/seats/deleteseats/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem('token')
+      },
+    });
+    const json = response.json();
+    // Sort the data by seatNumber
+    const sortedSeats = json.sort((a, b) => a.seatNumber - b.seatNumber);
+    setSeats(sortedSeats);
+ } catch (error) {
+  console.error("Error deleting seat:", error);
+ }
+}
+
+
 // Assign seats
 const  updateSeatStatus = async (seatId, slotName, bookedBy, seatValidTill = null) => {
   const seatStatusUpdate = {

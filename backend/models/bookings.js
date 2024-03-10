@@ -29,7 +29,8 @@ const bookingsSchema = new mongoose.Schema({
     lockerNum: {
         type: String,
         required: true,
-    }
+    } 
+    // discount needs to be added
 })
 
 module.exports = mongoose.model('bookings', bookingsSchema)
