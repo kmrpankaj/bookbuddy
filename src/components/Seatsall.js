@@ -99,7 +99,22 @@ const Seatsall = (props) => {
           }
     }
 
-    
+   // for seats background color 
+   const styles = {
+    godavari: { backgroundColor: "#25617ee3" },
+    krishna: { backgroundColor: "rgb(116 126 37 / 89%)" },
+    kaveri: { backgroundColor: "rgb(126 37 37 / 89%)" },
+  };
+  
+  const getSeatColor = (seatNumber) => {
+    if (seatNumber > 38 && seatNumber < 61) {
+      return styles.krishna;
+    } else if (seatNumber >= 61) {
+      return styles.kaveri;
+    } else {
+      return styles.godavari;
+    }
+  };
 
     return (
         <>
@@ -111,7 +126,7 @@ const Seatsall = (props) => {
                         {seats.length === 0 && "No user found lol! WTF!!!"}
                         {seats.map((seat) => {
                             return <div className="col-lg-6 col-xl-3 mb-4">
-                                <div className="card text-white h-100" style={{backgroundColor: "#25617ee3"}}>
+                                <div className="card text-white h-100" style={getSeatColor(seat.seatNumber)}>
                                     <div className="card-body">
                                         <div className="d-flex justify-content-between align-items-center">
                                             <div className="me-3">
