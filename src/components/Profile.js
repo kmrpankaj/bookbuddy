@@ -85,7 +85,7 @@ const Profile = () => {
                         </div>
                         <div className="col-6 mb-3">
                           <h6>Docuemnts</h6>
-                          <p className="text-muted"><Link target="_blank" rel="noopener noreferrer" to={`http://localhost:3001/${studentData.photo}`}>Photo</Link>, <Link target="_blank" rel="noopener noreferrer" to={`http://localhost:3001/${studentData.documentid}`}>Document</Link></p>
+                          <p className="text-muted"><Link target="_blank" rel="noopener noreferrer" to={`${process.env.REACT_APP_BACKEND_URL}/${studentData.photo}`}>Photo</Link>, <Link target="_blank" rel="noopener noreferrer" to={`${process.env.REACT_APP_BACKEND_URL}/${studentData.documentid}`}>Document</Link></p>
                         </div>
                       </div>
 

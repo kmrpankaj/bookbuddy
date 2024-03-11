@@ -1,7 +1,7 @@
 // EmailContext.js
 import React, { createContext, useContext } from 'react';
 
-const host = "http://localhost:3001"
+const host = process.env.REACT_APP_BACKEND_URL;
 // Create a context
 const EmailContext = createContext();
 

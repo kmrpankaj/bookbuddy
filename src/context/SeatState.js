@@ -2,7 +2,7 @@ import SeatContext from './SeatContext'
 import React, { useState } from 'react'
 
 const SeatState = (props) => {
-  const host = "http://localhost:3001"
+  const host = process.env.REACT_APP_BACKEND_URL;
     const seatsdata = []
       const [seats, setSeats] = useState(seatsdata)
       const [loading, setLoading] = useState(false);

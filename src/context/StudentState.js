@@ -2,7 +2,7 @@ import StudentContext from './StudentContext'
 import React, { useState } from 'react'
 
 const StudentState = (props) => {
-  const host = "http://localhost:3001"
+  const host = process.env.REACT_APP_BACKEND_URL;
     const studentsd = []
 
       const [students, setStudents] = useState(studentsd)

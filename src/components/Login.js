@@ -9,10 +9,11 @@ const Login = () => {
   const [storedCredentials, setStoredCredentials] = useState({ email: "", password: "" });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState({});
+  const host = process.env.REACT_APP_BACKEND_URL;
 
   const history = useNavigate()
   const handleLoginSubmit = async (e) => {
-    const host = "http://localhost:3001"
+    //const host = "http://localhost:3001"
     e.preventDefault()
     const response = await fetch(`${host}/students/login/`, {
       method: "POST",
@@ -57,7 +58,7 @@ const Login = () => {
   const storedToken = localStorage.getItem('token');
   const rememberMe = localStorage.getItem('rememberMe');
   const storedExpiryTime = localStorage.getItem('expiryTime');
-  const host = "http://localhost:3001";
+  //const host = "http://localhost:3001";
 
      // Declare the response variable outside the try block
     let response;

@@ -12,7 +12,7 @@ const Forgotpassword = () => {
     e.preventDefault(); // Prevent the form from submitting the traditional way
 
     try {
-      const response = await fetch('http://localhost:3001/students/forgot-password', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/students/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
