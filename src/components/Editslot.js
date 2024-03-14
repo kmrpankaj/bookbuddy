@@ -27,6 +27,16 @@ const Editslot = forwardRef((props, ref) => {
   const handleCustomDateCheckboxChange = (e) => {
     setIsCustomDateEnabled(e.target.checked);
 };
+
+  // for seat slot number
+const slotRedefined = {
+  "morning": 1,
+  "afternoon": 2,
+  "evening": 3,
+  "night": 4
+}
+const slotNumber = slotRedefined[slot.slotName];
+
   return (
     <>
         {/* <!-- Button trigger modal --> */}
@@ -39,7 +49,7 @@ const Editslot = forwardRef((props, ref) => {
   <div className="modal-dialog modal-dialog-centered" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLongTitle">Seat Number {slot.seatNumber}: {capitalizeFirstLetter(slot.slotName)} Slot</h5>
+        <h5 className="modal-title" id="exampleModalLongTitle">Seat Number {slot.seatNumber}: {capitalizeFirstLetter(slot.slotName)} Slot - {slotNumber}</h5>
         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
           {/* <span aria-hidden="true">&times;</span> */}
         </button>
@@ -67,7 +77,7 @@ const Editslot = forwardRef((props, ref) => {
                     onChange={handleCustomDateCheckboxChange}
                 />
                 <label className="form-check-label" htmlFor="customDateCheckbox">
-                    <small>Do you manually want to set a validity?</small>
+                    <small>Do you manually want to set a validity? {slot.bookedBy} </small>
                 </label>
             </div>
                  {/* Custom validity date input */}
