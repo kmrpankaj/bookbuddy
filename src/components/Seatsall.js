@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import AlertContext from '../context/AlertContext'
 import Sidedash from './Sidedash'
 import Editslot from './Editslot'
-import { copyToClipboard } from './Utilsfunc'
 
 const Seatsall = (props) => {
     const context = useContext(SeatContext)
@@ -13,6 +12,8 @@ const Seatsall = (props) => {
     const slotModalRef = useRef(null);
     const { showAlert } = useContext(AlertContext)
     const [slot, setSlot] = useState({})
+    const [filter, setFilter] = useState('all'); // State for filtering seats
+
     useEffect(() => {
       if (localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin')) {
             getAllSeats()
@@ -117,22 +118,41 @@ const Seatsall = (props) => {
   };
 
 
+   // Function to filter seats based on the selected filter
+   const filteredSeats = seats.filter((seat) => {
+    switch (filter) {
+        case 'godavari':
+            return true;
+        case 'krishna':
+            return seat.seatNumber > 38 && seat.seatNumber < 61;
+        case 'kaveri':
+            return seat.seatNumber >= 61;
+        default:
+          return seat.seatNumber >= 1 && seat.seatNumber <= 38;; // 'all' or default case, no filtering applied
+    }
+});
+
 
     return (
         <>
             <div className="container-fluid seatsall">
                 <div className="row">
                     <Sidedash />
-
+                    
                     <div className="col-md-9 pt-3"><div className="row">
-                        {seats.length === 0 && "No user found lol! WTF!!!"}
-                        {seats.map((seat) => {
+                    <div className="btn-group pb-3">
+                      <button className={`btn btn-secondary ${filter === "godavari" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('godavari')}>All</button>
+                      <button className={`btn btn-secondary ${filter === "all" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('all')}>Godavari Block</button>
+                      <button className={`btn btn-secondary ${filter === "krishna" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('krishna')}>Krishna Block</button>
+                      <button className={`btn btn-secondary ${filter === "kaveri" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('kaveri')}>Kaveri Block</button>
+                    </div>
+                            {filteredSeats.length === 0 && "No seats matching the criteria!"}
+                            {filteredSeats.map((seat) => {
                           // check if subscription expired
 
                           const validTill = seat.seatStatus.morning.seatValidTill;
                           const currentDate = new Date();
                           //const seatColor = validTill && new Date(validTill) < new Date() ? "#f96565" : (seat.seatStatus && seat.seatStatus.morning.status ? "#1b4256" : "#c4d8f3");
-                          console.log(validTill, "logging color");
                             return <div className="col-lg-6 col-xl-3 mb-4">
                                 <div className="card text-white h-100" style={getSeatColor(seat.seatNumber)}>
                                     <div className="card-body">

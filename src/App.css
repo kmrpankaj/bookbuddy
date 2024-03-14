@@ -7,6 +7,18 @@ body {
   font-size: .92rem;
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
+
+button.btn.btn-secondary.filterbtn.cursor-pointer {
+  background-color: #286280;
+}
+
+button.btn.btn-secondary.active.filterbtn.cursor-pointer {
+  background-color: #1b4256;
+}
+
 .sidebar .nav-link svg {
   padding-right: 7px;
 }
