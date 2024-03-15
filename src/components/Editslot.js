@@ -2,7 +2,7 @@ import React, { forwardRef, useState, useEffect } from 'react'
 import { capitalizeFirstLetter } from './Utilsfunc'
 
 const Editslot = forwardRef((props, ref) => {
-    const { slot, onChangeEdit, slotUpdate, makeSeatAvailable } = props
+    const { slot, onChangeEdit, slotUpdate, makeSeatAvailable, student } = props
 
     const [isCustomDateEnabled, setIsCustomDateEnabled] = useState(false);
     // Update based on props if needed, to reset when modal opens with new slot data
@@ -58,6 +58,7 @@ const slotNumber = slotRedefined[slot.slotName];
         <form>
             <div className="form-group">
                 <label className='mb-3' htmlFor="inputBookedby">Enter UID to assign this seat</label>
+                {student && student.name && (<p className='mb-3'>Assigned to <span class="mx-1 btn btn-success">{student.name}</span></p>)} 
                 <div className='d-flex align-items-center justify-content-between'>
                     <input onChange={onChangeEdit} value={slot.bookedBy || ''} name="bookedBy" type="text" id="uidinput" className="form-control" placeholder="UID" />
                     <span className='px-1' title='Unassign' role="button" type="button" data-bs-dismiss="modal" onClick={makeSeatAvailable}>
@@ -77,7 +78,7 @@ const slotNumber = slotRedefined[slot.slotName];
                     onChange={handleCustomDateCheckboxChange}
                 />
                 <label className="form-check-label" htmlFor="customDateCheckbox">
-                    <small>Do you manually want to set a validity? {slot.bookedBy} </small>
+                    <small>Do you manually want to set a validity? {} </small>
                 </label>
             </div>
                  {/* Custom validity date input */}

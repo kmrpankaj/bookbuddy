@@ -13,6 +13,7 @@ const Seatsall = (props) => {
     const { showAlert } = useContext(AlertContext)
     const [slot, setSlot] = useState({})
     const [filter, setFilter] = useState('all'); // State for filtering seats
+    const [student, setStudent] = useState(null); // State variable to store student data
 
     useEffect(() => {
       if (localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin')) {
@@ -26,12 +27,16 @@ const Seatsall = (props) => {
         }
 
     }, [])
+
+
     const handleCloseModal = () => {
         const modalElement = document.getElementById('staticBackdrop');
         modalElement.classList.remove('show'); // Adjust classes as needed for your Bootstrap version
         modalElement.removeAttribute('aria-modal'); // Optional step for accessibility
       };
-    const handleSlotClick = (e, currentSeat) => {
+
+
+    const handleSlotClick = async (e, currentSeat) => {
         // console.log(e.currentTarget); // Debug to see if this is the expected element
         // console.log(e.currentTarget.dataset.slot); 
         // Trigger modal or UI element that allows editing
@@ -47,7 +52,21 @@ const Seatsall = (props) => {
             seatValidTill: currentSeat.seatStatus[slotName].seatValidTill,
             seatNumber: currentSeat.seatNumber
         })
-        console.log("Updating slot state with: ", slot); // Debugging log
+        // fetching student data
+        const uid = currentSeat.seatStatus[slotName].bookedBy;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/students/show/uid/${uid}`); // Using the browser's fetch API
+            const studentData = await response.json(); // Parse the JSON response
+            setStudent(studentData);
+            // Now you have the student data in the `student` variable
+            // Use it to display information or perform actions
+        } catch (error) {
+            // Handle any errors that occurred during the API call
+            console.error('Error fetching student:', error);
+            // Provide appropriate error handling and feedback to the user
+        }
+        //console.log("Updating slot state with: ", slot); // Debugging log
+        console.log(student, "student")
         if (slotModalRef.current) {
           slotModalRef.current.click();
       }
@@ -56,8 +75,13 @@ const Seatsall = (props) => {
              // Handle cases where slot data is missing, perhaps initializing with default values or showing an error/alert
         //console.log(`Slot data for '${slotName}' is missing in the current seat.`);
         }
-
     }
+
+    useEffect(() => {
+      console.log(student); // Log when student changes
+  }, [student]);
+
+
     const onChangeEdit = (e) => {
         setSlot({...slot, [e.target.name]: e.target.value});
     }
@@ -176,7 +200,7 @@ const Seatsall = (props) => {
                         })
                         }
                     </div></div></div></div>
-                    <Editslot ref={slotModalRef} slot={slot} onChangeEdit={onChangeEdit} slotUpdate={slotUpdate} makeSeatAvailable={makeSeatAvailable} />
+                    <Editslot ref={slotModalRef} slot={slot} onChangeEdit={onChangeEdit} slotUpdate={slotUpdate} makeSeatAvailable={makeSeatAvailable} student={student} />
 
 
         </>
