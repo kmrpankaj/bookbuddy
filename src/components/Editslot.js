@@ -57,8 +57,8 @@ const slotNumber = slotRedefined[slot.slotName];
       <div className="modal-body">
         <form>
             <div className="form-group">
-                <label className='mb-3' htmlFor="inputBookedby">Enter UID to assign this seat</label>
                 {student && student.name && (<p className='mb-3'>Assigned to <span class="mx-1 btn btn-success">{student.name}</span></p>)} 
+                <label className='mb-3' htmlFor="inputBookedby">Enter UID to assign this seat</label>
                 <div className='d-flex align-items-center justify-content-between'>
                     <input onChange={onChangeEdit} value={slot.bookedBy || ''} name="bookedBy" type="text" id="uidinput" className="form-control" placeholder="UID" />
                     <span className='px-1' title='Unassign' role="button" type="button" data-bs-dismiss="modal" onClick={makeSeatAvailable}>
