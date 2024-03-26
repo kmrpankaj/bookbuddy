@@ -13,6 +13,8 @@ const Studentlist = (props) => {
     const { students, deleteStudent, getAllStudents, editStudent, editStudentAccountStatus } = context;
     const {showAlert} = useContext(AlertContext)
     const editModalRef = useRef(null);
+    const [filter, setFilter] = useState('all'); // State for filtering seats
+    const [searchTerm, setSearchTerm] = useState('');
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
     const history = useNavigate()
 
@@ -56,15 +58,65 @@ const Studentlist = (props) => {
         copyToClipboard(`studentuid-${uid}`)
         showAlert("UID copied to clipboard", "success")
     }
+
+    // check if validity has expired or not
+    function hasExpiredSeat(seatAssigned) {
+        return seatAssigned.some(seat => {
+            const validityDate = new Date(seat.validityDate);
+            return validityDate.getTime() < Date.now();
+        });
+    }
+
+      const filteredStudents = students.filter((student) => {
+        switch (filter) {
+          case 'active':
+              return student.accountStatus === true;
+          case 'inactive':
+            return student.accountStatus === false;
+          case 'hasBooking':
+            return student.seatAssigned.length > 0;
+          case 'expired':
+            return hasExpiredSeat(student.seatAssigned);;
+          default:
+              return student; // By default, no filtering based on account status or bookings
+        }
+      }).filter((student) => {
+          // Add the search term filtering here
+          return student.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                 student.uid.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 student.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 student.parentsphone.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+
     return (
         <>
             <div className="container-fluid">
                 <div className="row">
-                    <Sidedash />
+                    <Sidedash onSetActive={() => setFilter('active')} onSetInactive={() => setFilter('inactive')} onSetAll={() => setFilter('all')}  onSetExpired={() => setFilter('expired')} onSetHasBooking={() => setFilter('hasBooking')} />
                     
                     <div className="col-md-9 pt-3"><div className="row">
-                        {students.length===0 && "No user found lol! WTF!!!"}
-                        {students.map((student) => {
+                        <div className='col-md-12 position-relative'>
+                            <input 
+                            type="text" 
+                            className="form-control mb-3" 
+                            placeholder="Search by name UID email or phone.." 
+                            value={searchTerm} 
+                            onChange={(e) => setSearchTerm(e.target.value)} />
+                            {searchTerm && (
+                            <button 
+                                className="btn btn-outline-secondary" 
+                                type="button" 
+                                onClick={() => setSearchTerm('')}
+                                style={{position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 10, cursor: 'pointer'}}
+                            >
+                                X
+                            </button>
+                             )}
+                        </div>
+                    
+                        {filteredStudents.length===0 && "No user found! WTF!!!"}
+                        {filteredStudents.map((student) => {
                             const dateString = student.regisDate;
                             const date = new Date(dateString);
                             //gets random avatars

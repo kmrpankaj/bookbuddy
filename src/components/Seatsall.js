@@ -152,10 +152,9 @@ const Seatsall = (props) => {
         case 'kaveri':
             return seat.seatNumber >= 61;
         default:
-          return seat.seatNumber >= 1 && seat.seatNumber <= 38;; // 'all' or default case, no filtering applied
+          return seat.seatNumber >= 1 && seat.seatNumber <= 38; // 'all' or default case, no filtering applied
     }
 });
-
 
     return (
         <>
