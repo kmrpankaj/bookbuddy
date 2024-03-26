@@ -10,7 +10,7 @@ const Alerts = () => {
         setTimeout(() => {
           alertElement.classList.remove('fadeInDown');
           alertElement.classList.add('fadeOutDown');
-        }, 1500);
+        }, 1000);
       }
     }, [alert.visible]);
 
