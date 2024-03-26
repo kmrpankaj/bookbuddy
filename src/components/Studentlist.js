@@ -108,7 +108,7 @@ const Studentlist = (props) => {
                                 className="btn btn-outline-secondary" 
                                 type="button" 
                                 onClick={() => setSearchTerm('')}
-                                style={{position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 10, cursor: 'pointer'}}
+                                style={{position: 'absolute', height: 37, right: 12, top: 0, bottom: 0, zIndex: 10, cursor: 'pointer'}}
                             >
                                 X
                             </button>
