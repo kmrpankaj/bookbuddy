@@ -157,11 +157,11 @@ const Signup = () => {
 												<input className="form-control form-control-lg" value={students.address} type="text" name="address" placeholder="Enter your address" onChange={onChange} required/>
 											</div>
 											<div className="mb-3">
-												<label className="form-label">Phone</label>
+												<label className="form-label">Phone No.</label>
 												<input className="form-control form-control-lg" value={students.phone} type="text" name="phone" placeholder="Your phone number" onChange={onChange} required/>
 											</div>
 											<div className="mb-3">
-												<label className="form-label">Alternate No</label>
+												<label className="form-label">Parent's No.</label>
 												<input className="form-control form-control-lg" value={students.parentsphone} type="text" name="parentsphone" placeholder="Guardian or relative number" onChange={onChange} required/>
 											</div>
 											<div className="mb-3">
