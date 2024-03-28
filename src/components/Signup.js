@@ -176,8 +176,8 @@ const Signup = () => {
 											</div>
 
 											<div className="d-grid gap-2 mt-3">
-												<button type="submit" className="btn btn-lg btn-primary">Sign up</button>
-												{/* disabled={students.password.length<4 || students.phone.length<10||students.email.length<6||students.name.length<2 } */}
+												<button type="submit" className="btn btn-lg btn-primary" disabled={students.password.length<4 || students.phone.length<10||students.email.length<6||students.name.length<2 || students.photo.length===0 || students.documentid.length===0}>Sign up</button>
+												
 											</div>
 										</form>
 									</div>

@@ -142,35 +142,43 @@ const Studentlist = (props) => {
                                                 </div>
                                             </div>
                                             <hr className="my-0" />
-                                            <div className="card-body">
+                                            <div className="card-body position-relative">
                                                 <h5 className="h6 card-title">Seat Details</h5>
-                                                <ul className='list-group'>
-                                                    {
-                                                        //show booked shifts
-                                                        student.seatAssigned && student.seatAssigned.length > 0 ? (
-                                                            student.seatAssigned.map((shift, index) => (
-                                                            <li className='list-group-item' key={index}>
-                                                                <small>Seat: {shift.seatNumber} | {capitalizeFirstLetter(shift.slot)} | Valid: {shift.validityDate}</small>
-                                                            </li>
-                                                            ))
-                                                        ) : (
-                                                            <p>No booked shifts</p>
-                                                        )
-                                                    }
-                                                </ul>
+                                                <svg class="collapsible cursor-pointer" data-bs-toggle="collapse" data-bs-target={`#T${student.uid}`} aria-expanded="false" aria-controls={`T${student.uid}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zm160 352l-160-160c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z"/></svg>
+                                                <div class="collapse" id={`T${student.uid}`}>
+                                                    <ul className='list-group'>
+                                                        {
+                                                            //show booked shifts
+                                                            student.seatAssigned && student.seatAssigned.length > 0 ? (
+                                                                student.seatAssigned.map((shift, index) => (
+                                                                <li className='list-group-item' key={index}>
+                                                                    <small>Seat: {shift.seatNumber} | {capitalizeFirstLetter(shift.slot)} | Valid: {shift.validityDate}</small>
+                                                                </li>
+                                                                ))
+                                                            ) : (
+                                                                <p>No booked shifts</p>
+                                                            )
+                                                        }
+                                                    </ul>
+                                                </div>
                                             </div>
                                             <hr className="my-0" />
-                                            <div className="card-body">
+                                            <div className="card-body position-relative">
                                                 <h5 className="h6 card-title">About</h5>
-                                                <ul className="list-unstyled mb-0">
-                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-house" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c.2 35.5-28.5 64.3-64 64.3H128.1c-35.3 0-64-28.7-64-64V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24zM352 224a64 64 0 1 0 -128 0 64 64 0 1 0 128 0zm-96 96c-44.2 0-80 35.8-80 80c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16c0-44.2-35.8-80-80-80H256z"/></svg> Lives in: <span>{student.address}</span></li>
-                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-envelope" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM218 271.7L64.2 172.4C66 156.4 79.5 144 96 144H352c16.5 0 30 12.4 31.8 28.4L230 271.7c-1.8 1.2-3.9 1.8-6 1.8s-4.2-.6-6-1.8zm29.4 26.9L384 210.4V336c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V210.4l136.6 88.2c7 4.5 15.1 6.9 23.4 6.9s16.4-2.4 23.4-6.9z"/></svg> Email: <span>{student.email}</span></li>
-                                                    <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-phone" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg> Phone: <span>{student.phone}</span></li>
-                                                </ul>
+                                                <svg class="collapsible cursor-pointer" data-bs-toggle="collapse" data-bs-target={`#C${student.uid}`} aria-expanded="false" aria-controls={`C${student.uid}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zm160 352l-160-160c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z"/></svg>
+                                                <div class="collapse" id={`C${student.uid}`}>
+                                                    <ul className="list-unstyled mb-0">
+                                                        <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-house" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c.2 35.5-28.5 64.3-64 64.3H128.1c-35.3 0-64-28.7-64-64V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24zM352 224a64 64 0 1 0 -128 0 64 64 0 1 0 128 0zm-96 96c-44.2 0-80 35.8-80 80c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16c0-44.2-35.8-80-80-80H256z"/></svg> Lives in: <span>{student.address}</span></li>
+                                                        <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-envelope" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM218 271.7L64.2 172.4C66 156.4 79.5 144 96 144H352c16.5 0 30 12.4 31.8 28.4L230 271.7c-1.8 1.2-3.9 1.8-6 1.8s-4.2-.6-6-1.8zm29.4 26.9L384 210.4V336c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V210.4l136.6 88.2c7 4.5 15.1 6.9 23.4 6.9s16.4-2.4 23.4-6.9z"/></svg> Email: <span>{student.email}</span></li>
+                                                        <li className="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-phone" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg> Phone: <span>{student.phone}</span></li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                             <hr className="my-0" />
-                                            <div className="card-body">
+                                            <div className="card-body position-relative">
                                                 <h5 className="h6 card-title">Other Details</h5>
+                                                <svg class="collapsible cursor-pointer" data-bs-toggle="collapse" data-bs-target={`#P${student.uid}`} aria-expanded="false" aria-controls={`P${student.uid}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zm160 352l-160-160c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z"/></svg>
+                                                <div class="collapse" id={`P${student.uid}`}>
                                                 <ul className="list-unstyled mb-0">
                                                     <li className="mb-1"><span className="fas fa-globe fa-fw me-1">Role:</span> <span>{student.role}</span></li>
                                                     <li className="mb-1"><span className="fab fa-twitter fa-fw me-1">Registered on:</span> <span>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</span></li>
@@ -178,6 +186,7 @@ const Studentlist = (props) => {
                                                     <li className="mb-1"><span className="fab fa-instagram fa-fw me-1">Document ID: </span> <span>{student.documentid}</span></li>
                                                     <li className="mb-1"><span className="fab fa-linkedin fa-fw me-1">Parent's Phone:</span> <span>{student.parentsphone}</span></li>
                                                 </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

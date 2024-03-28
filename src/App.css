@@ -99,3 +99,20 @@ svg.bi-house, svg.bi.envelope, svg.bi.phone {
   animation: fadeOutDown 0.5s forwards;
 }
 
+.collapsible {
+  position: absolute;
+  right: 14px;
+  top: 19px;
+  height: 15px;
+  width: 15px;
+}
+.collapsible {
+  transition: transform 0.5s ease-in-out; /* Animation properties */
+  fill: #bab5b5;
+}
+
+.card-body:hover .collapsible {
+  transform: rotate(180deg); /* Rotation on hover */
+  fill: #303030;
+}
+
