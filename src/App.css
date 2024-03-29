@@ -118,3 +118,7 @@ span.collapsible:hover  svg {
   fill: #303030;
 }
 
+.fade {
+  transition: opacity .10s ease-out;
+}
+

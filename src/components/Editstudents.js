@@ -4,6 +4,7 @@ import AlertContext from '../context/AlertContext'
 const Editstudents = forwardRef((props, ref) => {
     const { student, onChangeEdit, handleClickEdit } = props
     const {showAlert} = useContext(AlertContext)
+    
     return (
         <>
             {/* <!-- Button trigger modal --> */}
@@ -29,10 +30,15 @@ const Editstudents = forwardRef((props, ref) => {
                                                 <label className="form-label">Full name</label>
                                                 <input className="form-control form-control-lg" type="text" value={student.ename} name="ename" placeholder="Enter your name" onChange={onChangeEdit} />
                                             </div>
+
+                                            {(localStorage.getItem('role') === 'Admin')? "":
+                                            <>
                                             <div className="mb-3">
                                                 <label className="form-label">Email</label>
                                                 <input className="form-control form-control-lg" type="email" value={student.eemail} name="eemail" placeholder="Enter your email" onChange={onChangeEdit} />
                                             </div>
+                                            </>
+                                            }
                                             <div className="mb-3">
 												<label className="form-label">Gender</label>
 												<div className="form-check form-check-inline mx-2">
@@ -60,19 +66,49 @@ const Editstudents = forwardRef((props, ref) => {
                                                 <label className="form-label">Alternate No</label>
                                                 <input className="form-control form-control-lg" type="text" value={student.eparentsphone} name="eparentsphone" placeholder="Guiardian or relative number" onChange={onChangeEdit} />
                                             </div>
-                                            <div className="mb-3">
+
+                                            {/* <div className="mb-3">
                                                 <label className="form-label">Photo</label>
-                                                <input className="form-control form-control-lg" type="text" value={student.ephoto} name="ephoto" placeholder="Upload your photo" onChange={onChangeEdit} />
+                                                <input className="form-control form-control-lg" type="file" name="ephoto" placeholder="Upload your photo" onChange={onChangeEdit} />
                                             </div>
                                             <div className="mb-3">
                                                 <label className="form-label">Document</label>
-                                                <input className="form-control form-control-lg" type="text" value={student.edocumentid} name="edocumentid" placeholder="Upload your document" onChange={onChangeEdit} />
+                                                <input className="form-control form-control-lg" type="file" name="edocumentid" placeholder="Upload your document" onChange={onChangeEdit} />
+                                            </div> */}
+
+                                            <div className="mb-3">
+                                                <label className="form-label">Photo</label>
+                                                    <input className="form-control form-control-lg" type="file" name="ephoto" placeholder="Upload your photo" onChange={onChangeEdit} />
+                                                <div>
+                                                    {student.ephoto ? (
+                                                        <small className="px-1 bg-light">Current photo: {student.ephoto || 'No file selected'}</small>
+                                                    ) : (
+                                                        <small className="px-1 bg-light">No file uploaded</small>
+                                                    )}
+                                                </div>
                                             </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Document</label>
+                                                    <input className="form-control form-control-lg" type="file" name="edocumentid" placeholder="Upload your document" onChange={onChangeEdit} />
+                                                <div>
+                                                    {student.edocumentid ? (
+                                                        <small className="px-1 bg-light">Current document: {student.edocumentid || 'uploads/default.'}</small>
+                                                    ) : (
+                                                        <small className="px-1 bg-light">No file uploaded</small>
+                                                    )}
+                                                </div>
+                                            </div>
+
+
+                                            {(localStorage.getItem('role') === 'Admin')? "":
+                                            <>
                                             <div className="mb-3">
 												<label className="form-label">Role</label>
 												<input className="form-control form-control-lg" type="text" value={student.erole} name="erole" placeholder="Add a role" onChange={onChangeEdit}/>
 											</div>
-                                        
+                                            </>
+                                            }
+
                                         </form>
                                     </div>
                                 </div>

@@ -78,7 +78,7 @@ const addStudent = async (name, email, gender, password, address, phone, parents
     const json = await response.json();
 
     if (!response.ok) {
-      console.log(response, 'hello res')
+      // console.log(response, 'hello res')
       throw new Error(`HTTP error! status: ${response.status}, message: ${json.message}`);
     }
     
@@ -151,40 +151,75 @@ const addStudent = async (name, email, gender, password, address, phone, parents
       }
 
 // Edit a student
-const editStudent = async (id, name, email, gender, password, address, phone, parentsphone, photo, documentid, role, accountStatus) => {
+// const editStudent = async (id, name, email, gender, password, address, phone, parentsphone, photo, documentid, role, accountStatus) => {
+//   try {
+//     const response = await fetch(`${host}/students/update/${id}`, {
+//       method: "PATCH",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
+//       },
+//       body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role, accountStatus }),
+//     });
+//     const json = await response.json();
+//     let newStudents = JSON.parse(JSON.stringify(students))
+//     // Logic to edit in client
+//     for (let index = 0; index < students.length; index++) {
+//       const element = newStudents[index];
+//       if (element._id === id) {
+//         element.name = name;
+//         element.email = email;
+//         element.gender = gender;
+//         element.password = password;
+//         element.address = address;
+//         element.phone = phone;
+//         element.parentsphone = parentsphone;
+//         element.photo = photo;
+//         element.documentid = documentid;
+//         element.role = role;
+//         element.accountStatus = accountStatus;
+//         break;
+//       }
+//     }
+//     setStudents(newStudents)
+//   } catch (error) {
+//     console.error("Error editing student:", error);
+//     // Handle the error
+//   }
+// };
+
+
+// Edit a student
+const editStudent = async (id, formData) => {
   try {
-    const response = await fetch(`${host}/students/update/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem('token'), // Replace with your actual auth token
-      },
-      body: JSON.stringify({ name, email, gender, password, address, phone, parentsphone, photo, documentid, role, accountStatus }),
-    });
-    const json = await response.json();
-    let newStudents = JSON.parse(JSON.stringify(students))
-    // Logic to edit in client
-    for (let index = 0; index < students.length; index++) {
-      const element = newStudents[index];
-      if (element._id === id) {
-        element.name = name;
-        element.email = email;
-        element.gender = gender;
-        element.password = password;
-        element.address = address;
-        element.phone = phone;
-        element.parentsphone = parentsphone;
-        element.photo = photo;
-        element.documentid = documentid;
-        element.role = role;
-        element.accountStatus = accountStatus;
-        break;
-      }
-    }
-    setStudents(newStudents)
+      const response = await fetch(`${host}/students/update/${id}`, {
+          method: "PATCH",
+          body: formData, // formData includes both files and text fields
+          headers: {
+              // "Content-Type": "multipart/form-data" will be set automatically with the correct boundary
+              "auth-token": localStorage.getItem('token'), // Ensure your auth-token is correctly set
+          },
+      });
+
+      const json = await response.json(); // Assuming the server responds with JSON that includes the updated student
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}, message: ${json.message}`);
+        }
+
+        // Update local state with the response data
+        setStudents(prevStudents => {
+            return prevStudents.map(student => {
+                if (student._id === id) {
+                    // Assuming your API returns the updated student object in 'json.updatedStudent'
+                    // Replace the entire student object with the updated data from the server
+                    return { ...json.updatedStudent };
+                }
+                return student; // For all other students, return them as they were
+            });
+        });
   } catch (error) {
-    console.error("Error editing student:", error);
-    // Handle the error
+      console.error("Error updating student:", error);
+      
   }
 };
 

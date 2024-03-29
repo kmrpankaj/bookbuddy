@@ -17,6 +17,7 @@ const Studentlist = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
     const history = useNavigate()
+    const [studentFiles, setStudentFiles] = useState({ ephoto: null, edocumentid: null });
 
     useEffect(() => {
         if(localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin') ){
@@ -36,11 +37,37 @@ const Studentlist = (props) => {
             editModalRef.current.click();
           }
         setStudent({id: currentStudent._id, ename: currentStudent.name, eemail: currentStudent.email, egender: currentStudent.gender, password: currentStudent.password, eaddress: currentStudent.address, ephone: currentStudent.phone, eparentsphone: currentStudent.parentsphone, ephoto: currentStudent.photo, edocumentid: currentStudent.documentid, erole: currentStudent.role})
-       
     }
-    const handleClickEdit = (e) => {
-        e.preventDefault()
-        editStudent(student.id, student.ename, student.eemail, student.egender, student.password, student.eaddress, student.ephone, student.eparentsphone, student.ephoto, student.edocumentid, student.erole)
+
+
+    const handleClickEdit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        
+        formData.append('name', student.ename);
+        formData.append('email', student.eemail);
+        formData.append('gender', student.egender);
+        formData.append('password', student.epassword);
+        formData.append('address', student.eaddress);
+        formData.append('phone', student.ephone);
+        formData.append('parentsphone', student.eparentsphone);
+        formData.append('role', student.erole);
+        formData.append('accountStatus', student.eaccountStatus);
+
+        Object.keys(student).forEach(key => {
+            formData.append(key, student[key]);
+        });
+    
+        // Add file fields if they exist
+        if (studentFiles.ephoto) {
+            formData.append('photo', studentFiles.ephoto);
+        }
+        if (studentFiles.edocumentid) {
+            formData.append('documentid', studentFiles.edocumentid);
+        }
+
+        await editStudent(student.id, formData);
         // console.log("updating the student", student)
     }
 
@@ -48,12 +75,16 @@ const Studentlist = (props) => {
         e.preventDefault();
         const newAccountStatus = currentAccountStatus === true ? false : true;
         editStudentAccountStatus(id, newAccountStatus);
-        console.log("Updating account status to:", newAccountStatus);
+        //console.log("Updating account status to:", newAccountStatus);
       };
 
     const onChangeEdit = (e) => {
-        setStudent({...student, [e.target.name]: e.target.value })
+    if (e.target.type === 'file') {
+        setStudentFiles({ ...studentFiles, [e.target.name]: e.target.files[0] });
+    } else {
+        setStudent({ ...student, [e.target.name]: e.target.value });
     }
+    };
     const copyTheUid = (uid) => {
         copyToClipboard(`studentuid-${uid}`)
         showAlert("UID copied to clipboard", "success")
@@ -82,11 +113,11 @@ const Studentlist = (props) => {
         }
       }).filter((student) => {
           // Add the search term filtering here
-          return student.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                 student.uid.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                 student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                 student.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                 student.parentsphone.toLowerCase().includes(searchTerm.toLowerCase());
+          return student.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                 student.uid?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 student.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 student.parentsphone?.toLowerCase().includes(searchTerm.toLowerCase());
       });
 
     return (
@@ -136,7 +167,11 @@ const Studentlist = (props) => {
                                                     {(student.role==="Superadmin" )?"":
                                                     <>
                                                     <button className="btn btn-primary btn-sm mx-1" onClick={(e) => toggleAccountStatus(e, student._id, student.accountStatus)}>{student.accountStatus?"Active": "Inactive"}</button>
+                                                    {(localStorage.getItem('role') === 'Admin')? "":
+                                                    <>
                                                     <button className="btn btn-primary btn-sm" onClick={(e) => { deleteStudent(student._id); showAlert(`${student.name} deleted successfully`, "danger") }}>Delete</button>
+                                                    </>
+                                                    }
                                                     </>
                                                     }
                                                 </div>
