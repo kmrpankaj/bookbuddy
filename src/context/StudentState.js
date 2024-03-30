@@ -249,11 +249,11 @@ const editStudentAccountStatus = async (id, accountStatus) => {
 
       setStudents(newStudents);
     } else {
-      console.error("Error editing student:", response.statusText);
+      console.error("Error editing student account status:", response.statusText);
       // Handle the error
     }
   } catch (error) {
-    console.error("Error editing student:", error);
+    console.error("Error editing student status:", error);
     // Handle the error
   }
 };
