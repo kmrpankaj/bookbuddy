@@ -55,8 +55,11 @@ const Studentlist = (props) => {
         formData.append('role', student.erole);
         formData.append('accountStatus', student.eaccountStatus);
 
+        // Append text fields to formData only if they have been explicitly set
         Object.keys(student).forEach(key => {
+            if (student[key] !== undefined && key !== 'password' && key !== 'accountStatus') {
             formData.append(key, student[key]);
+            }
         });
     
         // Add file fields if they exist
@@ -67,8 +70,21 @@ const Studentlist = (props) => {
             formData.append('documentid', studentFiles.edocumentid);
         }
 
-        await editStudent(student.id, formData);
-        // console.log("updating the student", student)
+        try {
+            const { success, updatedStudent, error } = await editStudent(student.id, formData, setStudent);
+        
+            if (success) {
+              console.log("Successfully updated student:", updatedStudent);
+              // Perform additional UI updates here, if necessary
+              showAlert("Update successful!", "success")
+            } else {
+              console.error("Failed to update student:", error);
+              // Handle error UI feedback here
+            }
+          } catch (error) {
+            console.error("Unexpected error:", error);
+            // Handle unexpected errors here
+          }
     }
 
     const toggleAccountStatus = (e, id, currentAccountStatus) => {

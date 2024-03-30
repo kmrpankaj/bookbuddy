@@ -217,6 +217,10 @@ const editStudent = async (id, formData) => {
                 return student; // For all other students, return them as they were
             });
         });
+
+        // Return success status and the updated student data
+    return { success: true, updatedStudent: json.updatedStudent };
+    
   } catch (error) {
       console.error("Error updating student:", error);
       
@@ -226,7 +230,7 @@ const editStudent = async (id, formData) => {
 // Edit a student's account status
 const editStudentAccountStatus = async (id, accountStatus) => {
   try {
-    const response = await fetch(`${host}/students/update/${id}`, {
+    const response = await fetch(`${host}/students/toggleacStatus/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

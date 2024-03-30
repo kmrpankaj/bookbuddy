@@ -28,7 +28,7 @@ const Editstudents = forwardRef((props, ref) => {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="m-sm-3">
-                                        <form className='text-start'>
+                                        <form enctype="multipart/form-data" method="post" className='text-start'>
                                             <div className="mb-3">
                                                 <label className="form-label">Full name</label>
                                                 <input className="form-control form-control-lg" type="text" value={student.ename} name="ename" placeholder="Enter your name" onChange={onChangeEdit} />
@@ -119,7 +119,7 @@ const Editstudents = forwardRef((props, ref) => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-primary" onClick={(e) => {handleClickEdit(e); showAlert("Update successful!", "success")}} data-bs-dismiss="modal">Update</button>
+                            <button type="button" className="btn btn-primary" onClick={handleClickEdit} data-bs-dismiss="modal">Update</button>
                         </div>
                     </div>
                 </div>
