@@ -71,19 +71,21 @@ const Studentlist = (props) => {
         }
 
         try {
-            const { success, updatedStudent, error } = await editStudent(student.id, formData, setStudent);
-        
-            if (success) {
-              console.log("Successfully updated student:", updatedStudent);
+            const response = await editStudent(student.id, formData);
+        // console.log(response.message, "hihello")
+            if (response.success) {
+              console.log("Successfully updated student:", response.updatedStudent);
               // Perform additional UI updates here, if necessary
-              showAlert("Update successful!", "success")
+              showAlert(`Update successful! ${response.updatedStudent}`, "success")
             } else {
-              console.error("Failed to update student:", error);
+            console.error("Failed to update student:", response.message);
+            showAlert(`Error uploading photos: ${response.error}`, "danger")
               // Handle error UI feedback here
             }
           } catch (error) {
             console.error("Unexpected error:", error);
             // Handle unexpected errors here
+            showAlert(`Error uploading photos: ${error.message}`, "danger")
           }
     }
 
@@ -240,8 +242,8 @@ const Studentlist = (props) => {
                                                 <ul className="list-unstyled mb-0">
                                                     <li className="mb-1"><span className="fas fa-globe fa-fw me-1">Role:</span> <span>{student.role}</span></li>
                                                     <li className="mb-1"><span className="fab fa-twitter fa-fw me-1">Registered on:</span> <span>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</span></li>
-                                                    <li className="mb-1"><span className="fab fa-facebook fa-fw me-1">Photo:</span> <span><a target="_blank" href={`${process.env.REACT_APP_BACKEND_URL}/${student.photo}`}>{student.photo}</a></span></li>
-                                                    <li className="mb-1"><span className="fab fa-instagram fa-fw me-1">Document ID: </span> <span><a target="_blank" href={`${process.env.REACT_APP_BACKEND_URL}/${student.documentid}`}>{student.documentid}</a></span></li>
+                                                    <li className="mb-1"><span className="fab fa-facebook fa-fw me-1">Photo:</span> <span><a target="_blank" href={`${process.env.REACT_APP_BACKEND_URL}/${student.photo}`}>Image-{student.photo}</a></span></li>
+                                                    <li className="mb-1"><span className="fab fa-instagram fa-fw me-1">Document ID: </span> <span><a target="_blank" href={`${process.env.REACT_APP_BACKEND_URL}/${student.documentid}`}>Id Proof-{student.documentid}</a></span></li>
                                                     <li className="mb-1"><span className="fab fa-linkedin fa-fw me-1">Parent's Phone:</span> <span>{student.parentsphone}</span></li>
                                                 </ul>
                                                 </div>

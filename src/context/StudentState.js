@@ -203,7 +203,8 @@ const editStudent = async (id, formData) => {
 
       const json = await response.json(); // Assuming the server responds with JSON that includes the updated student
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}, message: ${json.message}`);
+          const errorMessage = json.message || "An error occurred while updating the student.";
+          throw new Error(errorMessage);
         }
 
         // Update local state with the response data
@@ -219,10 +220,11 @@ const editStudent = async (id, formData) => {
         });
 
         // Return success status and the updated student data
-    return { success: true, updatedStudent: json.updatedStudent };
-    
+    return { success: true, updatedStudent: json.updatedStudent, message: "Student updated successfully" };
+
   } catch (error) {
       console.error("Error updating student:", error);
+      return { success: false, message: "Failed to update student.", error: error.message };
       
   }
 };
