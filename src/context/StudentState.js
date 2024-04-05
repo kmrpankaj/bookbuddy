@@ -79,7 +79,7 @@ const addStudent = async (name, email, gender, password, address, phone, parents
 
     if (!response.ok) {
       // console.log(response, 'hello res')
-      throw new Error(`HTTP error! status: ${response.status}, message: ${json.message}`);
+      throw new Error(`Error: ${json.error}`);
     }
     
     // Since we cannot directly get the photo and documentid paths from the response here,

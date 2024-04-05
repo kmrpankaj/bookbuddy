@@ -122,3 +122,20 @@ span.collapsible:hover  svg {
   transition: opacity .10s ease-out;
 }
 
+.floater {
+  position: fixed;
+  top: 96px;
+  right: 1px;
+  transition: all 1s ease-in-out;
+  z-index: 1;
+}
+.floater.top {
+  top: 56px;
+}
+.hidden {
+  visibility: hidden;
+}
+.floater.hidden {
+  right: -100px
+}
+

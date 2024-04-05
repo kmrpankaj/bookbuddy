@@ -13,7 +13,7 @@ const Login = () => {
 
   const history = useNavigate()
   const handleLoginSubmit = async (e) => {
-    //const host = "http://localhost:3001"
+
     e.preventDefault()
     const response = await fetch(`${host}/students/login/`, {
       method: "POST",

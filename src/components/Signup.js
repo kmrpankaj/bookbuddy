@@ -35,7 +35,7 @@ const Signup = () => {
 					subject: 'Welcome to Bookbuddy!',
 					html: `<h1>Welcome, ${students.name}!</h1><p>Thank you for signing up. We're thrilled to have you onboard.</p>`,
 				});
-				console.log('Welcome email sent successfully.');
+				// console.log('Welcome email sent successfully.');
 				} catch (emailError) {
 				console.error('Failed to send welcome email:', emailError);
 				// Optionally handle email sending errors, e.g., by logging them or showing an alert
@@ -101,6 +101,25 @@ const Signup = () => {
 		  passwordInput.type = "text";
 		}
 	  }
+
+  // phone validation
+	  const [phone, setPhone] = useState(students.phone || ''); // Initialize phone state with existing value or empty string
+	  const [phoneError, setPhoneError] = useState(''); // State for validation error message
+
+	  const handlePhoneChange = (event) => {
+		setPhone(event.target.value);
+		const phoneRegex = /^\d{10}$/; // Replace with your preferred phone number regex
+		if (!phoneRegex.test(event.target.value)) {
+		  setPhoneError('Please enter a valid phone number.');
+		} else {
+		  setPhoneError('');
+		}
+		// Call the existing onChange function if needed (pass event for consistency)
+		onChange && onChange(event); // Assuming onChange is a function
+	  };
+	
+
+
   return (
 
     <>
@@ -158,7 +177,8 @@ const Signup = () => {
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Phone No.</label>
-												<input className="form-control form-control-lg" value={students.phone} type="text" name="phone" placeholder="Your phone number" onChange={onChange} required/>
+												<input id="phone" className={`form-control form-control-lg ${phoneError ? 'is-invalid' : ''}`} value={students.phone} onChange={handlePhoneChange} type="text" name="phone" placeholder="Your phone number" required/>
+												<div id="phone-error" class="invalid-feedback">{phoneError}</div>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Parent's No.</label>

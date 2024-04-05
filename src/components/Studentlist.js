@@ -7,6 +7,8 @@ import Editstudents from './Editstudents'
 import AlertContext from '../context/AlertContext'
 import { capitalizeFirstLetter } from './Utilsfunc'
 import { copyToClipboard } from './Utilsfunc'
+import ScrollButton from './ScrollButton'
+
 
 const Studentlist = (props) => {
     const context = useContext(StudentContext)
@@ -141,6 +143,7 @@ const Studentlist = (props) => {
     return (
         <>
             <div className="container-fluid">
+            <ScrollButton />
                 <div className="row">
                     <Sidedash onSetActive={() => setFilter('active')} onSetInactive={() => setFilter('inactive')} onSetAll={() => setFilter('all')}  onSetExpired={() => setFilter('expired')} onSetHasBooking={() => setFilter('hasBooking')} />
                     
