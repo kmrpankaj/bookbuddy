@@ -76,9 +76,9 @@ const Studentlist = (props) => {
             const response = await editStudent(student.id, formData);
         // console.log(response.message, "hihello")
             if (response.success) {
-              console.log("Successfully updated student:", response.updatedStudent);
+              //console.log("Successfully updated student 1:", response.updatedStudent);
               // Perform additional UI updates here, if necessary
-              showAlert(`Update successful! ${response.updatedStudent}`, "success")
+              showAlert(`Update successful! ${response.updatedStudent.name}`, "success")
             } else {
             console.error("Failed to update student:", response.message);
             showAlert(`Error uploading photos: ${response.error}`, "danger")
@@ -138,7 +138,7 @@ const Studentlist = (props) => {
                  student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                  student.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                  student.parentsphone?.toLowerCase().includes(searchTerm.toLowerCase());
-      });
+      })
 
     return (
         <>

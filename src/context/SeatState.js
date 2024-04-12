@@ -73,10 +73,6 @@ const  updateSeatStatus = async (seatId, slotName, bookedBy, seatValidTill = nul
           throw new Error(`Error: ${response.statusText}`);
       }
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-    }
-
     return response; // Return the fetch response for further processing
 
   } catch (error) {
