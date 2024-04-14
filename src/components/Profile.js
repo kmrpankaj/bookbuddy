@@ -18,7 +18,7 @@ const Profile = () => {
   if (!studentData) return <div>No student data found</div>;
 
   //gets random avatars
-  const avatarFilename = getRandomAvatar("studentData.gender");
+  const avatarFilename = studentData.avatar;
   const dateString = studentData.regisDate;
   const dateRegistered = new Date(dateString);
   const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];

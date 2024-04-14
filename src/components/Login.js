@@ -60,6 +60,28 @@ const Login = () => {
   const storedExpiryTime = localStorage.getItem('expiryTime');
   //const host = "http://localhost:3001";
 
+  // checking if already logged in
+  const checkAuthentication = async () => {
+    // Check if token exists and has not expired
+    if (storedToken && new Date().getTime() < parseInt(storedExpiryTime, 10)) {
+      setIsAuthenticated(true);
+      showAlert("You are already logged in.", "info");
+      console.log('loggedin hai')
+      history('/profile'); // Redirect to home if already logged in
+    }
+    // Function to check if the token is still valid
+		const isTokenValid = () => {
+			return Boolean(localStorage.getItem('token'));
+		  };
+		// Check if the token exists and is valid
+		if (isTokenValid()) {
+			setIsAuthenticated(true);
+			history('/profile'); // Redirect to home if already logged in
+		  }
+  };
+
+  checkAuthentication();
+
      // Declare the response variable outside the try block
     let response;
   
@@ -104,7 +126,7 @@ const Login = () => {
         response.abort();
       }
     };
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [history, showAlert]); // Empty dependency array means this effect runs once on mount
   return (
     <>
       <div className="container d-flex flex-column">

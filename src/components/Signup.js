@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import StudentContext from '../context/StudentContext'
 import generateStrongPassword from './Strongpassword'
@@ -13,6 +13,33 @@ const Signup = () => {
 	const { addStudent } = context;
 	const [students, setstudents] = useState({name: "", email: "",  gender: "", password: "", address: "", phone: "", parentsphone: "", photo: "", documentid: "", role: "Student" })
 	const { sendEmail } = useEmail();
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+	useEffect(() => {
+	  const checkAuthentication = async () => {
+		const storedToken = localStorage.getItem('token');
+		const expiryTime = localStorage.getItem('expiryTime');
+  
+		// Check if token exists and has not expired
+		if (storedToken && new Date().getTime() < parseInt(expiryTime, 10)) {
+		  setIsAuthenticated(true);
+		  showAlert("You are already logged in.", "info");
+		  history('/profile'); // Redirect to home if already logged in
+		}
+		// Function to check if the token is still valid
+		const isTokenValid = () => {
+			return Boolean(localStorage.getItem('token'));
+		  };
+		// Check if the token exists and is valid
+		if (isTokenValid()) {
+			setIsAuthenticated(true);
+			history('/profile'); // Redirect to home if already logged in
+		  }
+	  };
+  
+	  checkAuthentication();
+	}, [history, showAlert]);
+
 
 	const handleClick = async (e) => {
 		e.preventDefault();

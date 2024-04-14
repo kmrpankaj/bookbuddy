@@ -117,8 +117,14 @@ const Seatsall = (props) => {
         const slotName = slot.slotName;
         const seatID = slot.seatId;
         try {
-            await removeAssignedSlot(seatID, slotName);
-            showAlert("Seat removed successfully", "success");
+            const response = await removeAssignedSlot(seatID, slotName);
+            console.log(response)
+            if (response && response.ok) {
+              showAlert("Seat removed successfully", "success");
+            } else {
+              showAlert("Operation completed, but check the details", "warning");
+            }
+            
           } catch (error) {
             showAlert("Failed to remove the seat", "error");
           }

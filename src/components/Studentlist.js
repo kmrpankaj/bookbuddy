@@ -172,7 +172,7 @@ const Studentlist = (props) => {
                             const dateString = student.regisDate;
                             const date = new Date(dateString);
                             //gets random avatars
-                            const avatarFilename = getRandomAvatar(student.gender || "male");
+                            const avatarFilename = student.avatar;
                             return (
                                 <>
                                     <div key={student.uid} className="col-md-4 col-xl-4">
@@ -203,13 +203,16 @@ const Studentlist = (props) => {
                                                 <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target={`#T${student.uid}`} aria-expanded="true" aria-controls={`T${student.uid}`}>Seat Details</h5>
                                                 <svg className="collapse-svg position-absolute" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zm160 352l-160-160c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z"/></svg>
                                             </span>   
-                                                <div className="collapse show" id={`T${student.uid}`}>
+                                                <div className={`collapse ${student.seatAssigned.length > 0 ? "show":""}`} id={`T${student.uid}`}>
                                                     <ul className='list-group'>
                                                         {
                                                             //show booked shifts
                                                             student.seatAssigned && student.seatAssigned.length > 0 ? (
                                                                 student.seatAssigned.map((shift, index) => (
-                                                                <li className='list-group-item' key={index}>
+
+                                                                    //checking validity date
+
+                                                                <li className={`list-group-item ${(new Date(shift.validityDate) < new Date().setHours(0, 0, 0, 0)?"border-danger":"")}`} key={index}>
                                                                     <small>Seat: {shift.seatNumber} | {capitalizeFirstLetter(shift.slot)} | Valid: {shift.validityDate}</small>
                                                                 </li>
                                                                 ))

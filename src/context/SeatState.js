@@ -108,9 +108,11 @@ const removeAssignedSlot = async (seatId, slotName) => {
     // Assuming the backend returns the updated seat object, refresh seat status in state
     const updatedSeat = await response.json();
     setSeats(prevSeats => prevSeats.map(seat => seat._id === seatId ? updatedSeat.seat : seat));
+    return { ok: true, data: updatedSeat };
   } catch (error) {
     console.error('Failed to remove assigned slot:', error);
     // Optionally handle the error, e.g., by setting an error state or displaying a message
+    return { ok: false, error: error.message };
   } finally {
     setLoading(false);
   }

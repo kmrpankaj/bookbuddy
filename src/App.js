@@ -15,6 +15,7 @@ import SeatState from './context/SeatState';
 import { EmailProvider } from './context/EmailContext';
 import Forgotpassword from './components/Forgotpassword';
 import Passwordreset from './components/Passwordreset';
+import CreateCoupons from './components/CreateCoupons';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                   <Route path="/allseats" element={<Seatsall />} />
                   <Route path="/forgotpassword" element={<Forgotpassword />} />
                   <Route path="/resetpassword" element={<Passwordreset />} />
+                  <Route path="/createcoupon" element={<CreateCoupons />} />
                 </Routes>
               </EmailProvider>
             </BrowserRouter>
