@@ -16,6 +16,11 @@ import { EmailProvider } from './context/EmailContext';
 import Forgotpassword from './components/Forgotpassword';
 import Passwordreset from './components/Passwordreset';
 import CreateCoupons from './components/CreateCoupons';
+import Couponsall from './components/Couponsall';
+import BookingForm from './components/BookingForm';
+import TransactionStatus from './components/TransactionStatus';
+import PaymentResult from './components/PaymentResult';
+import BookingCart from './components/BookingCart';
 
 
 function App() {
@@ -39,6 +44,12 @@ function App() {
                   <Route path="/forgotpassword" element={<Forgotpassword />} />
                   <Route path="/resetpassword" element={<Passwordreset />} />
                   <Route path="/createcoupon" element={<CreateCoupons />} />
+                  <Route path="/viewcoupons" element={<Couponsall />} />
+                  <Route path="/createbooking" element={<BookingForm />} />
+                  <Route path="/transaction-status/:clientTxnId" element={<TransactionStatus />} />
+                  <Route path="/payment-result" element={<PaymentResult />} />
+                  <Route path="/cart" element={<BookingCart />} />
+
                 </Routes>
               </EmailProvider>
             </BrowserRouter>

@@ -20,7 +20,11 @@ const Studentlist = (props) => {
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
     const history = useNavigate()
     const [studentFiles, setStudentFiles] = useState({ ephoto: null, edocumentid: null });
-
+    const styleBackground = {
+        backgroundImage: "url('/images/stdbg.jpg')",
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover' 
+        }
     useEffect(() => {
         if(localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin') ){
             getAllStudents()
@@ -176,9 +180,9 @@ const Studentlist = (props) => {
                             return (
                                 <>
                                     <div key={student.uid} className="col-md-4 col-xl-4">
-                                        <div className="card mb-3">
+                                        <div className="card mb-3" style={styleBackground} >
                                             <div className="card-body text-center">
-                                                <img src={`/images/${avatarFilename}.jpg`} alt="Stacie Hall" className="img-fluid rounded-circle mb-2" width="128" height="128" />
+                                                <img src={`/images/${avatarFilename}.jpg`} alt={student.name} className="img-fluid rounded-circle mb-2" width="128" height="128" />
                                                 <h5 className="card-title mb-0">{student.name}</h5>
                                                 <div className="text-muted mb-2 position-relative"><span id={`studentuid-${student.uid}`}>{student.uid}</span> <svg className='position-absolute' width="16" height="16" onClick={()=> copyTheUid(student.uid)} style={{cursor: "pointer", top: "2px", paddingLeft: "5px"}} fill="#212529 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"/><title>Copy to clipboard</title></svg></div>
                                                

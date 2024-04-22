@@ -139,3 +139,50 @@ span.collapsible:hover  svg {
   right: -100px
 }
 
+/* Coupon code card */
+.coupon-card {
+  border: 1px dashed #333;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: white;
+  text-align: center;
+}
+.coupon-title {
+  font-size: 24px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: red;
+}
+.coupon-discount {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: red;
+}
+.coupon-detail {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.coupon-code {
+  font-size: 18px;
+  margin: 10px 0;
+}
+.coupon-cta {
+  font-size: 16px;
+  color: white;
+  background: rgb(13 110 253);
+  display: inline-block;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.coupon-cta:hover {
+  background: rgb(15, 29, 83);
+  color: white;
+  text-decoration: none;
+}
+span.badge.badge-info {
+  background: #0dcaf0;
+}
+

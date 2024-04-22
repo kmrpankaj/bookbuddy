@@ -3,6 +3,7 @@ import AlertContext from '../context/AlertContext'
 import Sidedash from './Sidedash'
 
 const CreateCoupons = () => {
+    const host = process.env.REACT_APP_BACKEND_URL;
     const {showAlert} = useContext(AlertContext)
     const [formData, setFormData] = useState({
         code: '',
@@ -10,40 +11,63 @@ const CreateCoupons = () => {
         discountType: 'amount', // Initial discount type
         discountValue: '',
         expirationDate: '',
+        createdBy: '',
         usageLimit: '',
         isActive: true
     })
 
     const handleChange = (e) => {
-        const value = e.target.type === 'checkbox' ? e.target.checked: e.target.value;
-        setFormData({
-            ...formData,
-            [e.target.name]: value
-        })
+        const { type, name, value, checked } = e.target;
+        const updatedValue = type === 'checkbox' ? checked : value;
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: updatedValue
+        }))
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Handle 'unlimited' usageLimit scenario
+        const submissionData = {
+            ...formData,
+            usageLimit: formData.usageLimit ? formData.usageLimit : null  // Convert empty string or similar falsy value to null
+        };
+
         try {
-            const response = await fetch('/coupons/create', {
+            const response = await fetch(`${host}/coupons/create`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem('token'), // Authorization token
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(submissionData)
             });
             
             if(!response.ok) {
                 throw new Error('HTTP error', + response.status);
             }
             const data = await response.json();
-            console.log(data, "coupon created successfully");
-            
             //add alert message
+            showAlert("Coupon created successfully", "success")
+            // Reset the form data on successfull sumission
+            setFormData({
+                code: '',
+                description: '',
+                discountType: 'amount', // Initial discount type
+                discountValue: '',
+                expirationDate: '',
+                createdBy: '',
+                usageLimit: '',
+                isActive: true
+            })
+            
 
         } catch (error) {
             console.error('Error creating coupon:', error)
              //add alert message
+             showAlert(`Error creating coupon: ${error}`, "danger")
 
         }
     }
