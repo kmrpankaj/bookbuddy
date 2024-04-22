@@ -82,7 +82,7 @@ const Login = () => {
 
   checkAuthentication();
 
-     // Declare the response variable outside the try block
+     // Declare the response variable outside the try block.
     let response;
   
     const fetchData = async () => {
