@@ -3,8 +3,8 @@ import StudentContext from '../context/StudentContext'
 import Sidedash from './Sidedash'
 import useStudentData from './Usestudentdata'
 import { Link } from 'react-router-dom'
-import { capitalizeFirstLetter } from './Utilsfunc'
 import { useNavigate } from 'react-router-dom';
+import { convertSlotToTimings } from './Utilsfunc'
 
 
 const Profile = () => {
@@ -34,12 +34,26 @@ const Profile = () => {
       [seatId]: !prev[seatId]  // Toggle the checked state
     }));
   };
-const handleSubmit = () => {
-  // Only pass seats that are selected to the cart page
-  const seatsToRenew = studentData.seatAssigned.filter(seat => selectedSeats[`${seat.seatNumber}-${seat.slot}`]);
-  navigate('/cart', { state: { seatsToRenew } });
-  handleClose();
-};
+  const handleSubmit = () => {
+    // Include both selected and unselected seats in the navigation state
+    const seatAssignments = studentData.seatAssigned.map(seat => ({
+      ...seat,
+      selected: !!selectedSeats[`${seat.seatNumber}-${seat.slot}`]  // Ensure to initialize selectedSeats state appropriately
+    }));
+  
+    // Determine which slots are not booked
+    const bookedSlots = new Set(studentData.seatAssigned.map(seat => seat.slot));
+    const allSlots = ["morning", "afternoon", "evening", "night"];
+    const availableSlots = allSlots.filter(slot => !bookedSlots.has(slot)).map(slot => ({
+      seatNumber: "New",  // or any logic to assign seat number or keep it flexible
+      slot: slot,
+      selected: false  // These are not selected by default
+    }));
+  
+    navigate('/cart', { state: { seatsToRenew: seatAssignments, availableSlots } });
+    handleClose();
+  };
+
   return (
     <>
     <div className="container-fluid">
@@ -114,7 +128,7 @@ const handleSubmit = () => {
                        { 
                        studentData.seatAssigned && studentData.seatAssigned.length > 0 ? (
                         studentData.seatAssigned.map((shift, index) => (
-                          <li key={shift.slot} className="list-group-item"><span className='font-weight-bold'>Seat:</span> {shift.seatNumber} | <span className='font-weight-bold'>Slot:</span> {capitalizeFirstLetter(shift.slot)} | <span className='font-weight-bold'>Valid untill:</span> {shift.validityDate} {(new Date(shift.validityDate)) < (new Date().setHours(0, 0, 0, 0))?(<span className="badge bg-danger badge-danger">Expired</span>):""}</li>
+                          <li key={shift.slot} className="list-group-item"><span className='fw-bold'>Seat:</span> {shift.seatNumber} | <span className='fw-bold'>Slot:</span> <span className={`${(new Date(shift.validityDate)) < (new Date().setHours(0, 0, 0, 0))?"text-danger":""}`}> {convertSlotToTimings(shift.slot)} </span> | <span className='fw-bold'>Ends On:</span> <span className={`${(new Date(shift.validityDate)) < (new Date().setHours(0, 0, 0, 0))?"text-danger":""}`}>{shift.validityDate}</span> {(new Date(shift.validityDate)) < (new Date().setHours(0, 0, 0, 0))?(<span className="badge bg-danger badge-danger">Expired</span>):""}</li>
                           ))
                           ) : (
                               <p>No booked shifts</p>
@@ -127,7 +141,9 @@ const handleSubmit = () => {
                       {studentData.seatAssigned && studentData.seatAssigned.length > 0 ? (
                           <button onClick={handleShow} className="btn btn-primary">Renew</button>
                         ) : (
-                          <></>
+                          <>
+                          <button onClick={handleSubmit} className="btn btn-primary">Book a Seat Now!</button>
+                          </>
                         )
                         }
                       </div>
@@ -151,15 +167,16 @@ const handleSubmit = () => {
                                           <input
                                               className="form-check-input me-2"
                                               type="checkbox"
+                                              style={{borderColor: "#999ea3"}}
                                               checked={!!selectedSeats[`${seat.seatNumber}-${seat.slot}`]}
                                               onChange={() => handleCheckboxChange(`${seat.seatNumber}-${seat.slot}`)}
                                   id={`custom-checkbox-${index}`}
                                           />
-                                          <span className="font-weight-bold">Seat:</span> {seat.seatNumber} |
-                                          <span className="font-weight-bold">Slot:</span> {capitalizeFirstLetter(seat.slot)} |
-                                          <span className="font-weight-bold">Valid until:</span> {seat.validityDate}
+                                          <span className="fw-bold">Seat:</span> {seat.seatNumber} |
+                                          <span className="fw-bold"> Slot:</span> {convertSlotToTimings(seat.slot)} |&nbsp;
+                                          <span className="fw-bold d-inline">Ends:</span> {seat.validityDate}
                                           {new Date(seat.validityDate) < new Date().setHours(0, 0, 0, 0) && (
-                                              <span className="badge bg-danger">Expired</span>
+                                              <span className="badge bg-danger d-inline-block">Expired</span>
                                           )}
                                       </li>
                                   ))}

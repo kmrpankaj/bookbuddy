@@ -12,7 +12,7 @@ const Sidedash = ({ onSetActive, onSetInactive, onSetAll, onSetExpired, onSetHas
   if (error) return <div>Error: {error}</div>;
   if (!studentData) return <div>No student data found</div>;
     return (
-        <nav className='col-md-2 pt-3 d-md-block sidebar bg-body-tertiary'>
+        <nav className='col-md-2 pt-3 d-md-block vh-100 sidebar bg-body-tertiary'>
             <div className="sidebar-sticky">
             <ul className="nav flex-column">
               <li className="nav-item">
@@ -24,21 +24,21 @@ const Sidedash = ({ onSetActive, onSetInactive, onSetAll, onSetExpired, onSetHas
               <li className="nav-item">
                 <Link className="nav-link" to="/profile">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                  Profile
+                  Home
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link" to="/">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
                   Book A Seat
                 </Link>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <Link className="nav-link" to="/account">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
                   Account
                 </Link>
-              </li>
+              </li> */}
               {(adminLoggedIn === "Admin" || adminLoggedIn === "Superadmin") ?
               <>
               <li className="nav-item">

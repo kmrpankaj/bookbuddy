@@ -44,3 +44,43 @@ export const copyToClipboard = (elementId) => {
     if (!word) return word; // Return the original word if it's empty or undefined
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
+
+export const oneMonthValidity = (originalDate) => {
+  let date = new Date(originalDate); // Parse string to Date object
+
+  let newMonth = date.getMonth() + 1; // Get next month (0-indexed, 0=January, 11=December)
+  let newYear = date.getFullYear();
+
+  if (newMonth > 11) { // Handle December case, move to next year
+      newMonth = 0; // January of next year
+      newYear += 1;
+  }
+
+  date.setFullYear(newYear, newMonth); // Set year and month correctly
+  date.setDate(date.getDate()); // Set to the day before in the next month
+
+  // Format the date back into "YYYY-MM-DD" string format
+  return date.toISOString().split('T')[0];
+}
+
+// --------------------------- formatted date ---------------------------
+export const formatDate = (dateString) => {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const date = new Date(dateString);
+  
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  
+  return `${day} ${month}, ${year}`;
+}
+
+export const convertSlotToTimings = (slot) => {
+  const slotMap = {
+      morning: "06 am to 10 am",
+      evening: "10 am to 02 pm",
+      afternoon: "02 pm to 06 pm",
+      night: "06 pm to 10 pm",
+  };
+  return slotMap[slot] || slot; // Return the original slot if not found
+}

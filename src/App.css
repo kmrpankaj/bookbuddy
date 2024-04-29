@@ -186,3 +186,51 @@ span.badge.badge-info {
   background: #0dcaf0;
 }
 
+@media print {
+  body * {
+    visibility: hidden; /* Hides everything initially */
+  }
+  .print-container, .print-container * {
+    visibility: visible; /* Ensures only the print container and its contents are visible */
+    print-color-adjust: exact;
+  }
+  .print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: auto; /* Adjust height as needed */
+    /* background-color: white; /* Change background to white for printing */
+  }
+
+  /* Specific styles to match your design */
+
+  .print-container h1, .print-container h3 {
+    color: black; /* Ensuring text is readable in black for printers */
+  }
+  .print-container .table {
+    width: 100%; /* Tables should take full width */
+  }
+  .print-container .card-footer {
+    print-color-adjust: exact;
+  }
+  .print-container .printcontainer-row.row.d-flex {
+    width: 1200px;
+    margin: 0px auto;
+    justify-content: center !important;
+}
+.print-pdf.position-absolute {
+  display: none;
+}
+  @media (min-width: 576px) {
+    .no-responsive {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+      width: 1200px; /* Fixed width */
+    }
+  }
+}
+
+
+

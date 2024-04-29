@@ -123,7 +123,7 @@ const Couponsall = () => {
 
                                         <div class="coupon-card">
                                             <div class="coupon-title">Edit | <span className='cursor-pointer' onClick={()=>{deleteCoupon(coupon._id)}}>Delete</span></div>
-                                            <div class="coupon-discount">{coupon.discountValue + '' + (coupon.discountType==="amount"?"₹":"%")} OFF</div>
+                                            <div class="coupon-discount">{(coupon.discountType==="amount"?"₹":"%") + "" + coupon.discountValue} OFF</div>
                                             <div class="coupon-detail">{coupon.description}</div>
                                             <div className="coupon-code">Times used: {coupon.timesUsed}</div>
                                             <div className="coupon-code">Usage Limit: {(coupon.usageLimit===null?"Unlimited":coupon.usageLimit)}</div>

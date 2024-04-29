@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">BookBuddy Members</Link>
+        <Link className="navbar-brand" to="/profile">BookBuddy Members</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -37,10 +37,7 @@ const Navbar = () => {
           {userLoggedIn?
           <>
             <li className="nav-item">
-              <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} aria-current="page" to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${location.pathname === "/account" ? "active" : ""}`} to="/account">Account</Link>
+              <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} aria-current="page" to="/profile">Home</Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === "/profile" ? "active" : ""}`} to="/profile">Profile</Link>

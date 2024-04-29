@@ -21,6 +21,8 @@ import BookingForm from './components/BookingForm';
 import TransactionStatus from './components/TransactionStatus';
 import PaymentResult from './components/PaymentResult';
 import BookingCart from './components/BookingCart';
+import CheckoutPage from './components/CheckoutPage';
+import TransactionReceipt from './components/TransactionReceipt';
 
 
 function App() {
@@ -49,6 +51,8 @@ function App() {
                   <Route path="/transaction-status/:clientTxnId" element={<TransactionStatus />} />
                   <Route path="/payment-result" element={<PaymentResult />} />
                   <Route path="/cart" element={<BookingCart />} />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/transaction/:id" element={<TransactionReceipt />} />
 
                 </Routes>
               </EmailProvider>
