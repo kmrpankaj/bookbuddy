@@ -163,7 +163,7 @@ const removeError = () => {
         customer_name: studentData.name,
         customer_email: studentData.email,
         customer_mobile: studentData.phone,
-        redirect_url: `https://40ca-2405-201-3001-7134-d81c-8443-a5ef-5521.ngrok-free.app/bookings/api/transaction/${txnData.clientTxnId}`,
+        redirect_url: `https://members.bookbuddy.co.in/transaction/${txnData.clientTxnId}`,
         udf1: "user defined field 1 (max 25 char)",
         udf2: "user defined field 2 (max 25 char)",
         bookedBy: studentData.uid,
