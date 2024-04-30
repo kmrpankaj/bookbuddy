@@ -1,19 +1,47 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import StudentContext from '../context/StudentContext'
 import useStudentData from './Usestudentdata'
 
 const Sidedash = ({ onSetActive, onSetInactive, onSetAll, onSetExpired, onSetHasBooking }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to handle sidebar visibility
   const context = useContext(StudentContext)
   const { getOneStudent } = context;
   const { studentData, isLoading, error } = useStudentData(getOneStudent);
   const adminLoggedIn = localStorage.getItem('role')
 
+  useEffect(() => {
+    const handleResize = () => {
+        if (window.innerWidth <= 768) {
+            setIsSidebarOpen(true);
+        } else {
+            setIsSidebarOpen(false);
+        }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
+}, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Toggle the state
+};
+
   if (error) return <div>Error: {error}</div>;
   if (!studentData) return <div>No student data found</div>;
     return (
-        <nav className='col-md-2 pt-3 sidebar bg-body-tertiary'>
-            <div className="sidebar-sticky">
+      <>
+      
+
+        <nav className="col-md-2 pt-3 sidebar bg-body-tertiary">
+        <span className="sidebar-toggle btn btn-light" onClick={toggleSidebar}>
+                
+                <svg class={`${isSidebarOpen ? 'svg-open' : 'svg-closed'}`} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 448 512"><path d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zm160 352l-160-160c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z"></path></svg>
+            </span>
+            <div className={`sidebar-sticky ${isSidebarOpen ? 'collapsed' : 'open'}`} >
             <ul className="nav flex-column">
               <li className="nav-item">
                 <Link className="nav-link active">
@@ -106,6 +134,7 @@ const Sidedash = ({ onSetActive, onSetInactive, onSetAll, onSetExpired, onSetHas
             : ""}
           </div>
         </nav>
+        </>
     )
 }
 
