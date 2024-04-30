@@ -17,7 +17,7 @@ const Alerts = () => {
   return (
 
     alert.visible && 
-    <div className="alert-overlay">
+    <div className="">
       <div className={`alert w-100 z-1020 alert-${alert.type} fadeInDown`} role="alert">
           {alert.message}
       </div>

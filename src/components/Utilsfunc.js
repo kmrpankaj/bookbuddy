@@ -78,8 +78,8 @@ export const formatDate = (dateString) => {
 export const convertSlotToTimings = (slot) => {
   const slotMap = {
       morning: "06 am to 10 am",
-      evening: "10 am to 02 pm",
-      afternoon: "02 pm to 06 pm",
+      afternoon: "10 am to 02 pm",
+      evening: "02 pm to 06 pm",
       night: "06 pm to 10 pm",
   };
   return slotMap[slot] || slot; // Return the original slot if not found

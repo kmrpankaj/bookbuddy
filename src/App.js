@@ -36,7 +36,7 @@ function App() {
                 <Alerts />
                 <Navbar />
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<Profile />} />
                   <Route path="/account" element={<Account />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
