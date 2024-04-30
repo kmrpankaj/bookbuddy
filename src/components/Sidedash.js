@@ -12,7 +12,7 @@ const Sidedash = ({ onSetActive, onSetInactive, onSetAll, onSetExpired, onSetHas
   if (error) return <div>Error: {error}</div>;
   if (!studentData) return <div>No student data found</div>;
     return (
-        <nav className='col-md-2 pt-3 d-md-block sidebar bg-body-tertiary'>
+        <nav className='col-md-2 pt-3 sidebar bg-body-tertiary'>
             <div className="sidebar-sticky">
             <ul className="nav flex-column">
               <li className="nav-item">
