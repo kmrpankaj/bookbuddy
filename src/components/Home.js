@@ -1,21 +1,13 @@
-import React from 'react'
-import Sidedash from './Sidedash'
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
-  return (
-    <div className="container-fluid">
-      <div className="row">
-        <Sidedash />
+const Home = ({ url }) => {
+  useEffect(() => {
+    // Redirect to the external URL
+    window.location.href = url;
+}, [url]);
 
-        <div className="col-md-9 pt-3">
-          <div className="row">
-            Book a seat.
-          </div>
-        </div>
-      </div>
-    </div>
-
-  )
+return null; // Render nothing
 }
 
 export default Home

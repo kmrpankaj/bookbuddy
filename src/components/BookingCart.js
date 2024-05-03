@@ -23,7 +23,7 @@ const BookingCart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [coupon, setCoupon] = useState({ code: '', amount: 0, applied: false });
   const [couponCode, setCouponCode] = useState('');
-  const productPrice = 350;
+  const productPrice = 3.50;
   const { showAlert } = useContext(AlertContext)
 
    // Early return or redirection if no data is available
