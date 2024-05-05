@@ -147,6 +147,7 @@ const Seatsall = (props) => {
     }
   };
 
+  
 
    // Function to filter seats based on the selected filter
    const filteredSeats = seats.filter((seat) => {
@@ -157,6 +158,13 @@ const Seatsall = (props) => {
             return seat.seatNumber > 38 && seat.seatNumber < 61;
         case 'kaveri':
             return seat.seatNumber >= 61;
+        case 'waiting':
+            // Check if the seat number starts with 'W' and then parse the number
+            if (/^W\d+/.test(seat.seatNumber)) {
+              const numericPart = parseInt(seat.seatNumber.substring(1));
+              return numericPart >= 1 && numericPart <= 20;
+          }
+          return false;
         default:
           return seat.seatNumber >= 1 && seat.seatNumber <= 38; // 'all' or default case, no filtering applied
     }
@@ -174,6 +182,7 @@ const Seatsall = (props) => {
                       <button className={`btn btn-secondary ${filter === "all" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('all')}>Godavari Block</button>
                       <button className={`btn btn-secondary ${filter === "krishna" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('krishna')}>Krishna Block</button>
                       <button className={`btn btn-secondary ${filter === "kaveri" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('kaveri')}>Kaveri Block</button>
+                      <button className={`btn btn-secondary ${filter === "waiting" ? 'active' : ''} filterbtn cursor-pointer`} onClick={() => setFilter('waiting')}>Waiting Block</button>
                     </div>
                             {filteredSeats.length === 0 && "No seats matching the criteria!"}
                             {filteredSeats.map((seat) => {
