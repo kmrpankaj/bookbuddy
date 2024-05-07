@@ -265,6 +265,26 @@ span.badge.badge-info {
   transition: transform 0.3s;
 }
 
+/* payment icons */
+a.payment-icon {
+  height: 88px;
+  text-decoration: none;
+  color: #585c5f;
+}
+a.payment-icon img.bhim {
+  padding: 14px 4px;
+}
+a.payment-icon img {
+  border: 2px solid #f37a27;
+  padding: 2px 4px;
+}
+a.payment-icon img.gpay {
+  padding: 4px 4px;
+}
+a.payment-icon span {
+  text-align: center;
+}
+
 
 
 
