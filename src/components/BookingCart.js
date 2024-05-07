@@ -275,7 +275,7 @@ const removeError = () => {
                   </div>
                   <div className="card-footer text-muted">
 
-                    <span>Get a discount when you renew or purchase 3 or 4 seats at once.</span><br />
+                    <span>Get a discount when you renew or purchase 3 or 4 slots at once.</span><br />
                     <span>For new bookings, seats will be assigned by library manager within 24 hours.</span>
 
                   </div>
