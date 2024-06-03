@@ -162,7 +162,7 @@ const Seatsall = (props) => {
             // Check if the seat number starts with 'W' and then parse the number
             if (/^W\d+/.test(seat.seatNumber)) {
               const numericPart = parseInt(seat.seatNumber.substring(1));
-              return numericPart >= 1 && numericPart <= 20;
+              return numericPart >= 1 && numericPart <= 40;
           }
           return false;
         default:
