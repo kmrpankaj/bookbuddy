@@ -1,13 +1,11 @@
-import React, { forwardRef, useContext } from 'react'
+import React, { forwardRef, useContext, useEffect } from 'react'
 import AlertContext from '../context/AlertContext'
 
 const Editstudents = forwardRef((props, ref) => {
-    const { student, onChangeEdit, handleClickEdit } = props
+    const { student, onChangeEdit, handleClickEdit, editLoader } = props
     const {showAlert} = useContext(AlertContext)
 
-
-
-
+    
     return (
         <>
             {/* <!-- Button trigger modal --> */}
@@ -119,7 +117,7 @@ const Editstudents = forwardRef((props, ref) => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-primary" onClick={handleClickEdit} data-bs-dismiss="modal">Update</button>
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleClickEdit}>{editLoader ? <div class="spinner-border spinner-border-sm" role="status"></div>: "Update"}</button>
                         </div>
                     </div>
                 </div>

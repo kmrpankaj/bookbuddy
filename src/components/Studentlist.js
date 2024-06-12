@@ -21,6 +21,7 @@ const Studentlist = (props) => {
     const history = useNavigate()
     const [studentFiles, setStudentFiles] = useState({ ephoto: null, edocumentid: null });
     const [showImage, setShowImage] = useState(null);
+    const [editLoader, setEditLoader] = useState(false);
     const styleBackground = {
         backgroundImage: "url('/images/stdbg.jpg')",
         backgroundRepeat: 'no-repeat',
@@ -49,7 +50,7 @@ const Studentlist = (props) => {
 
     const handleClickEdit = async (e) => {
         e.preventDefault();
-
+        setEditLoader(true)
         const formData = new FormData();
         
         formData.append('name', student.ename);
@@ -81,6 +82,7 @@ const Studentlist = (props) => {
             const response = await editStudent(student.id, formData);
         // console.log(response.message, "hihello")
             if (response.success) {
+                setEditLoader(false)
               //console.log("Successfully updated student 1:", response.updatedStudent);
               // Perform additional UI updates here, if necessary
               showAlert(`Update successful! ${response.updatedStudent.name}`, "success")
@@ -265,13 +267,13 @@ const Studentlist = (props) => {
                                                         <span>
                                                             {showImage === `${student.uid}-doc` ?
                                                                 <>
-                                                                    <button className="btn btn-sm btn-secondary" onClick={() => setShowImage(null)}>Hide</button>
+                                                                    <button className="btn btn-sm btn-secondary mx-2 mb-2 py-0" onClick={() => setShowImage(null)}>Hide</button>
                                                                     {isImageFile(student.photo) ?
                                                                     <img src={student.photo} alt={`Photo-Id-${student.name.replace(/\s/g, '')}`} style={{ width: '100%' }} /> :
                                                                     <a href={student.photo} target="_blank" rel="noopener noreferrer">View Document</a> 
                                                                     }
                                                                 </> :
-                                                                <button className="btn btn-sm btn-primary" onClick={() => setShowImage(`${student.uid}-doc`)}>Show</button>
+                                                                <button className="btn btn-sm btn-primary mx-2 py-0" onClick={() => setShowImage(`${student.uid}-doc`)}>Show</button>
                                                             }
                                                         </span>
                                                     </li>
@@ -280,7 +282,7 @@ const Studentlist = (props) => {
                                                         <span>
                                                                 {showImage === `${student.uid}-doc` ?
                                                                     <>
-                                                                        <button className="btn btn-sm btn-secondary mr-1" onClick={() => setShowImage(null)}>Hide</button>
+                                                                        <button className="btn btn-sm btn-secondary mx-2 mb-2 py-0" onClick={() => setShowImage(null)}>Hide</button>
                                                                         {isImageFile(student.documentid) ?
                                                                         <a href={student.documentid}>
                                                                             <img src={student.documentid} alt={`Document-Id-${student.name.replace(/\s/g, '')}`} style={{ width: '100%' }} />
@@ -289,7 +291,7 @@ const Studentlist = (props) => {
                                                                         }
 
                                                                     </> :
-                                                                    <button className="btn btn-sm btn-primary mr-1" onClick={() => setShowImage(`${student.uid}-doc`)}>Show</button>
+                                                                    <button className="btn btn-sm btn-primary mx-2 py-0" onClick={() => setShowImage(`${student.uid}-doc`)}>Show</button>
                                                                 }
                                                             </span>
                                                     </li>
@@ -306,7 +308,7 @@ const Studentlist = (props) => {
                     </div>
                 </div>
             </div>
-            <Editstudents key={student._id} ref={editModalRef} student={student} onChangeEdit={onChangeEdit} handleClickEdit={handleClickEdit} />
+            <Editstudents key={student._id} ref={editModalRef} editLoader={editLoader} student={student} onChangeEdit={onChangeEdit} handleClickEdit={handleClickEdit} />
         </>
     )
 }

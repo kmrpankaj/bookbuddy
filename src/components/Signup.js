@@ -14,6 +14,7 @@ const Signup = () => {
 	const [students, setstudents] = useState({name: "", email: "",  gender: "", password: "", address: "", phone: "", parentsphone: "", photo: "", documentid: "", role: "Student" })
 	const { sendEmail } = useEmail();
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [showSpinner, setShowSpinner] = useState(false);
   
 	useEffect(() => {
 	  const checkAuthentication = async () => {
@@ -43,7 +44,7 @@ const Signup = () => {
 
 	const handleClick = async (e) => {
 		e.preventDefault();
-
+		setShowSpinner(true)
 		// Destructure the students state to pass individual values to addStudent
 		const { name, email, gender, password, address, phone, parentsphone, photo, documentid, role } = students;
 
@@ -52,6 +53,7 @@ const Signup = () => {
 			const response = await addStudent(name, email, gender, password, address, phone, parentsphone, photo, documentid, role);
 
 			if (response.ok) {
+				setShowSpinner(false)
 				// Assuming response contains the JSON data directly if successful
 				showAlert("Signup successful!", "success");
 
@@ -223,8 +225,7 @@ const Signup = () => {
 											</div>
 
 											<div className="d-grid gap-2 mt-3">
-												<button type="submit" className="btn btn-lg btn-primary" disabled={students.password.length<4 || students.phone.length<10||students.email.length<6||students.name.length<2 || students.photo.length===0 || students.documentid.length===0}>Sign up</button>
-												
+												<button type="submit" className="btn btn-lg btn-primary" disabled={students.password.length<4 || students.phone.length<10||students.email.length<6||students.name.length<2 || students.photo.length===0 || students.documentid.length===0}>{showSpinner ? <div class="spinner-border" role="status"></div> : "Sign up"}</button>
 											</div>
 										</form>
 									</div>
