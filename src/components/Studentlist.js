@@ -20,6 +20,7 @@ const Studentlist = (props) => {
     const [student, setStudent] = useState({id: "", ename: "", eemail: "", egender: "", password: "", eaddress: "", ephone: "", eparentsphone: "", ephoto: "", edocumentid: "", uid: "", erole: "Student"})
     const history = useNavigate()
     const [studentFiles, setStudentFiles] = useState({ ephoto: null, edocumentid: null });
+    const [showImage, setShowImage] = useState(null);
     const styleBackground = {
         backgroundImage: "url('/images/stdbg.jpg')",
         backgroundRepeat: 'no-repeat',
@@ -143,6 +144,13 @@ const Studentlist = (props) => {
                  student.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                  student.parentsphone?.toLowerCase().includes(searchTerm.toLowerCase());
       })
+// checking if uploaded file uploaded is pdf
+      const isImageFile = (fileUrl) => {
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        const fileExtension = fileUrl.split('.').pop().toLowerCase();
+        return imageExtensions.includes(fileExtension);
+    };
+
 
     return (
         <>
@@ -252,8 +260,39 @@ const Studentlist = (props) => {
                                                 <ul className="list-unstyled mb-0">
                                                     <li className="mb-1"><span className="fas fa-globe fa-fw me-1">Role:</span> <span>{student.role}</span></li>
                                                     <li className="mb-1"><span className="fab fa-twitter fa-fw me-1">Registered on:</span> <span>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</span></li>
-                                                    <li className="mb-1"><span className="fab fa-facebook fa-fw me-1">Photo:</span> <span><a target="_blank" href={`${process.env.REACT_APP_BACKEND_URL}/${student.photo}`}>Image-{student.photo}</a></span></li>
-                                                    <li className="mb-1"><span className="fab fa-instagram fa-fw me-1">Document ID: </span> <span><a target="_blank" href={`${process.env.REACT_APP_BACKEND_URL}/${student.documentid}`}>Id Proof-{student.documentid}</a></span></li>
+                                                    <li className="mb-1">
+                                                        <span className="fab fa-facebook fa-fw me-1">Photo:</span>
+                                                        <span>
+                                                            {showImage === `${student.uid}-doc` ?
+                                                                <>
+                                                                    <button className="btn btn-sm btn-secondary" onClick={() => setShowImage(null)}>Hide</button>
+                                                                    {isImageFile(student.photo) ?
+                                                                    <img src={student.photo} alt={`Photo-Id-${student.name.replace(/\s/g, '')}`} style={{ width: '100%' }} /> :
+                                                                    <a href={student.photo} target="_blank" rel="noopener noreferrer">View Document</a> 
+                                                                    }
+                                                                </> :
+                                                                <button className="btn btn-sm btn-primary" onClick={() => setShowImage(`${student.uid}-doc`)}>Show</button>
+                                                            }
+                                                        </span>
+                                                    </li>
+                                                    <li className="mb-1">
+                                                        <span className="fab fa-instagram fa-fw me-1">Document ID: </span>
+                                                        <span>
+                                                                {showImage === `${student.uid}-doc` ?
+                                                                    <>
+                                                                        <button className="btn btn-sm btn-secondary mr-1" onClick={() => setShowImage(null)}>Hide</button>
+                                                                        {isImageFile(student.documentid) ?
+                                                                        <a href={student.documentid}>
+                                                                            <img src={student.documentid} alt={`Document-Id-${student.name.replace(/\s/g, '')}`} style={{ width: '100%' }} />
+                                                                        </a> :
+                                                                            <a href={student.documentid} target="_blank" rel="noopener noreferrer">View Document</a> 
+                                                                        }
+
+                                                                    </> :
+                                                                    <button className="btn btn-sm btn-primary mr-1" onClick={() => setShowImage(`${student.uid}-doc`)}>Show</button>
+                                                                }
+                                                            </span>
+                                                    </li>
                                                     <li className="mb-1"><span className="fab fa-linkedin fa-fw me-1">Parent's Phone:</span> <span>{student.parentsphone}</span></li>
                                                 </ul>
                                                 </div>

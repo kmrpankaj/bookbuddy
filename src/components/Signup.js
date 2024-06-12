@@ -165,7 +165,7 @@ const Signup = () => {
 							<div className="card">
 								<div className="card-body">
 									<div className="m-sm-3">
-										<form onSubmit={handleClick} className="needs-validation" noValidate>
+										<form enctype="multipart/form-data" onSubmit={handleClick} className="needs-validation" noValidate>
 											<div className="mb-3">
 												<label className="form-label">Full name</label>
 												<input className="form-control form-control-lg" value={students.name} type="text" name="name" placeholder="Enter your name" onChange={onChange} required/>
