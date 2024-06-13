@@ -285,6 +285,23 @@ a.payment-icon span {
   text-align: center;
 }
 
+/* spinner wrap */
+
+.spinner-wrap {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+.spinner-wrap .spinner-border {
+  position: absolute;
+  right: -21px;
+  bottom: 13px;
+}
+
+.valid-feedback {
+  display: inline-block;
+}
+
 
 
 

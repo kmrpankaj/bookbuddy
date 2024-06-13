@@ -8,6 +8,7 @@ import { useEmail } from '../context/EmailContext'
 
 const Signup = () => {
 	const history = useNavigate()
+	const host = process.env.REACT_APP_BACKEND_URL
 	const context = useContext(StudentContext)
 	const {showAlert} = useContext(AlertContext)
 	const { addStudent } = context;
@@ -15,6 +16,11 @@ const Signup = () => {
 	const { sendEmail } = useEmail();
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [showSpinner, setShowSpinner] = useState(false);
+	const [isPhoneAvailable, setIsPhoneAvailable] = useState(true); // State for phone number availability
+	const [isEmailAvailable, setIsEmailAvailable] = useState(true); // State for email availability
+	const debounceDelay = 1000; // Debounce delay in milliseconds
+	const [isCheckingEmailAvailability, setIsCheckingEmailAvailability] = useState(false);
+	const [isCheckingPhoneAvailability, setIsCheckingPhoneAvailability] = useState(false);
   
 	useEffect(() => {
 	  const checkAuthentication = async () => {
@@ -107,7 +113,79 @@ const Signup = () => {
 		  // Handle other inputs (text, email, etc.)
 		  setstudents({ ...students, [e.target.name]: e.target.value });
 		}
+
+		// phone input
+		if (e.target.name === 'phone') {
+			handlePhoneChange(e.target.value); // Debounced phone validation
+		  } else if (e.target.name === 'email') {
+			handleEmailChange(e.target.value); // Debounced email validation
+		  }
 	  };
+
+
+// Debounced phone number check function =====================================
+  const [checkPhoneAvailability, setCheckPhoneAvailability] = useState(null);
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (checkPhoneAvailability && checkPhoneAvailability.length===10) {
+        const response = await fetch(`${host}/students/check-phone`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: checkPhoneAvailability }),
+        });
+        const data = await response.json();
+        setIsPhoneAvailable(data.available);
+		setIsCheckingPhoneAvailability(false);
+
+      }
+    }, debounceDelay);
+
+    return () => clearTimeout(timeout);
+  }, [checkPhoneAvailability, debounceDelay]);
+
+  const handlePhoneChange = (phone) => {
+	const phoneRegex = /^\d{10}$/; // phone regex
+	if (!phoneRegex.test(phone)) {
+		setPhoneError('Please enter a valid phone number.');
+		setIsCheckingPhoneAvailability(false)
+		return; // Exit the function if validation fails
+	  }
+	setIsCheckingPhoneAvailability(true);
+    setCheckPhoneAvailability(phone); // Trigger debounced check
+	setPhoneError('');
+  };
+
+  // Debounced email check function
+  const [checkEmailAvailability, setCheckEmailAvailability] = useState(null);
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (checkEmailAvailability) {
+        const response = await fetch(`${host}/students/check-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: checkEmailAvailability }),
+        });
+        const data = await response.json();
+        setIsEmailAvailable(data.available);
+		setIsCheckingEmailAvailability(false);
+      }
+    }, debounceDelay);
+
+    return () => clearTimeout(timeout);
+  }, [checkEmailAvailability, debounceDelay]);
+
+  const [emailError, setEmailError] = useState("")
+  const handleEmailChange = (email) => {
+	const emailRegex = /^[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}$/; // email regex
+	if (!emailRegex.test(email)) {
+		setEmailError('Please enter a valid email address.'); // Set error state directly
+		setIsCheckingEmailAvailability(false)
+		return; // Exit the function if validation fails
+	  }
+	setIsCheckingEmailAvailability(true);
+    setCheckEmailAvailability(email); // Trigger debounced check
+	setEmailError("")
+  };
 
 
 	const generatePassword = (inputId) => {
@@ -135,17 +213,23 @@ const Signup = () => {
 	  const [phone, setPhone] = useState(students.phone || ''); // Initialize phone state with existing value or empty string
 	  const [phoneError, setPhoneError] = useState(''); // State for validation error message
 
-	  const handlePhoneChange = (event) => {
-		setPhone(event.target.value);
-		const phoneRegex = /^\d{10}$/; // Replace with your preferred phone number regex
-		if (!phoneRegex.test(event.target.value)) {
-		  setPhoneError('Please enter a valid phone number.');
-		} else {
-		  setPhoneError('');
-		}
-		// Call the existing onChange function if needed (pass event for consistency)
-		onChange && onChange(event); // Assuming onChange is a function
-	  };
+
+
+	    // // phone validation
+		const [parentPhone, setParentPhone] = useState(students.parentsphone || ''); // Initialize phone state with existing value or empty string
+		const [parentPhoneError, setParentPhoneError] = useState(''); // State for validation error message
+  
+		const handleParentPhoneChange = (event) => {
+		setParentPhone(event.target.value);
+		  const phoneRegex = /^\d{10}$/; // Replace with your preferred phone number regex
+		  if (!phoneRegex.test(event.target.value)) {
+			setParentPhoneError('Please enter a valid phone number.');
+		  } else {
+			setParentPhoneError('');
+		  }
+		  // Call the existing onChange function if needed (pass event for consistency)
+		  onChange && onChange(event); // Assuming onChange is a function
+		};
 	
 
 
@@ -167,15 +251,17 @@ const Signup = () => {
 							<div className="card">
 								<div className="card-body">
 									<div className="m-sm-3">
-										<form enctype="multipart/form-data" onSubmit={handleClick} className="needs-validation" noValidate>
+										<form encType="multipart/form-data" onSubmit={handleClick} className="needs-validation" noValidate>
 											<div className="mb-3">
 												<label className="form-label">Full name</label>
 												<input className="form-control form-control-lg" value={students.name} type="text" name="name" placeholder="Enter your name" onChange={onChange} required/>
-												
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Email</label>
-												<input className="form-control form-control-lg" value={students.email} type="email" name="email" placeholder="Enter your email" onChange={onChange} required/>
+												<input className={`form-control form-control-lg ${(emailError? "is-invalid": "")} ${(isEmailAvailable? "": "is-invalid")}`} value={students.email} type="email" name="email" placeholder="Enter your email" onChange={onChange} required/>
+												{isCheckingEmailAvailability && <span className='spinner-wrap'><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></span>}
+												{emailError && <div id="email-error" class="invalid-feedback">{emailError}</div>}
+												{!isCheckingEmailAvailability && !emailError && checkEmailAvailability && <div id="email-error" class={`${(isEmailAvailable ? "valid-feedback": "invalid-feedback")}`}>{isEmailAvailable ? "Available" : "Email already exists, try a different one."}</div>}
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Create a password</label>
@@ -206,12 +292,15 @@ const Signup = () => {
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Phone No.</label>
-												<input id="phone" className={`form-control form-control-lg ${phoneError ? 'is-invalid' : ''}`} value={students.phone} onChange={handlePhoneChange} type="text" name="phone" placeholder="Your phone number" required/>
+												<input id="phone" className={`form-control form-control-lg ${phoneError || !isPhoneAvailable ? 'is-invalid' : ''}`} value={students.phone} onChange={onChange} type="text" name="phone" placeholder="Your phone number" required/>
+												{isCheckingPhoneAvailability && <span className='spinner-wrap'><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></span>}
 												<div id="phone-error" class="invalid-feedback">{phoneError}</div>
+												{!isCheckingPhoneAvailability && !phoneError && checkPhoneAvailability && <div id="phone-error" class={`${(isPhoneAvailable ? "valid-feedback": "invalid-feedback")}`}>{isPhoneAvailable ? "Available" : "Phone number already exists, try a different one."}</div>}
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Parent's Phone No.</label>
-												<input className="form-control form-control-lg" value={students.parentsphone} type="text" name="parentsphone" placeholder="Guardian or relative number" onChange={onChange} required/>
+												<input className={`form-control form-control-lg ${parentPhoneError? "is-invalid" : ""}`} value={students.parentsphone} type="text" name="parentsphone" placeholder="Guardian or relative number" onChange={handleParentPhoneChange} required/>
+												<div id="parentphone-error" class="invalid-feedback">{parentPhoneError}</div>
 											</div>
 											<div className="mb-3">
 												<label className="form-label">Photo</label>
@@ -225,7 +314,7 @@ const Signup = () => {
 											</div>
 
 											<div className="d-grid gap-2 mt-3">
-												<button type="submit" className="btn btn-lg btn-primary" disabled={students.password.length<4 || students.phone.length<10||students.email.length<6||students.name.length<2 || students.photo.length===0 || students.documentid.length===0}>{showSpinner ? <div class="spinner-border" role="status"></div> : "Sign up"}</button>
+												<button type="submit" className="btn btn-lg btn-primary" disabled={students.password.length<4 || students.phone.length < 10 || students.email.length < 6 || students.name.length<3 || students.photo.length===0 || students.documentid.length===0 || isPhoneAvailable === false || isEmailAvailable === false}>{showSpinner ? <div class="spinner-border" role="status"></div> : "Sign up"}</button>
 											</div>
 										</form>
 									</div>
