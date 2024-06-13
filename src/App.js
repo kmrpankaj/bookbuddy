@@ -36,7 +36,7 @@ function App() {
                 <Alerts />
                 <Navbar />
                 <Routes>
-                  <Route path="/" element={<Home url="https://bookbuddy.co.in" />} />
+                  <Route path="/" element={<Home url="https://members.bookbuddy.co.in/login" />} />
                   <Route path="/account" element={<Account />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
