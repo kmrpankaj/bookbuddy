@@ -7,6 +7,9 @@ const ActivityLog = () => {
     const [logData, setLogData] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(15);
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -47,7 +50,7 @@ const ActivityLog = () => {
         //console.log(change.path[2], 'hellohi why')
         let message = '';
         switch (collectionName) {
-            
+
             case 'seats':
                 //const seatNumber = change.originalSeatNumber;
                 const period = change.path[1]; // Assuming night is the second element
@@ -69,12 +72,12 @@ const ActivityLog = () => {
                                 message += `${period} slot has been assigned to the user "${change.rhs}".`;
                             }
                         } else if (changedField.includes('seatValidTill')) {
-                            if (change.lhs !== null && change.rhs===null) {
-                                message += `validity ${change.lhs?formatDate(change.lhs):change.lhs} has been removed.`;
-                            } else if(change.lhs === null && change.rhs !==null) {
-                                message += `validity has been assigned to ${change.rhs?formatDate(change.rhs):change.rhs}.`;
-                            } else if(change.lhs !== null && change.rhs !==null) {
-                                message += `validity has been updated from ${change.lhs?formatDate(change.lhs):change.lhs} to ${change.rhs?formatDate(change.rhs):change.rhs}.`; // Human-readable date format
+                            if (change.lhs !== null && change.rhs === null) {
+                                message += `validity ${change.lhs ? formatDate(change.lhs) : change.lhs} has been removed.`;
+                            } else if (change.lhs === null && change.rhs !== null) {
+                                message += `validity has been assigned to ${change.rhs ? formatDate(change.rhs) : change.rhs}.`;
+                            } else if (change.lhs !== null && change.rhs !== null) {
+                                message += `validity has been updated from ${change.lhs ? formatDate(change.lhs) : change.lhs} to ${change.rhs ? formatDate(change.rhs) : change.rhs}.`; // Human-readable date format
                             }
                         } else {
                             // Handle other potential changes within seatStatus
@@ -90,7 +93,7 @@ const ActivityLog = () => {
                 }
                 break;
             case 'students':
-                console.log(changedField, "insidestudent")
+                //console.log(changedField, "insidestudent")
                 const studentId = affactedDoc || 'Unknown Student'; // Handle missing originalStudentId
                 if (change.kind === 'E') {
                     message = `Student ${studentId} - ${changeFieldStudents} changed from "${change.lhs}" to "${change.rhs}".`;
@@ -107,9 +110,22 @@ const ActivityLog = () => {
         return message.trim() ? <li key={change.path}>{message}</li> : null;
     }
 
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = logData.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Render page numbers
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(logData.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
 
-// Deleting a log ==========================
+    // Deleting a log ==========================
     const deleteALog = async (id) => {
         try {
             const response = await fetch(`${host}/activity/delete/${id}`, {
@@ -157,11 +173,11 @@ const ActivityLog = () => {
                                                         <th scope="col">Delete</th>
                                                     </tr>
                                                 </thead>
-                                                {logData && logData.length > 0 ? (
+                                                {currentItems && currentItems.length > 0 ? (
                                                     <tbody>
-                                                        {logData.map((log, index) => (
+                                                        {currentItems.map((log, index) => (
                                                             <tr key={log._id}>
-                                                                <th scope="row">{index + 1}</th>
+                                                                <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
                                                                 <td colSpan="2">{formatDate(log.operationDate)}</td>
                                                                 <td>{log.operatedBy}</td>
                                                                 <td>
@@ -179,7 +195,7 @@ const ActivityLog = () => {
                                                                     </ul>
                                                                 </td>
                                                                 <td>
-                                                                    <span className='px-1' title='Unassign' role="button" type="button" data-bs-dismiss="modal" onClick={()=>{deleteALog(log._id)}}>
+                                                                    <span className='px-1' title='Unassign' role="button" type="button" data-bs-dismiss="modal" onClick={() => { deleteALog(log._id) }}>
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
@@ -194,6 +210,20 @@ const ActivityLog = () => {
                                                     <p>No activity log data found.</p>
                                                 )}
                                             </table>
+                                            <nav>
+                                                <ul className='pagination'>
+                                                    {pageNumbers.map(number => (
+                                                        <li key={number} className='page-item'>
+                                                            <a onClick={(e) => {
+                                                                e.preventDefault(); // This prevents the default action
+                                                                paginate(number);
+                                                            }} href="#" className='page-link'>
+                                                                {number}
+                                                            </a>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </nav>
                                         </div>
                                     </div>
                                 </div>
