@@ -23,6 +23,7 @@ import PaymentResult from './components/PaymentResult';
 import BookingCart from './components/BookingCart';
 import CheckoutPage from './components/CheckoutPage';
 import TransactionReceipt from './components/TransactionReceipt';
+import ActivityLog from './components/ActivityLog';
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
                   <Route path="/cart" element={<BookingCart />} />
                   <Route path="/checkout" element={<CheckoutPage />} />
                   <Route path="/transaction/:id" element={<TransactionReceipt />} />
+                  <Route path="/log" element={<ActivityLog />} />
 
                 </Routes>
               </EmailProvider>

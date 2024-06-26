@@ -5,6 +5,7 @@ const Couponsall = () => {
     const host = process.env.REACT_APP_BACKEND_URL;
     const couponsdata = []
     const [coupons, setCoupons] = useState(couponsdata)
+    const studentNameCache = {};
 
     const getAllCoupons = async () => {
         try {
@@ -17,9 +18,15 @@ const Couponsall = () => {
             })
             const json = await response.json();
             const couponsWithStudent = await Promise.all(json.map(async (coupon) => {
-                const studentName = await getStudentName(coupon.createdBy);
-                return { ...coupon, studentName }
-            }))
+                try {
+                    const studentName = await getStudentName(coupon.createdBy);
+                    return { ...coupon, studentName };
+                } catch (error) {
+                    console.error(`Error fetching student name for ID ${coupon.createdBy}:`, error);
+                    // Set a default value (e.g., "Name Unavailable") for studentName
+                    return { ...coupon, studentName: "Name Unavailable" };
+                }
+            }));
 
 
             setCoupons(couponsWithStudent)
@@ -29,18 +36,31 @@ const Couponsall = () => {
     }
 
     const getStudentName = async (studentId) => {
-        const response = await fetch(`${host}/students/show/${studentId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': localStorage.getItem('token'),
-            }
-        })
-        if(!response.ok){
-            throw new Error('Network response was not ok');    
+        if (studentNameCache[studentId]) {
+            return studentNameCache[studentId];
         }
-        const studentData = await response.json();
-        return studentData.name;
+
+        try {
+            const response = await fetch(`${host}/students/show/${studentId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('token'),
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const studentData = await response.json();
+            const studentName = studentData.name;
+            studentNameCache[studentId] = studentName; // Cache the student name
+            return studentName;
+        } catch (error) {
+            console.error(`Error fetching student name for ID ${studentId}:`, error);
+            return 'Unknown';
+        }
     }
 
     // toggle coupon status
@@ -121,15 +141,15 @@ const Couponsall = () => {
                                 <>
                                     <div key={coupon._id} className='col-md-4 col-xl-4'>
 
-                                        <div class="coupon-card">
-                                            <div class="coupon-title">Edit | <span className='cursor-pointer' onClick={()=>{deleteCoupon(coupon._id)}}>Delete</span></div>
-                                            <div class="coupon-discount">{(coupon.discountType==="amount"?"₹":"%") + "" + coupon.discountValue} OFF</div>
-                                            <div class="coupon-detail">{coupon.description}</div>
+                                        <div className="coupon-card">
+                                            <div className="coupon-title">Edit | <span className='cursor-pointer' onClick={()=>{deleteCoupon(coupon._id)}}>Delete</span></div>
+                                            <div className="coupon-discount">{(coupon.discountType==="amount"?"₹":"%") + "" + coupon.discountValue} OFF</div>
+                                            <div className="coupon-detail">{coupon.description}</div>
                                             <div className="coupon-code">Times used: {coupon.timesUsed}</div>
                                             <div className="coupon-code">Usage Limit: {(coupon.usageLimit===null?"Unlimited":coupon.usageLimit)}</div>
                                             <div className="coupon-code">Created By: {coupon.studentName}</div>
                                             <p onClick={() => {toggleCouponStatus(coupon._id, coupon.isActive)}} className="cursor-pointer">Status: <span className='badge badge-info'>{coupon.isActive?"Active":"Inactive"}</span></p>
-                                            <p class="coupon-cta">{coupon.code}</p>
+                                            <p className="coupon-cta">{coupon.code}</p>
                                         </div>
                                         
                                     </div>

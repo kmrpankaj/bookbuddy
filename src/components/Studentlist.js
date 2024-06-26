@@ -56,7 +56,6 @@ const Studentlist = (props) => {
         formData.append('name', student.ename);
         formData.append('email', student.eemail);
         formData.append('gender', student.egender);
-        formData.append('password', student.epassword);
         formData.append('address', student.eaddress);
         formData.append('phone', student.ephone);
         formData.append('parentsphone', student.eparentsphone);

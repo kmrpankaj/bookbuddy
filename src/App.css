@@ -53,11 +53,26 @@ svg.bi-house, svg.bi.envelope, svg.bi.phone {
   margin-bottom: 2px;
 }
 
+@media (max-width: 1024px){
 .alert {
   position: sticky;
   top: 0;
   /* other styles like width, z-index, etc. */
 }
+}
+
+
+@media (min-width: 1025px) {
+  .alert {
+    position: fixed;
+    bottom: 4%;
+    width: 30% !important;
+    right: 4%;
+    z-index: 2;
+    box-shadow: 0px 2px 6px;
+  }
+}
+
 
 .alert-overlay {
   position: fixed;

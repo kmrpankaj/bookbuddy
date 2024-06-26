@@ -117,7 +117,7 @@ const Editstudents = forwardRef((props, ref) => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleClickEdit}>{editLoader ? <div class="spinner-border spinner-border-sm" role="status"></div>: "Update"}</button>
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleClickEdit}>Update</button>
                         </div>
                     </div>
                 </div>

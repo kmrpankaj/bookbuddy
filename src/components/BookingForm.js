@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidedash from './Sidedash';
 
 const BookingForm = () => {
     const [booking, setBooking] = useState({
@@ -46,55 +47,68 @@ const BookingForm = () => {
         console.log(booking);
         // You would handle API submission here
     };
-  return (
-    <form onSubmit={handleSubmit} className="container mt-5">
-            <h3>Create Booking Order</h3>
-            {booking.seatDetails.map((x, i) => (
-                <div key={i} className="mb-3">
-                    <label className="form-label">Seat Number</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="seatNumber"
-                        value={x.seatNumber}
-                        onChange={e => handleInputChange(e, i)}
-                    />
-                    <label className="form-label">Slot</label>
-                    <select
-                        className="form-select"
-                        name="slot"
-                        value={x.slot}
-                        onChange={e => handleInputChange(e, i)}
-                    >
-                        <option value="">Select a Slot</option>
-                        <option value="morning">Morning</option>
-                        <option value="afternoon">Afternoon</option>
-                        <option value="evening">Evening</option>
-                        <option value="night">Night</option>
-                    </select>
-                    <label className="form-label">Valid Till</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        name="seatValidTill"
-                        value={x.seatValidTill}
-                        onChange={e => handleInputChange(e, i)}
-                    />
-                    {booking.seatDetails.length - 1 === i && (
-                        <button
-                            type="button"
-                            onClick={handleAddClick}
-                            className="btn btn-primary mt-2"
-                        >
-                            Add Seat
-                        </button>
-                    )}
+    return (
+        <div>
+            <div className="container-fluid">
+                <div className="row">
+                    <Sidedash />
+                    <div className="col-md-10 pt-3">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <form onSubmit={handleSubmit} className="container mt-5">
+                                    <h3>Create Booking Order</h3>
+                                    {booking.seatDetails.map((x, i) => (
+                                        <div key={i} className="mb-3">
+                                            <label className="form-label">Seat Number</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                name="seatNumber"
+                                                value={x.seatNumber}
+                                                onChange={e => handleInputChange(e, i)}
+                                            />
+                                            <label className="form-label">Slot</label>
+                                            <select
+                                                className="form-select"
+                                                name="slot"
+                                                value={x.slot}
+                                                onChange={e => handleInputChange(e, i)}
+                                            >
+                                                <option value="">Select a Slot</option>
+                                                <option value="morning">Morning</option>
+                                                <option value="afternoon">Afternoon</option>
+                                                <option value="evening">Evening</option>
+                                                <option value="night">Night</option>
+                                            </select>
+                                            <label className="form-label">Valid Till</label>
+                                            <input
+                                                type="date"
+                                                className="form-control"
+                                                name="seatValidTill"
+                                                value={x.seatValidTill}
+                                                onChange={e => handleInputChange(e, i)}
+                                            />
+                                            {booking.seatDetails.length - 1 === i && (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddClick}
+                                                    className="btn btn-primary mt-2"
+                                                >
+                                                    Add Seat
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {/* Other fields would go here */}
+                                    <button type="submit" className="btn btn-success">Submit Booking</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            ))}
-            {/* Other fields would go here */}
-            <button type="submit" className="btn btn-success">Submit Booking</button>
-        </form>
-  )
+            </div>
+        </div>
+    )
 }
 
 export default BookingForm
