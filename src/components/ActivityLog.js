@@ -38,6 +38,7 @@ const ActivityLog = () => {
 
 
     function humanReadableAuditLog(change, collectionName, affactedDoc, operationType) {
+        //console.log(`Operation Type: ${operationType}, Collection Name: ${collectionName}`);
         //console.log(operationType)
         if (!change.path || !collectionName) {
             return null; // Handle missing data gracefully
@@ -50,6 +51,7 @@ const ActivityLog = () => {
         //console.log(pathParts, "Pathparts")
         //console.log(change.path[2], 'hellohi why')
         let message = '';
+        
         switch (collectionName) {
 
             case 'seats':
@@ -94,17 +96,23 @@ const ActivityLog = () => {
                 }
                 break;
             case 'students':
-                //console.log(changedField, "insidestudent")
-                //const operationDelete = operationType || 'Unknown Operation'
+
                 const studentId = affactedDoc || 'Unknown Student'; // Handle missing originalStudentId
-                console.log(operationType, "operationtype")
-                if (change.kind === 'E' && operationType === "DELETE") {
-                    
-                    message = `Student ${studentId} has been deleted.`;
-                } else if (change.kind === 'E' && operationType === 'PATCH') {
-                    message = `Student ${studentId} - ${changeFieldStudents} changed from "${change.lhs}" to "${change.rhs}".`;
-                } else {
-                    console.warn(`Unknown change kind: ${change.kind} for students`);
+                
+                switch (operationType) {
+                    case 'PATCH':
+                        if (change.kind === 'E') {
+                            message = `Student ${studentId} - ${changeFieldStudents} changed from "${change.lhs}" to "${change.rhs}".`;
+                        } else {
+                            console.warn(`Unknown change kind: ${change.kind} for students`);
+                        }
+                        break;
+
+                    case 'DELETE':
+                            message = `Student ${affactedDoc} has been deleted.`;
+                        break;
+                    default:
+                        console.warn(`Unknown change kind: ${change.kind} for students`);
                 }
                 break;
             default:
@@ -194,6 +202,7 @@ const ActivityLog = () => {
                                                                             <li key={idx}>
                                                                                 {/* Call humanReadableAuditLog here */}
                                                                                 {humanReadableAuditLog(change, log.collectionName, log.affactedDoc, log.operationType)}
+                                                                                {log.operationType === "DELETE" ? `Student ${log.affactedDoc} has been deleted.`: ""}
                                                                             </li>
                                                                         ))}
                                                                     </ul>
