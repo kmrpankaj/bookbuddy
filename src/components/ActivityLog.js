@@ -24,7 +24,7 @@ const ActivityLog = () => {
                     }
                 })
                 const data = await response.json();
-                setLogData(data);
+                setLogData(data.reverse());
             } catch (error) {
                 console.error('Error fetching activity log:', error);
                 setError('Failed to load activity log. Please try again later.');
@@ -37,7 +37,8 @@ const ActivityLog = () => {
     }, []);
 
 
-    function humanReadableAuditLog(change, collectionName, affactedDoc) {
+    function humanReadableAuditLog(change, collectionName, affactedDoc, operationType) {
+        //console.log(operationType)
         if (!change.path || !collectionName) {
             return null; // Handle missing data gracefully
         }
@@ -94,11 +95,14 @@ const ActivityLog = () => {
                 break;
             case 'students':
                 //console.log(changedField, "insidestudent")
+                //const operationDelete = operationType || 'Unknown Operation'
                 const studentId = affactedDoc || 'Unknown Student'; // Handle missing originalStudentId
-                if (change.kind === 'E') {
-                    message = `Student ${studentId} - ${changeFieldStudents} changed from "${change.lhs}" to "${change.rhs}".`;
-                } else if (change.kind === 'D') {
+                console.log(operationType, "operationtype")
+                if (change.kind === 'E' && operationType === "DELETE") {
+                    
                     message = `Student ${studentId} has been deleted.`;
+                } else if (change.kind === 'E' && operationType === 'PATCH') {
+                    message = `Student ${studentId} - ${changeFieldStudents} changed from "${change.lhs}" to "${change.rhs}".`;
                 } else {
                     console.warn(`Unknown change kind: ${change.kind} for students`);
                 }
@@ -189,7 +193,7 @@ const ActivityLog = () => {
                                                                         {log.changes && log.changes.map((change, idx) => (
                                                                             <li key={idx}>
                                                                                 {/* Call humanReadableAuditLog here */}
-                                                                                {humanReadableAuditLog(change, log.collectionName, log.affactedDoc)}
+                                                                                {humanReadableAuditLog(change, log.collectionName, log.affactedDoc, log.operationType)}
                                                                             </li>
                                                                         ))}
                                                                     </ul>
