@@ -318,5 +318,17 @@ a.payment-icon span {
 }
 
 
+/* Input coupon select */
+
+select#couponResSelect {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: 1px solid #dee2e6;
+}
+.couponRestriction label {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
 
 

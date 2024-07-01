@@ -23,7 +23,7 @@ const BookingCart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [coupon, setCoupon] = useState({ code: '', amount: 0, applied: false });
   const [couponCode, setCouponCode] = useState('');
-  const productPrice = 350;
+  const productPrice = 400;
   const { showAlert } = useContext(AlertContext)
 
    // Early return or redirection if no data is available
@@ -48,23 +48,36 @@ const BookingCart = () => {
   }, [currentSeats, additionalSlots]);
 
   // Auto apply coupons based on number of cart
-  const autoApplyCoupon = () => {
+const autoApplyCoupon = () => {
     let discountAmount = 0;
-    const totalItems = [...currentSeats, ...additionalSlots].filter(seat => seat.selected).length;
+    const selectedSeats = [...currentSeats, ...additionalSlots].filter(seat => seat.selected);
+    const totalItems = selectedSeats.length;
     if (totalItems === 3) {
-      setCoupon({ code: 'TRIPLEDEAL', amount: 50, applied: true }); // Assuming the discount for 3 items
-      setCouponCode('TRIPLEDEAL');
+        setCoupon({ code: 'TRIPLEDEAL', amount: 200, applied: true }); // Assuming the discount for 3 items
+        setCouponCode('TRIPLEDEAL');
     } else if (totalItems === 4) {
-      setCoupon({ code: 'FOURBUNDLE', amount: 100, applied: true }); // Assuming the discount for 4 items
-      setCouponCode('FOURBUNDLE');
+        setCoupon({ code: 'FOURBUNDLE', amount: 300, applied: true }); // Assuming the discount for 4 items
+        setCouponCode('FOURBUNDLE');
+    } else if (totalItems === 2) {
+        const selectedTimes = selectedSeats.map(seat => seat.slot); // Assuming seat has a timeSlot property
+        if (selectedTimes.includes('morning') && selectedTimes.includes('night')) {
+            setCoupon({ code: 'TWILIGHT', amount: 100, applied: true });
+            setCouponCode('TWILIGHT');
+        } else {
+            // Remove any auto-applied coupons if the conditions are no longer met
+            if (coupon.code === 'TRIPLEDEAL' || coupon.code === 'FOURBUNDLE' || coupon.code === 'TWILIGHT') {
+                setCoupon({ code: '', amount: 0, applied: false });
+                setCouponCode('');
+            }
+        }
     } else {
-      // Remove any auto-applied coupons if the conditions are no longer met
-      if (coupon.code === 'TRIPLEDEAL' || coupon.code === 'FOURBUNDLE') {
-        setCoupon({ code: '', amount: 0, applied: false });
-        setCouponCode('')
-      }
+        // Remove any auto-applied coupons if the conditions are no longer met
+        if (coupon.code === 'TRIPLEDEAL' || coupon.code === 'FOURBUNDLE' || coupon.code === 'MORNINGNIGHT') {
+            setCoupon({ code: '', amount: 0, applied: false });
+            setCouponCode('');
+        }
     }
-  };
+};
 
   if (!studentData) return <div>No student data found</div>;
 

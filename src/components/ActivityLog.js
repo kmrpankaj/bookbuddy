@@ -67,7 +67,7 @@ const ActivityLog = () => {
                         }
 
                         if (changedField.includes('status')) {
-                            message += `${period} slot ${change.lhs ? 'became available' : 'was reserved'}.`;
+                            message += `${period} slot ${change.lhs ? 'became available' : 'was booked'}.`;
                         } else if (changedField.includes('bookedBy')) {
                             if (change.lhs) {
                                 message += `student ${change.lhs} has been removed from ${period} slot.`;

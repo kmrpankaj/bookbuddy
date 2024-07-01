@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Sidedash from './Sidedash';
+import AlertContext from '../context/AlertContext';
 
 const Couponsall = () => {
     const host = process.env.REACT_APP_BACKEND_URL;
+    const { showAlert } = useContext(AlertContext)
     const couponsdata = []
     const [coupons, setCoupons] = useState(couponsdata)
     const studentNameCache = {};
@@ -90,6 +92,7 @@ const Couponsall = () => {
                     }
                     return coupon
                 }))
+                showAlert("Coupon status changed", "success")
             } else {
                 // Handle any error messages from the server
                 console.error('Failed to update coupon status:', responseData.error);
@@ -114,7 +117,7 @@ const Couponsall = () => {
             const json = await response.json()
             if(response.ok) {
                 const newCouponsData = coupons.filter(coupon => coupon._id !== id)
-                
+                showAlert("Coupon deleted!", "success")
                 setCoupons(newCouponsData)
             } else {
                 console.error("Failed to delete the coupon:", json);
@@ -146,6 +149,7 @@ const Couponsall = () => {
                                             <div className="coupon-discount">{(coupon.discountType==="amount"?"₹":"%") + "" + coupon.discountValue} OFF</div>
                                             <div className="coupon-detail">{coupon.description}</div>
                                             <div className="coupon-code">Times used: {coupon.timesUsed}</div>
+                                            <div className="coupon-code">Restrictions: {coupon.productRestriction}</div>
                                             <div className="coupon-code">Usage Limit: {(coupon.usageLimit===null?"Unlimited":coupon.usageLimit)}</div>
                                             <div className="coupon-code">Created By: {coupon.studentName}</div>
                                             <p onClick={() => {toggleCouponStatus(coupon._id, coupon.isActive)}} className="cursor-pointer">Status: <span className='badge badge-info'>{coupon.isActive?"Active":"Inactive"}</span></p>
