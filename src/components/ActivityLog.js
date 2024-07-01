@@ -76,11 +76,11 @@ const ActivityLog = () => {
                             }
                         } else if (changedField.includes('seatValidTill')) {
                             if (change.lhs !== null && change.rhs === null) {
-                                message += `validity ${change.lhs ? formatDate(change.lhs) : change.lhs} has been removed.`;
+                                message += `${period} slot validity ${change.lhs ? formatDate(change.lhs) : change.lhs} has been removed.`;
                             } else if (change.lhs === null && change.rhs !== null) {
-                                message += `validity has been assigned to ${change.rhs ? formatDate(change.rhs) : change.rhs}.`;
+                                message += `${period} slot validity has been assigned to ${change.rhs ? formatDate(change.rhs) : change.rhs}.`;
                             } else if (change.lhs !== null && change.rhs !== null) {
-                                message += `validity has been updated from ${change.lhs ? formatDate(change.lhs) : change.lhs} to ${change.rhs ? formatDate(change.rhs) : change.rhs}.`; // Human-readable date format
+                                message += `${period} slot validity has been updated from ${change.lhs ? formatDate(change.lhs) : change.lhs} to ${change.rhs ? formatDate(change.rhs) : change.rhs}.`; // Human-readable date format
                             }
                         } else {
                             // Handle other potential changes within seatStatus

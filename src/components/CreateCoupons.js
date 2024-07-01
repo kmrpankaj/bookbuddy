@@ -118,7 +118,7 @@ const CreateCoupons = () => {
                                 <option value="1 product">One Product</option>
                                 <option value="2 products">Two Products</option>
                                 <option value="3 products">Three Products</option>
-                                <option value="3 products">Four Products</option>
+                                <option value="4 products">Four Products</option>
                             </select>
                             
                         </div>
