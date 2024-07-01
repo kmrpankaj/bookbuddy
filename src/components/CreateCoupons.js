@@ -106,6 +106,9 @@ const CreateCoupons = () => {
                             <input type="number" className="form-control" id="discountValue" name="discountValue" value={formData.discountValue} onChange={handleChange} />
                         </div>
                         <div class="input-group couponRestriction mb-3">
+                        <div class="input-group-append">
+                                <label class="input-group-text" for="inputGroupSelect02">Restrictions</label>
+                            </div>
                             <select class="coupon-select" id="couponResSelect" name="productRestriction" value={formData.productRestriction} onChange={handleChange}>
                                 <option value="none" selected>None</option>
                                 <option value="morning">Morning Slot</option>
@@ -117,9 +120,7 @@ const CreateCoupons = () => {
                                 <option value="3 products">Three Products</option>
                                 <option value="3 products">Four Products</option>
                             </select>
-                            <div class="input-group-append">
-                                <label class="input-group-text" for="inputGroupSelect02">Restrictions</label>
-                            </div>
+                            
                         </div>
                         <div className="mb-3">
                             <label htmlFor="expirationDate" className="form-label">Expiration Date</label>
