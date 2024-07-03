@@ -330,5 +330,10 @@ select#couponResSelect {
   border-bottom-right-radius: 0px;
 }
 
+/* Pagination */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 

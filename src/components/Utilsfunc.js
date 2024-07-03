@@ -84,3 +84,28 @@ export const convertSlotToTimings = (slot) => {
   };
   return slotMap[slot] || slot; // Return the original slot if not found
 }
+
+
+// --------------------------- formatted time ---------------------------
+export const  convertToIST = (timestamp) => {
+  // Create a Date object from the given timestamp
+  const date = new Date(timestamp);
+
+  // Calculate the IST offset in milliseconds (5 hours 30 minutes)
+  const ISTOffset = 5.5 * 60 * 60 * 1000;
+
+  // Create a new Date object for IST
+  const istDate = new Date(date.getTime() + ISTOffset);
+
+  // Extract hours, minutes, and seconds
+  let hours = istDate.getUTCHours();
+  let minutes = istDate.getUTCMinutes();
+  let seconds = istDate.getUTCSeconds();
+
+  // Format hours, minutes, and seconds to hh:mm:ss
+  hours = hours.toString().padStart(2, '0');
+  minutes = minutes.toString().padStart(2, '0');
+  seconds = seconds.toString().padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
+}

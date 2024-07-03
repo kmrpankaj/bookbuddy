@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Sidedash from './Sidedash'
-import { formatDate } from './Utilsfunc';
+import { formatDate, convertToIST } from './Utilsfunc';
 
 const ActivityLog = () => {
     const host = process.env.REACT_APP_BACKEND_URL;
@@ -177,7 +177,8 @@ const ActivityLog = () => {
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">#</th>
-                                                        <th colSpan="2" scope="col">Date</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Time</th>
                                                         <th scope="col">User</th>
                                                         <th scope="col">Operation</th>
                                                         <th scope="col">Where</th>
@@ -190,7 +191,8 @@ const ActivityLog = () => {
                                                         {currentItems.map((log, index) => (
                                                             <tr key={log._id}>
                                                                 <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
-                                                                <td colSpan="2">{formatDate(log.operationDate)}</td>
+                                                                <td>{formatDate(log.operationDate)}</td>
+                                                                <td>{convertToIST(log.operationDate)}</td>
                                                                 <td>{log.operatedBy}</td>
                                                                 <td>
                                                                     <p>{log.operationType === 'PATCH' ? "UPDATED" : log.operationType}</p>
