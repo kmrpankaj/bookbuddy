@@ -24,44 +24,47 @@ import BookingCart from './components/BookingCart';
 import CheckoutPage from './components/CheckoutPage';
 import TransactionReceipt from './components/TransactionReceipt';
 import ActivityLog from './components/ActivityLog';
+import { LoadingProvider } from './context/LoadingContext';
 
 
 function App() {
   return (
     <div className="App">
-      <StudentState>
-        <AlertState>
-          <SeatState>
-            <BrowserRouter>
-              <EmailProvider>
-                <Alerts />
-                <Navbar />
-                <Routes>
-                  <Route path="/" element={<Home url="https://members.bookbuddy.co.in/login" />} />
-                  <Route path="/account" element={<Account />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/allstudents" element={<Studentlist />} />
-                  <Route path="/allseats" element={<Seatsall />} />
-                  <Route path="/forgotpassword" element={<Forgotpassword />} />
-                  <Route path="/resetpassword" element={<Passwordreset />} />
-                  <Route path="/createcoupon" element={<CreateCoupons />} />
-                  <Route path="/viewcoupons" element={<Couponsall />} />
-                  <Route path="/createbooking" element={<BookingForm />} />
-                  <Route path="/transaction-status/:clientTxnId" element={<TransactionStatus />} />
-                  <Route path="/payment-result" element={<PaymentResult />} />
-                  <Route path="/cart" element={<BookingCart />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/transaction/:id" element={<TransactionReceipt />} />
-                  <Route path="/log" element={<ActivityLog />} />
+      <LoadingProvider>
+        <StudentState>
+          <AlertState>
+            <SeatState>
+              <BrowserRouter>
+                <EmailProvider>
+                  <Alerts />
+                  <Navbar />
+                  <Routes>
+                    <Route path="/" element={<Home url="https://members.bookbuddy.co.in/login" />} />
+                    <Route path="/account" element={<Account />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/allstudents" element={<Studentlist />} />
+                    <Route path="/allseats" element={<Seatsall />} />
+                    <Route path="/forgotpassword" element={<Forgotpassword />} />
+                    <Route path="/resetpassword" element={<Passwordreset />} />
+                    <Route path="/createcoupon" element={<CreateCoupons />} />
+                    <Route path="/viewcoupons" element={<Couponsall />} />
+                    <Route path="/createbooking" element={<BookingForm />} />
+                    <Route path="/transaction-status/:clientTxnId" element={<TransactionStatus />} />
+                    <Route path="/payment-result" element={<PaymentResult />} />
+                    <Route path="/cart" element={<BookingCart />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
+                    <Route path="/transaction/:id" element={<TransactionReceipt />} />
+                    <Route path="/log" element={<ActivityLog />} />
 
-                </Routes>
-              </EmailProvider>
-            </BrowserRouter>
-          </SeatState>
-        </AlertState>
-      </StudentState>
+                  </Routes>
+                </EmailProvider>
+              </BrowserRouter>
+            </SeatState>
+          </AlertState>
+        </StudentState>
+      </LoadingProvider>
     </div>
   );
 }

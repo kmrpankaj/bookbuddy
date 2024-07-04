@@ -14,6 +14,7 @@ const Seatsall = (props) => {
     const [slot, setSlot] = useState({})
     const [filter, setFilter] = useState('all'); // State for filtering seats
     const [student, setStudent] = useState(null); // State variable to store student data
+    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
       if (localStorage.getItem('token') && (localStorage.getItem('role') === 'Admin' || localStorage.getItem('role') === 'Superadmin')) {
@@ -78,7 +79,7 @@ const Seatsall = (props) => {
     }
 
     useEffect(() => {
-      console.log(student); // Log when student changes
+      //console.log(student); // Log when student changes
   }, [student]);
 
 

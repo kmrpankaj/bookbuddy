@@ -28,6 +28,15 @@ button.btn.btn-secondary.active.filterbtn.cursor-pointer {
 .sidebar .nav-link.active {
   color:#000;
 }
+:-ms-input-placeholder { 
+  color: #797c7f;     /* Internet Explorer 10-11 */
+}	  
+::-ms-input-placeholder { 
+  color: #797c7f;    /* Microsoft Edge */
+}
+::placeholder { 
+  color: #797c7f;     /* Firefox, Chrome, Opera */
+}
 
 /* Profile page */
 .gradient-custom {
