@@ -192,7 +192,7 @@ const removeError = () => {
 
         newSlots: additionalSlots.filter(slot => slot.selected).map(({ slot }) => slot)
       };
-      console.log(initialData)
+      //console.log(initialData)
     } catch (error) {
       console.error('Error during transaction ID generation:', error.message);
       setError('Transaction ID Generation Failed: ' + error.message);

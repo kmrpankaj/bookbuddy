@@ -9,6 +9,7 @@ import { convertSlotToTimings } from './Utilsfunc';
 const CheckoutPage = () => {
     const location = useLocation()
     const { orderResponse } = location.state || {};
+    console.log(orderResponse)
 
     if (!orderResponse) {
         return <div>No order details available.</div>;
@@ -97,7 +98,7 @@ const CheckoutPage = () => {
                                                             <div className="payment-links mb-4">
                                                                 <p className="lead fw-bold" style={{ color: "#f37a27" }}>Click a UPI method to continue</p>
                                                                 <div className="icon-container d-flex justify-content-around">
-                                                                    {orderResponse.order.upi_intent.bhim_link && (
+                                                                    {/* {orderResponse.order.upi_intent.bhim_link && (
                                                                         <a href={orderResponse.order.upi_intent.bhim_link} className="payment-icon">
                                                                             <img class="bhim" src="/images/bhim-upi-icon.png" width="60" />
                                                                             <span class="d-block">BHIM</span>
@@ -120,7 +121,7 @@ const CheckoutPage = () => {
                                                                             <img class="gpay" src="/images/google-pay-icon.png" width="60" />
                                                                             <span class="d-block">GPay</span>
                                                                         </a>
-                                                                    )}
+                                                                    )} */}
                                                                     {orderResponse.order.paymentUrl && (
                                                                         <a href={orderResponse.order.paymentUrl} className="payment-icon">
                                                                             <img class="showqr" src="/images/show-qr-icon.png" width="60" />

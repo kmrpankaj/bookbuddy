@@ -25,6 +25,12 @@ import CheckoutPage from './components/CheckoutPage';
 import TransactionReceipt from './components/TransactionReceipt';
 import ActivityLog from './components/ActivityLog';
 import { LoadingProvider } from './context/LoadingContext';
+import '@fontsource/jost';
+import '@fontsource/jost/300.css'; // Light
+import '@fontsource/jost/400.css'; // Regular
+import '@fontsource/jost/500.css'; // Medium
+import '@fontsource/jost/700.css'; // Bold
+import BookingManager from './components/BookingManager';
 
 
 function App() {
@@ -57,6 +63,7 @@ function App() {
                     <Route path="/checkout" element={<CheckoutPage />} />
                     <Route path="/transaction/:id" element={<TransactionReceipt />} />
                     <Route path="/log" element={<ActivityLog />} />
+                    <Route path="/bookings" element={<BookingManager />} />
 
                   </Routes>
                 </EmailProvider>

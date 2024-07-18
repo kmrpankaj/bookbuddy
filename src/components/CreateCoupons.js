@@ -105,7 +105,7 @@ const CreateCoupons = () => {
                             <label htmlFor="discountValue" className="form-label">{formData.discountType === 'amount' ? 'Amount (₹)' : 'Percentage (%)'}</label>
                             <input type="number" className="form-control" id="discountValue" name="discountValue" value={formData.discountValue} onChange={handleChange} />
                         </div>
-                        <div class="input-group couponRestriction mb-3">
+                        <div class="input-group couponRestriction mb-3 mt-4">
                         <div class="input-group-append">
                                 <label class="input-group-text" for="inputGroupSelect02">Restrictions</label>
                             </div>

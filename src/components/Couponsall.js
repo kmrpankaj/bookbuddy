@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Sidedash from './Sidedash';
 import AlertContext from '../context/AlertContext';
+import { formatDate } from './Utilsfunc';
 
 const Couponsall = () => {
     const host = process.env.REACT_APP_BACKEND_URL;
@@ -151,6 +152,7 @@ const Couponsall = () => {
                                             <div className="coupon-code">Times used: {coupon.timesUsed}</div>
                                             <div className="coupon-code">Restrictions: {coupon.productRestriction}</div>
                                             <div className="coupon-code">Usage Limit: {(coupon.usageLimit===null?"Unlimited":coupon.usageLimit)}</div>
+                                            <div className="coupon-code">Expiration Date: {(coupon.expirationDate===null?"Unlimited":formatDate(coupon.expirationDate))}</div>
                                             <div className="coupon-code">Created By: {coupon.studentName}</div>
                                             <p onClick={() => {toggleCouponStatus(coupon._id, coupon.isActive)}} className="cursor-pointer">Status: <span className='badge badge-info'>{coupon.isActive?"Active":"Inactive"}</span></p>
                                             <p className="coupon-cta">{coupon.code}</p>

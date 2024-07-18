@@ -44,7 +44,14 @@ const Login = () => {
         history("/profile"); // Redirect to allstudents page for admin
       }
     } else {
-      showAlert(json.error, "danger")
+      // Handle errors
+        if (json.errors) { // Check for existence of errors array
+            const errorMessage = json.errors.join(', '); // Join error messages
+            showAlert(`Error: ${errorMessage}`, "danger");
+        } else {
+            // Handle unexpected errors if no errors array is present
+            showAlert("An unexpected error occurred. Please try again.", "danger");
+        }
     }
 
   }

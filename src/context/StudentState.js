@@ -19,7 +19,7 @@ const getAllStudents = async () => {
       },
     });
     const json = await response.json();
-    setStudents(json);
+    setStudents(json.reverse());
   } catch (error) {
     console.error("Error fetching all students:", error);
     // Handle the error, you might want to set an error state or display a message to the user

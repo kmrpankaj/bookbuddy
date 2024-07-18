@@ -192,36 +192,36 @@ const Studentlist = (props) => {
                                         <div className="card mb-3" aria-hidden="true" style={{ backgroundImage: `url("/images/stdbg.jpg")`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', }}>
                                             <div className="card-body text-center placeholder-glow">
                                                 <span className="img-fluid placeholder rounded-circle mb-2 card-img-top" width="128" height="128" style={{ display: 'inline-block', background: '#8a8f90', height: 128, width: 128 }} ></span>
-                                                <h5 className="card-title mb-0 placeholder-glow"><span class="placeholder col-5"></span></h5>
+                                                <h5 className="card-title mb-0 placeholder-glow"><span className="placeholder col-5"></span></h5>
                                                 <div className="text-muted mb-2 position-relative placeholder-glow">
-                                                    <span id="studentuid-2411DI183"><span class="placeholder col-3"></span></span>
+                                                    <span id="studentuid-2411DI183"><span className="placeholder col-3"></span></span>
 
                                                 </div>
-                                                <div><span className="placeholder-glow btn btn-primary btn-sm"><span class="placeholder col-5"></span></span></div>
+                                                <div><span className="placeholder-glow btn btn-primary btn-sm"><span className="placeholder col-5"></span></span></div>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body position-relative">
                                                 <span className="collapsible position-relative placeholder-glow">
-                                                    <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target="#T2411DI183" aria-expanded="true" aria-controls="T2411DI183"><span class="placeholder col-5"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target="#T2411DI183" aria-expanded="true" aria-controls="T2411DI183"><span className="placeholder col-5"></span></h5>
 
                                                 </span>
                                                 <div className="collapse " id="T2411DI183">
                                                     <ul className="list-group">
-                                                        <p className='placeholder-glow'><span class="placeholder col-4"></span></p>
+                                                        <p className='placeholder-glow'><span className="placeholder col-4"></span></p>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <span className="collapsible position-relative">
-                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#C2411DI183" aria-expanded="false" aria-controls="C2411DI183"><span class="placeholder col-3"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#C2411DI183" aria-expanded="false" aria-controls="C2411DI183"><span className="placeholder col-3"></span></h5>
 
                                                 </span>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <span className="collapsible position-relative">
-                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#P2411DI183" aria-expanded="false" aria-controls="P2411DI183"><span class="placeholder col-6"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#P2411DI183" aria-expanded="false" aria-controls="P2411DI183"><span className="placeholder col-6"></span></h5>
 
                                                 </span>
                                             </div>
@@ -232,36 +232,36 @@ const Studentlist = (props) => {
                                         <div className="card mb-3" aria-hidden="true" style={{ backgroundImage: `url("/images/stdbg.jpg")`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', }}>
                                             <div className="card-body text-center placeholder-glow">
                                                 <span className="img-fluid placeholder rounded-circle mb-2 card-img-top" width="128" height="128" style={{ display: 'inline-block', background: '#8a8f90', height: 128, width: 128 }} ></span>
-                                                <h5 className="card-title mb-0 placeholder-glow"><span class="placeholder col-5"></span></h5>
+                                                <h5 className="card-title mb-0 placeholder-glow"><span className="placeholder col-5"></span></h5>
                                                 <div className="text-muted mb-2 position-relative placeholder-glow">
-                                                    <span id="studentuid-2411DI183"><span class="placeholder col-3"></span></span>
+                                                    <span id="studentuid-2411DI183"><span className="placeholder col-3"></span></span>
 
                                                 </div>
-                                                <div><span className="placeholder-glow btn btn-primary btn-sm"><span class="placeholder col-5"></span></span></div>
+                                                <div><span className="placeholder-glow btn btn-primary btn-sm"><span className="placeholder col-5"></span></span></div>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body position-relative">
                                                 <span className="collapsible position-relative placeholder-glow">
-                                                    <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target="#T2411DI183" aria-expanded="true" aria-controls="T2411DI183"><span class="placeholder col-5"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target="#T2411DI183" aria-expanded="true" aria-controls="T2411DI183"><span className="placeholder col-5"></span></h5>
 
                                                 </span>
                                                 <div className="collapse " id="T2411DI183">
                                                     <ul className="list-group">
-                                                        <p className='placeholder-glow'><span class="placeholder col-4"></span></p>
+                                                        <p className='placeholder-glow'><span className="placeholder col-4"></span></p>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <span className="collapsible position-relative">
-                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#C2411DI183" aria-expanded="false" aria-controls="C2411DI183"><span class="placeholder col-3"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#C2411DI183" aria-expanded="false" aria-controls="C2411DI183"><span className="placeholder col-3"></span></h5>
 
                                                 </span>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <span className="collapsible position-relative">
-                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#P2411DI183" aria-expanded="false" aria-controls="P2411DI183"><span class="placeholder col-6"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#P2411DI183" aria-expanded="false" aria-controls="P2411DI183"><span className="placeholder col-6"></span></h5>
 
                                                 </span>
                                             </div>
@@ -272,36 +272,36 @@ const Studentlist = (props) => {
                                         <div className="card mb-3" aria-hidden="true" style={{ backgroundImage: `url("/images/stdbg.jpg")`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', }}>
                                             <div className="card-body text-center placeholder-glow">
                                                 <span className="img-fluid placeholder rounded-circle mb-2 card-img-top" width="128" height="128" style={{ display: 'inline-block', background: '#8a8f90', height: 128, width: 128 }} ></span>
-                                                <h5 className="card-title mb-0 placeholder-glow"><span class="placeholder col-5"></span></h5>
+                                                <h5 className="card-title mb-0 placeholder-glow"><span className="placeholder col-5"></span></h5>
                                                 <div className="text-muted mb-2 position-relative placeholder-glow">
-                                                    <span id="studentuid-2411DI183"><span class="placeholder col-3"></span></span>
+                                                    <span id="studentuid-2411DI183"><span className="placeholder col-3"></span></span>
 
                                                 </div>
-                                                <div><span className="placeholder-glow btn btn-primary btn-sm"><span class="placeholder col-5"></span></span></div>
+                                                <div><span className="placeholder-glow btn btn-primary btn-sm"><span className="placeholder col-5"></span></span></div>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body position-relative">
                                                 <span className="collapsible position-relative placeholder-glow">
-                                                    <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target="#T2411DI183" aria-expanded="true" aria-controls="T2411DI183"><span class="placeholder col-5"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer" data-bs-toggle="collapse" data-bs-target="#T2411DI183" aria-expanded="true" aria-controls="T2411DI183"><span className="placeholder col-5"></span></h5>
 
                                                 </span>
                                                 <div className="collapse " id="T2411DI183">
                                                     <ul className="list-group">
-                                                        <p className='placeholder-glow'><span class="placeholder col-4"></span></p>
+                                                        <p className='placeholder-glow'><span className="placeholder col-4"></span></p>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <span className="collapsible position-relative">
-                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#C2411DI183" aria-expanded="false" aria-controls="C2411DI183"><span class="placeholder col-3"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#C2411DI183" aria-expanded="false" aria-controls="C2411DI183"><span className="placeholder col-3"></span></h5>
 
                                                 </span>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body">
                                                 <span className="collapsible position-relative">
-                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#P2411DI183" aria-expanded="false" aria-controls="P2411DI183"><span class="placeholder col-6"></span></h5>
+                                                    <h5 className="h6 card-title cursor-pointer placeholder-glow" data-bs-toggle="collapse" data-bs-target="#P2411DI183" aria-expanded="false" aria-controls="P2411DI183"><span className="placeholder col-6"></span></h5>
 
                                                 </span>
                                             </div>

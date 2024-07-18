@@ -1,3 +1,102 @@
+/* Base font setup */
+body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400; /* Regular weight for body text */
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700; /* Bold weight for headings */
+  margin: 0 0 1rem 0;
+  color: #222;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+/* Paragraphs */
+p {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  margin: 0 0 1.5rem 0;
+  color: #444;
+}
+
+/* Lists */
+ul, ol {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  margin: 0 0 1.5rem 0;
+  padding-left: 1.5rem;
+  color: #444;
+}
+
+/* Forms */
+input, textarea, select, button {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  color: #333;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  font-weight: 500; /* Medium weight for buttons */
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.btn-group-xs > .btn, .btn-xs {
+  padding: .25rem .4rem;
+  font-size: .875rem;
+  line-height: .5;
+  border-radius: .2rem;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Other elements */
+a {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* ========== Base =============== */
+
 body {
   font-size: 15px;
   color: #595c5f;
@@ -17,6 +116,12 @@ button.btn.btn-secondary.filterbtn.cursor-pointer {
 
 button.btn.btn-secondary.active.filterbtn.cursor-pointer {
   background-color: #1b4256;
+}
+
+.form-control:focus {
+  border-color: none; 
+  outline: none;
+  box-shadow: none;
 }
 
 .sidebar .nav-link svg {
@@ -319,11 +424,13 @@ a.payment-icon span {
 .spinner-wrap .spinner-border {
   position: absolute;
   right: -21px;
-  bottom: 13px;
+  bottom: 28px;
 }
 
 .valid-feedback {
   display: inline-block;
+  margin-top: 0;
+  padding-left: 14px;
 }
 
 
@@ -333,16 +440,31 @@ select#couponResSelect {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   border: 1px solid #dee2e6;
+  padding-bottom: 4.3px;
 }
 .couponRestriction label {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+}
+.coupongo:active {
+  border: 0;
+  border-color: transparent !important;
 }
 
 /* Pagination */
 .pagination {
   display: flex;
   flex-wrap: wrap;
+}
+
+/* Bookings table */
+.bookings-table td {
+  color: #545454;
+  font-size: 14px;
+  font-weight: 300;
+}
+.bookings-table-head th {
+  font-weight: 400;
 }
 
 
