@@ -513,7 +513,7 @@ const BookingForm = () => {
                                     <form onSubmit={handleSubmit} className="">
 
                                         <div className='mb-3 row'>
-                                            <div className='col-md-5'>
+                                            <div className='col-md-5 position-relative'>
                                                 <span className="mb-2 d-block">User Search</span>
                                                 <div className="input-group col-md-5">
                                                     <input name="studentSearch" value={searchQuery} type="search" onChange={(e) => handleInputChange(e)} className="form-control rounded-start" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
@@ -533,7 +533,19 @@ const BookingForm = () => {
                                                     </button>
 
                                                 </div>
+                                                <ul className="list-group position-absolute list-group-flush shadow-sm z-1 rounded border border-1 border-secondary-subtle" style={{ marginTop: '-16px', border: '1px solid #dee2e6' }}>
+                                                    {searchResults.length > 0 ? (
+                                                        searchResults.map((student) => (
+                                                            <li key={student._id} className="list-group-item list-group-item-action" onClick={() => handleStudentSelect(student)}>{student.name} - {student.email} - {student.uid} - {student.phone}</li>
+                                                        ))
+                                                    ) : (
+                                                        searchQuery && !isLoading && noSearchResult && <li className="list-group-item list-group-item-action text-danger">No student found.</li>
+                                                    )
+                                                    }
+                                                </ul>
                                             </div>
+
+                                            
                                             <div className="col-md-5">
                                                 <label className="form-label">Date</label>
                                                 <input
@@ -546,18 +558,7 @@ const BookingForm = () => {
                                             </div>
 
 
-                                            <div className='col-md-5 bg-body-tertiary position-relative'>
-                                                <ul className="list-group position-absolute list-group-flush shadow-sm z-1 rounded border border-1 border-secondary-subtle" style={{ marginTop: '-16px', border: '1px solid #dee2e6' }}>
-                                                    {searchResults.length > 0 ? (
-                                                        searchResults.map((student) => (
-                                                            <li key={student._id} className="list-group-item list-group-item-action" onClick={() => handleStudentSelect(student)}>{student.name} - {student.email} - {student.uid} - {student.phone}</li>
-                                                        ))
-                                                    ) : (
-                                                        searchQuery && !isLoading && noSearchResult && <li className="list-group-item list-group-item-action text-danger">No student found.</li>
-                                                    )
-                                                    }
-                                                </ul>
-                                            </div>
+                                            
                                         </div>
 
 
