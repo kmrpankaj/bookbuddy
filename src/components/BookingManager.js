@@ -144,8 +144,8 @@ const BookingManager = () => {
                                                                 <td>{booking.customerEmail}</td>
                                                                 <td>{booking.customerMobile}</td>
                                                                 <td>{booking.udf1}</td>
-                                                                <td><span className={`${booking.udf2?'badge text-bg-danger': ''}`}>{booking.udf2}</span></td>
-                                                                <td>{booking.udf3}</td>
+                                                                <td><span className={`${booking.udf2&&booking.udf2!=='0'?'badge text-bg-danger': 'badge text-bg-success'}`}>{booking.udf2}</span></td>
+                                                                <td className='text-nowrap'>{booking.udf3}</td>
                                                                 <td>{formatDate(booking.updatedAt)}</td>
                                                                 <td><button onClick={() => handleSendReceipt(booking.clientTxnId)}>Send</button></td>
                                                                 <td>

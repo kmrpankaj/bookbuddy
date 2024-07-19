@@ -75,6 +75,7 @@ const BookingEdit = () => {
                 <div className='container'>
                   <h3>Edit Booking</h3>
                   <form onSubmit={handleSubmit}>
+                  <div className='mb-3 row'>
                     <div className="mb-3">
                       <label className="form-label">Booked By</label>
                       <input type="text" className="form-control" name="bookedBy" value={booking.bookedBy} onChange={handleInputChange} />
@@ -85,7 +86,7 @@ const BookingEdit = () => {
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Client Txn ID</label>
-                      <input type="text" className="form-control" name="clientTxnId" value={booking.clientTxnId} onChange={handleInputChange} />
+                      <input type="text" className="form-control" name="clientTxnId" value={booking.clientTxnId} onChange={handleInputChange} disabled />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Amount</label>
@@ -136,15 +137,15 @@ const BookingEdit = () => {
                       <input type="text" className="form-control" name="customerMobile" value={booking.customerMobile} onChange={handleInputChange} />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">UDF1</label>
+                      <label className="form-label">Amount Paid</label>
                       <input type="text" className="form-control" name="udf1" value={booking.udf1} onChange={handleInputChange} />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">UDF2</label>
+                      <label className="form-label">Payment Due</label>
                       <input type="text" className="form-control" name="udf2" value={booking.udf2} onChange={handleInputChange} />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">UDF3</label>
+                      <label className="form-label">Notes</label>
                       <input type="text" className="form-control" name="udf3" value={booking.udf3} onChange={handleInputChange} />
                     </div>
                     <div className="mb-3">
@@ -163,6 +164,7 @@ const BookingEdit = () => {
                       ))}
                     </div>
                     <button type="submit" className="btn btn-primary">Update Booking</button>
+                    </div>
                   </form>
                 </div>
               </div>
