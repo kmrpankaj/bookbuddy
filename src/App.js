@@ -31,6 +31,7 @@ import '@fontsource/jost/400.css'; // Regular
 import '@fontsource/jost/500.css'; // Medium
 import '@fontsource/jost/700.css'; // Bold
 import BookingManager from './components/BookingManager';
+import BookingEdit from './components/BookingEdit';
 
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
                     <Route path="/transaction/:id" element={<TransactionReceipt />} />
                     <Route path="/log" element={<ActivityLog />} />
                     <Route path="/bookings" element={<BookingManager />} />
+                    <Route path="/editbookings/:id" element={<BookingEdit />} />
 
                   </Routes>
                 </EmailProvider>

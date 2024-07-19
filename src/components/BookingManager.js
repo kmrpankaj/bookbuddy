@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Sidedash from './Sidedash';
+import { Link } from 'react-router-dom'; 
 import { formatDate } from './Utilsfunc';
 import AlertContext from '../context/AlertContext';
-import { capitalizeFirstLetter } from './Utilsfunc';
 
 const BookingManager = () => {
     const [bookings, setBookings] = useState([]);
@@ -125,7 +125,7 @@ const BookingManager = () => {
                                                                         {booking.seatDetails.map((seat, seatIndex) => (
 
                                                                             <li className="text-nowrap rounded border px-2" style={{'marginTop': '-1px'}} key={seatIndex}>
-                                                                                <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize text-bg-${seat.type==='new'?'warning':'success'}`}>{seat.type}</span>
+                                                                                <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type==='new'?'warning':'success'}`}>{seat.type}</span>
                                                                             </li>
 
                                                                         ))}
@@ -150,6 +150,7 @@ const BookingManager = () => {
                                                                 <td><button onClick={() => handleSendReceipt(booking.clientTxnId)}>Send</button></td>
                                                                 <td>
                                                                     <button className="btn btn-danger btn-sm" onClick={() => deleteBooking(booking._id)}>Delete</button>
+                                                                    <Link to={`/editbookings/${booking._id}`} className="btn btn-primary">Edit</Link>
                                                                 </td>
                                                             </tr>
                                                         ))}

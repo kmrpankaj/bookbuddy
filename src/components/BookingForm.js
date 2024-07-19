@@ -688,11 +688,11 @@ const BookingForm = () => {
                                         <div className="row mb-3">
                                             <div className="col">
                                                 <label className="form-label">Sub Total</label>
-                                                <input type="text" name='totalPrice' value={booking.totalPrice} className="form-control" placeholder="Sub Total" aria-label="totalPrice" disabled />
+                                                <input type="text" name='totalPrice' value={booking.totalPrice} className="form-control" placeholder="Sub Total" aria-label="totalPrice" onChange={handleBookingInputChange} />
                                             </div>
                                             <div className="col">
                                                 <label className="form-label">Total</label>
-                                                <input type="text" name='amount' value={booking.amount} className="form-control" placeholder="Total" aria-label="amount" disabled />
+                                                <input type="text" name='amount' value={booking.amount} className="form-control" placeholder="Total" aria-label="amount" onChange={handleBookingInputChange} />
                                             </div>
                                         </div>
 

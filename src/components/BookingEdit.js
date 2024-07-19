@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom'; // Assuming you are using react-router-dom
+import { useParams, useNavigate } from 'react-router-dom'; // Assuming you are using react-router-dom
 import Sidedash from './Sidedash';
 
 const BookingEdit = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const history = useNavigate(); 
   const [booking, setBooking] = useState(null);
   const host = process.env.REACT_APP_BACKEND_URL;
 
@@ -14,7 +14,7 @@ const BookingEdit = () => {
 
   const fetchBooking = async () => {
     try {
-      const response = await fetch(`${host}/bookings/api/bookings/${id}`);
+      const response = await fetch(`${host}/bookings/api/singlebookings/${id}`);
       const data = await response.json();
       setBooking(data);
     } catch (error) {
@@ -37,15 +37,15 @@ const BookingEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${host}/bookings/api/bookings/${id}`, {
-        method: 'PUT',
+      const response = await fetch(`${host}/bookings/api/edit/bookings/${id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(booking),
       });
       if (response.ok) {
-        history.push('/bookings');
+        history('/bookings');
       } else {
         console.error('Error updating booking');
       }
@@ -54,10 +54,10 @@ const BookingEdit = () => {
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDateForInput = (dateString) => {
     if (!dateString) return '';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
   };
 
   if (!booking) {
@@ -157,7 +157,7 @@ const BookingEdit = () => {
                         <div key={index} className="mb-3">
                           <input type="text" className="form-control mb-1" name="seatNumber" placeholder="Seat Number" value={seat.seatNumber} onChange={(e) => handleSeatDetailChange(e, index)} />
                           <input type="text" className="form-control mb-1" name="slot" placeholder="Slot" value={seat.slot} onChange={(e) => handleSeatDetailChange(e, index)} />
-                          <input type="date" className="form-control mb-1" name="seatValidTill" placeholder="Valid Till" value={seat.seatValidTill} onChange={(e) => handleSeatDetailChange(e, index)} />
+                          <input type="date" className="form-control mb-1" name="seatValidTill" placeholder="Valid Till" value={formatDateForInput(seat.seatValidTill)} onChange={(e) => handleSeatDetailChange(e, index)} />
                           <input type="text" className="form-control mb-1" name="type" placeholder="Type" value={seat.type} onChange={(e) => handleSeatDetailChange(e, index)} />
                         </div>
                       ))}
