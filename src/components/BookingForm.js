@@ -371,7 +371,10 @@ const BookingForm = () => {
         try {
             const response = await fetch(`${host}/bookings/create/direct-order`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem('token'),
+                 },
                 body: JSON.stringify(updatedBooking),
             });
             const responseData = await response.json();
@@ -397,7 +400,10 @@ const BookingForm = () => {
         try {
             const response = await fetch(`${host}/bookings/api/direct-webhook`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem('token'),
+                 },
                 body: JSON.stringify({ clientTxnId }),
             });
 
@@ -767,7 +773,7 @@ const BookingForm = () => {
                                         <div className="row mb-3">
                                             <div className="col">
                                                 <label className="form-label">Notes</label>
-                                                <input type="textarea" name='udf3' value={booking.udf3} className="form-control" placeholder="Add a note or if any." aria-label="Note" onChange={handleBookingInputChange} />
+                                                <textarea type="textarea" name='udf3' value={booking.udf3} className="form-control" placeholder="Add a note if any." aria-label="Note" onChange={handleBookingInputChange} rows='3'></textarea>
                                             </div>
                                         </div>
 

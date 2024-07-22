@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Sidedash from './Sidedash';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import { formatDate } from './Utilsfunc';
 import AlertContext from '../context/AlertContext';
 
@@ -29,6 +29,9 @@ const BookingManager = () => {
     const deleteBooking = async (bookingId) => {
         try {
             await fetch(`${host}/bookings/api/delete/booking/${bookingId}`, {
+                headers: {
+                    "auth-token": localStorage.getItem('token'),
+                 },
                 method: 'DELETE',
             });
             setBookings(bookings.filter((booking) => booking._id !== bookingId));
@@ -40,10 +43,18 @@ const BookingManager = () => {
 
     //=================================
     // Send Receipts
-    const sendReceipt = async (TxnId) => {
-        console.log('Sending receipt for:', TxnId);
+    const sendReceipt = async (TxnId) => { 
+        //console.log('Sending receipt for:', TxnId);
         setIsLoading(true);
+        const spinnerId = `loading-${TxnId}`;
+        const spinnerElement = document.getElementById(spinnerId);
+
         try {
+            if (spinnerElement) {
+                spinnerElement.style.display = 'block'; // Hide spinner after state change
+              } else {
+                console.warn(`Spinner element with ID 'loading-${TxnId}' not found.`); // Handle missing element
+              }
             const response = await fetch(`${host}/bookings/send-receipt/${TxnId}`, {
                 method: 'POST',
                 // Optionally add headers and body for the request
@@ -62,12 +73,18 @@ const BookingManager = () => {
             showAlert(error.message, 'danger')
         } finally {
             setIsLoading(false);
+            if (spinnerElement ) {
+                spinnerElement.style.display = 'none'; // Hide spinner after state change
+              } else {
+                console.warn(`Spinner element with ID 'loading-${TxnId}' not found.`); // Handle missing element
+              }
         }
     };
 
     const handleSendReceipt = (txnId) => {
         sendReceipt(txnId);
     };
+
 
     return (
         <div>
@@ -121,11 +138,11 @@ const BookingManager = () => {
                                                                 <td>{booking.bookedBy}</td>
                                                                 <td>{booking.customerName}</td>
                                                                 <td>
-                                                                    <ul>
+                                                                    <ul className='list-unstyled'>
                                                                         {booking.seatDetails.map((seat, seatIndex) => (
 
-                                                                            <li className="text-nowrap rounded border px-2" style={{'marginTop': '-1px'}} key={seatIndex}>
-                                                                                <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type==='new'?'warning':'success'}`}>{seat.type}</span>
+                                                                            <li className="text-nowrap rounded border px-2 mb-1" style={{ 'marginTop': '-1px' }} key={seatIndex}>
+                                                                                <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span>
                                                                             </li>
 
                                                                         ))}
@@ -144,10 +161,10 @@ const BookingManager = () => {
                                                                 <td>{booking.customerEmail}</td>
                                                                 <td>{booking.customerMobile}</td>
                                                                 <td>{booking.udf1}</td>
-                                                                <td><span className={`${booking.udf2&&booking.udf2!=='0'?'badge text-bg-danger': 'badge text-bg-success'}`}>{booking.udf2}</span></td>
+                                                                <td><span className={`${booking.udf2 && booking.udf2 !== '0' ? 'badge text-bg-danger' : 'badge text-bg-success'}`}>{booking.udf2}</span></td>
                                                                 <td className='text-nowrap'>{booking.udf3}</td>
                                                                 <td>{formatDate(booking.updatedAt)}</td>
-                                                                <td><button onClick={() => handleSendReceipt(booking.clientTxnId)}>Send</button></td>
+                                                                <td><button className='send-email' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{display: 'none'}} class="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
                                                                 <td>
                                                                     <button className="btn btn-danger btn-sm" onClick={() => deleteBooking(booking._id)}>Delete</button>
                                                                     <Link to={`/editbookings/${booking._id}`} className="btn btn-primary">Edit</Link>

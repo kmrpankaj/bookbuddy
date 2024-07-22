@@ -41,6 +41,7 @@ const BookingEdit = () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          "auth-token": localStorage.getItem('token'),
         },
         body: JSON.stringify(booking),
       });

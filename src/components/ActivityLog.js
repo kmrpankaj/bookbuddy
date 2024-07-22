@@ -47,11 +47,11 @@ const ActivityLog = () => {
         const pathParts = change.path.slice(1); // Skip leading empty element
         const changedField = pathParts.join('.');
         const changeFieldStudents = change.path[0]
-        //console.log(changedField, "ChangeField")
-        //console.log(pathParts, "Pathparts")
+        // console.log(changedField, "ChangeField")
+        // console.log(pathParts, "Pathparts")
         //console.log(change.path[2], 'hellohi why')
         let message = '';
-        
+
         switch (collectionName) {
 
             case 'seats':
@@ -98,7 +98,7 @@ const ActivityLog = () => {
             case 'students':
 
                 const studentId = affactedDoc || 'Unknown Student'; // Handle missing originalStudentId
-                
+
                 switch (operationType) {
                     case 'PATCH':
                         if (change.kind === 'E') {
@@ -109,15 +109,40 @@ const ActivityLog = () => {
                         break;
 
                     case 'DELETE':
-                            message = `Student ${affactedDoc} has been deleted.`;
+                        message = `Student ${affactedDoc} has been deleted.`;
                         break;
                     default:
                         console.warn(`Unknown change kind: ${change.kind} for students`);
                 }
                 break;
+
+            case 'bookings':
+                switch (operationType) {
+                    case 'PATCH':
+                        if (change.kind === 'E') {
+                            message = `Booking ${affactedDoc} - ${changeFieldStudents} changed from "${change.lhs}" to "${change.rhs}".`;
+                        } else {
+                            console.warn(`Unknown change kind: ${change.kind} for bookings`);
+                        }
+                        break;
+
+                    case 'DELETE':
+                        message = `Booking ${affactedDoc} has been deleted.`;
+                        break;
+                    case 'POST': 
+                    
+                        message = `New Booking entry with receipt number ${affactedDoc} created.`;
+                        break;
+                    default:
+                        console.warn(`Unknown operation type: ${operationType} for bookings`);
+                }
+                break;
+
             default:
                 console.warn(`Unsupported collection: ${collectionName}`);
         }
+
+
 
         return message.trim() ? <li key={change.path}>{message}</li> : null;
     }
@@ -195,7 +220,10 @@ const ActivityLog = () => {
                                                                 <td>{convertToIST(log.operationDate)}</td>
                                                                 <td>{log.operatedBy}</td>
                                                                 <td>
-                                                                    <p>{log.operationType === 'PATCH' ? "UPDATED" : log.operationType}</p>
+                                                                    <p>
+                                                                        {log.operationType === 'PATCH' ? "UPDATED" : (log.operationType === 'POST'? 'NEW':log.operationType)}
+
+                                                                    </p>
                                                                 </td>
                                                                 <td>{log.collectionName}</td>
                                                                 <td>
@@ -204,7 +232,9 @@ const ActivityLog = () => {
                                                                             <li key={idx}>
                                                                                 {/* Call humanReadableAuditLog here */}
                                                                                 {humanReadableAuditLog(change, log.collectionName, log.affactedDoc, log.operationType)}
-                                                                                {log.operationType === "DELETE" ? `Student ${log.affactedDoc} has been deleted.`: ""}
+                                                                                {log.operationType  === "DELETE" && log.collectionName === 'student' ? `Student ${log.affactedDoc} has been deleted.` : ""}
+                                                                                {log.operationType  === "DELETE" && log.collectionName === 'bookings' ? `Booking receipt number #${log.affactedDoc} has been deleted.` : ""}
+                                                                                {log.operationType === "POST" && log.collectionName === 'bookings' ? `New Booking entry with receipt number #${log.affactedDoc} created.`: ""}
                                                                             </li>
                                                                         ))}
                                                                     </ul>
