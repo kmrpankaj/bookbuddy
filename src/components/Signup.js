@@ -130,7 +130,7 @@ const welcomeEmailHTML = `
 				try {
 					await sendEmail({
 						to: students.email, // Use the email provided by the student
-						subject: 'Welcome to Bookbuddy!',
+						subject: 'Study your way - BookBuddy!',
 						html: welcomeEmailHTML,
 					});
 					// console.log('Welcome email sent successfully.');

@@ -16,7 +16,11 @@ const BookingManager = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await fetch(`${host}/bookings/api/bookings`); // Adjust the path if needed
+            const response = await fetch(`${host}/bookings/api/bookings`,{
+                headers: {
+                    "auth-token": localStorage.getItem('token'),
+                 },
+            }); // Adjust the path if needed
             const data = await response.json();
             setBookings(data.reverse());
         } catch (error) {
@@ -106,15 +110,17 @@ const BookingManager = () => {
                                                             <th>Payment Status</th>
                                                             <th>Booking Date</th>
                                                             <th>Client Txn ID</th>
-                                                            <th>Booked By</th>
+                                                            <th>UHID</th>
                                                             <th>Customer Name</th>
-                                                            <th>Seat Details</th>
                                                             <th>Amount</th>
+                                                            <th>Payment Mode</th>
+                                                            <th>Amount Due</th>
+                                                            <th>Seat Details</th>
+                                                            <th>Receipt</th>
                                                             <th>Created At</th>
                                                             <th>Discount Coupon</th>
                                                             <th>Discount Value</th>
                                                             <th>Total Price</th>
-                                                            <th>Payment Mode</th>
                                                             <th>Order Status</th>
                                                             <th>Payment Cash</th>
                                                             <th>Payment Online</th>
@@ -122,10 +128,8 @@ const BookingManager = () => {
                                                             <th>Customer Email</th>
                                                             <th>Customer Mobile</th>
                                                             <th>Partial Payment</th>
-                                                            <th>Amount Due</th>
                                                             <th>Notes</th>
                                                             <th>Updated At</th>
-                                                            <th>Receipt</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                     </thead>
@@ -137,23 +141,26 @@ const BookingManager = () => {
                                                                 <td>{booking.clientTxnId}</td>
                                                                 <td>{booking.bookedBy}</td>
                                                                 <td>{booking.customerName}</td>
+                                                                <td>{booking.amount}</td>
+                                                                <td>{booking.paymentMode}</td>
+                                                                <td><span style={{maxWidth: "4rem"}} className={`${booking.udf2 && booking.udf2 !== '0' ? 'badge text-bg-danger' : 'badge text-bg-success'}`}>{booking.udf2?booking.udf2:"No Dues"}</span></td>
                                                                 <td>
                                                                     <ul className='list-unstyled'>
                                                                         {booking.seatDetails.map((seat, seatIndex) => (
 
-                                                                            <li className="text-nowrap rounded border px-2 mb-1" style={{ 'marginTop': '-1px' }} key={seatIndex}>
-                                                                                <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span>
+                                                                            <li className="text-nowrap rounded border px-2 mb-1 d-flex align-items-center justify-content-between" style={{ 'marginTop': '-1px' }} key={seatIndex}>
+                                                                                <span className='fw-medium'>Seat: </span><span>{seat.seatNumber?seat.seatNumber:"?"}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span>
+                                                                                {/* <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span> */}
                                                                             </li>
 
                                                                         ))}
                                                                     </ul>
                                                                 </td>
-                                                                <td>{booking.amount}</td>
+                                                                <td><button className='send-email' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{display: 'none'}} class="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
                                                                 <td>{formatDate(booking.createdAt)}</td>
                                                                 <td>{booking.discountCoupon}</td>
                                                                 <td>{booking.discountValue}</td>
                                                                 <td>{booking.totalPrice}</td>
-                                                                <td>{booking.paymentMode}</td>
                                                                 <td>{booking.orderStatus ? 'True' : 'False'}</td>
                                                                 <td>{booking.pCash}</td>
                                                                 <td>{booking.pOnline}</td>
@@ -161,10 +168,8 @@ const BookingManager = () => {
                                                                 <td>{booking.customerEmail}</td>
                                                                 <td>{booking.customerMobile}</td>
                                                                 <td>{booking.udf1}</td>
-                                                                <td><span className={`${booking.udf2 && booking.udf2 !== '0' ? 'badge text-bg-danger' : 'badge text-bg-success'}`}>{booking.udf2}</span></td>
-                                                                <td className='text-nowrap'>{booking.udf3}</td>
+                                                                <td>{booking.udf3}</td>
                                                                 <td>{formatDate(booking.updatedAt)}</td>
-                                                                <td><button className='send-email' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{display: 'none'}} class="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
                                                                 <td>
                                                                     <button className="btn btn-danger btn-sm" onClick={() => deleteBooking(booking._id)}>Delete</button>
                                                                     <Link to={`/editbookings/${booking._id}`} className="btn btn-primary">Edit</Link>
