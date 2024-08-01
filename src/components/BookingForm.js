@@ -151,8 +151,6 @@ const BookingForm = () => {
                 paymentMode: newPaymentMode
             }));
         }
-
-
     };
 
     const handleStudentSelect = (student) => {
@@ -160,7 +158,7 @@ const BookingForm = () => {
             seatNumber: seat.seatNumber,
             slot: seat.slot,
             seatValidTill: seat.validityDate.split('T')[0], // Converting to yyyy-mm-dd format
-            type: 'renewal'
+            type: 'renewal',
         }));
 
         setBooking((prevBooking) => ({
@@ -169,7 +167,8 @@ const BookingForm = () => {
             customerName: student.name,
             customerEmail: student.email,
             customerMobile: student.phone,
-            seatDetails: seatDetails.length > 0 ? seatDetails : [{ seatNumber: '', slot: '', seatValidTill: calculateNextMonthDate(), type: 'new' }]
+            seatDetails: seatDetails.length > 0 ? seatDetails : [{ seatNumber: '', slot: '', seatValidTill: calculateNextMonthDate(), type: 'new' }],
+            pOnline: paybalAmount
         }));
         setSearchQuery(student.uid);  // Set the selected student's name in the search box
         setSearchResults([]);  // Clear the search results
@@ -391,6 +390,7 @@ const BookingForm = () => {
             // Handle webhook data if needed
         } catch (error) {
             console.error('Error during order creation:', error.message);
+            showAlert(`Something went wrong: ${error.message}`, 'danger')
         }
     };
 
@@ -449,6 +449,7 @@ const BookingForm = () => {
             setSearchQuery('')
         } catch (error) {
             console.error('Error calling direct webhook:', error.message);
+            showAlert(`Something went wrong: ${error.message}`, 'danger')
         }
     };
 
@@ -467,11 +468,12 @@ const BookingForm = () => {
 
             // Update the state and proceed to create the order
             setBooking(updatedBooking);
-            console.log(updatedBooking, 'kya hai updated booking me')
+            //console.log(updatedBooking, 'kya hai updated booking me')
             await createOrder(updatedBooking);
 
         } catch (error) {
             console.error('Error during transaction ID generation:', error.message);
+            showAlert(`Something went wrong: ${error.message}`, 'danger')
         }
     };
 
