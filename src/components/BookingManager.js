@@ -14,6 +14,7 @@ const BookingManager = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const tableRef = useRef(null);
+    const adminLoggedIn = localStorage.getItem('role')
 
     // Table scroll horizontally
     const scrollTable = (direction) => {
@@ -165,7 +166,7 @@ const BookingManager = () => {
                                             onClick={() => scrollTable('left')}
                                             style={{
                                                 position: 'fixed',
-                                                top: '12%',
+                                                top: '107px',
                                                 right: "45px",
                                                 transform: 'translateY(-50%)',
                                                 zIndex: 1000,
@@ -175,7 +176,7 @@ const BookingManager = () => {
                                             onClick={() => scrollTable('right')}
                                             style={{
                                                 position: 'fixed',
-                                                top: '12%',
+                                                top: '107px',
                                                 right: "5px",
                                                 transform: 'translateY(-50%)',
                                                 zIndex: 1000,
@@ -276,7 +277,11 @@ const BookingManager = () => {
                                                                 <td>{formatDate(booking.updatedAt)}</td>
                                                                 <td>
                                                                     <div className='d-flex align-items-center justify-content-between'>
-                                                                        <span><button className="btn btn-danger btn-sm mb-0 me-2" onClick={() => deleteBooking(booking._id)}>Delete</button></span>
+                                                                        {(adminLoggedIn === "Superadmin") ?
+                                                                            <>
+                                                                                <span><button className="btn btn-danger btn-sm mb-0 me-2" onClick={() => deleteBooking(booking._id)}>Delete</button></span>
+                                                                            </>
+                                                                            :""}
                                                                         <span><Link to={`/editbookings/${booking._id}`} className="btn btn-primary btn-sm">Edit</Link></span>
                                                                     </div>
                                                                 </td>
