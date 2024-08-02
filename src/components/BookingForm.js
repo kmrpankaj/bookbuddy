@@ -31,7 +31,7 @@ const BookingForm = () => {
 
     const calculateNextMonthDate = () => {
         const now = new Date();
-        now.setMonth(now.getMonth() + 1);
+        // now.setMonth(now.getMonth() + 1);
         return now.toISOString().split('T')[0];
     };
 
@@ -48,6 +48,7 @@ const BookingForm = () => {
         clientTxnId: '',
         amount: '',
         pInfo: '',
+        validityInfo: [],
         customerName: '',
         customerEmail: '',
         customerMobile: '',
@@ -370,10 +371,10 @@ const BookingForm = () => {
         try {
             const response = await fetch(`${host}/bookings/create/direct-order`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     "auth-token": localStorage.getItem('token'),
-                 },
+                },
                 body: JSON.stringify(updatedBooking),
             });
             const responseData = await response.json();
@@ -400,10 +401,10 @@ const BookingForm = () => {
         try {
             const response = await fetch(`${host}/bookings/api/direct-webhook`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     "auth-token": localStorage.getItem('token'),
-                 },
+                },
                 body: JSON.stringify({ clientTxnId }),
             });
 
@@ -427,6 +428,7 @@ const BookingForm = () => {
                 clientTxnId: '',
                 amount: '',
                 pInfo: '',
+                validityInfo: [],
                 customerName: '',
                 customerEmail: '',
                 customerMobile: '',
@@ -481,18 +483,67 @@ const BookingForm = () => {
     const extendValidity = (index) => {
         const newSeatDetails = [...booking.seatDetails];
         const currentDate = new Date(newSeatDetails[index].seatValidTill);
-
+    
         // Add one month to the current date
         currentDate.setMonth(currentDate.getMonth() + 1);
-
-        // Update the date in the format YYYY-MM-DD
+    
+        // If it's the first time extending, save the original date
+        if (!newSeatDetails[index].originalSeatValidTill) {
+            newSeatDetails[index].originalSeatValidTill = newSeatDetails[index].seatValidTill;
+        }
+    
+        // Calculate the total extension by comparing the original validity with the current extended date
+        const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
+        const totalExtension = Math.floor((currentDate - originalValidity) / (1000 * 60 * 60 * 24 * 30)); // Convert milliseconds to months
+    
+        // Update the date and track the extension
         newSeatDetails[index].seatValidTill = currentDate.toISOString().split('T')[0];
+        newSeatDetails[index].totalExtension = totalExtension;
+    
+        // Update the booking state with the new seat details and save the total extension to pInfo array
+        setBooking((prevBooking) => {
+            const newPInfo = [...(prevBooking.validityInfo || [])];
+            newPInfo[index] = totalExtension; // Update pInfo for this seat
+            
+            return {
+                ...prevBooking,
+                seatDetails: newSeatDetails,
+                validityInfo: newPInfo, // Update the pInfo array
+            };
+        });
+    };
 
-        // Update the booking state with the new seat details
-        setBooking((prevBooking) => ({
-            ...prevBooking,
-            seatDetails: newSeatDetails,
-        }));
+    const handleValidityInputChange = (e, index) => {
+        const { value } = e.target;
+        const newSeatDetails = [...booking.seatDetails];
+        
+        // If the original date is not set, set it now
+        if (!newSeatDetails[index].originalSeatValidTill) {
+            newSeatDetails[index].originalSeatValidTill = newSeatDetails[index].seatValidTill;
+        }
+    
+        // Update the specific field
+        newSeatDetails[index].seatValidTill = value;
+    
+        // Calculate the total extension from the original date
+        const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
+        const currentValidity = new Date(value);
+        const totalExtension = Math.floor((currentValidity - originalValidity) / (1000 * 60 * 60 * 24 * 30)); // Convert milliseconds to months
+    
+        // Update the total extension
+        newSeatDetails[index].totalExtension = totalExtension;
+    
+        // Update the booking state with the new seat details and save the total extension to pInfo array
+        setBooking((prevBooking) => {
+            const newPInfo = [...(prevBooking.validityInfo || [])];
+            newPInfo[index] = totalExtension; // Update pInfo for this seat
+            
+            return {
+                ...prevBooking,
+                seatDetails: newSeatDetails,
+                validityInfo: newPInfo, // Update the pInfo array
+            };
+        });
     };
 
 
@@ -553,7 +604,7 @@ const BookingForm = () => {
                                                 </ul>
                                             </div>
 
-                                            
+
                                             <div className="col-md-5">
                                                 <label className="form-label">Date</label>
                                                 <input
@@ -566,7 +617,7 @@ const BookingForm = () => {
                                             </div>
 
 
-                                            
+
                                         </div>
 
 
@@ -636,20 +687,22 @@ const BookingForm = () => {
                                                     </div>
 
                                                     <div className="form-group col-md-6 position-relative">
-                                                        <label className="form-label me-2">Valid Till</label>
+                                                        <label className="form-label me-2">Validity</label>
                                                         <button
                                                             type="button"
                                                             className="btn position-absolute btn-success btn-xs py-2"
                                                             onClick={() => extendValidity(i)}
                                                         >Extend 1 month</button>
+                                                        <span className={`btn-xs btn py-2 px-2 start-50 position-absolute ${x.totalExtension > 2 ? 'bg-danger text-light' : x.totalExtension > 1 ? 'bg-warning' : x.totalExtension === 1 ? 'bg-success text-light' : 'bg-warning'
+                                                            }`}>{x.totalExtension?x.totalExtension:'0'} month{x.totalExtension > 1?'s':''} extended.</span>
                                                         <input
                                                             type="date"
                                                             className="form-control"
                                                             name="seatValidTill"
                                                             value={x.seatValidTill}
-                                                            onChange={e => handleInputChange(e, i)}
+                                                            onChange={e => handleValidityInputChange(e, i)}
                                                         />
-                                                        
+
                                                     </div>
                                                 </div>
                                                 <div className='text-center position-absolute top-0 end-0'><span type="button" onClick={() => handleRemoveClick(i)} className="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill='#000' height="16" width="16"><path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z" /></svg></span></div>

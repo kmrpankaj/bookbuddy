@@ -209,6 +209,7 @@ const BookingManager = () => {
                                                             <th>Payment Cash</th>
                                                             <th>Payment Online</th>
                                                             {/* <th>Payment Info</th> */}
+                                                            <th>Extended to</th>
                                                             <th>Customer Email</th>
                                                             <th>Customer Mobile</th>
                                                             <th>Notes</th>
@@ -271,6 +272,15 @@ const BookingManager = () => {
                                                                 <td>{booking.pCash}</td>
                                                                 <td>{booking.pOnline}</td>
                                                                 {/* <td>{booking.pInfo}</td> */}
+
+                                                                <td>
+                                                                    <ul className='list-unstyled'>
+                                                                    {booking.validityInfo.map((info, idx) => (
+                                                                        <li className={`ps-1 mb-1 ${info==='1'?'bg-success text-light': info>'1'?'bg-danger text-light':''}`} key={idx}>{info} Month</li>
+                                                                    ))}
+                                                                    </ul>
+                                                                </td>
+
                                                                 <td>{booking.customerEmail}</td>
                                                                 <td>{booking.customerMobile}</td>
                                                                 <td>{booking.udf3 ? booking.udf3 : "No notes"}</td> {/* Notes */}
@@ -281,7 +291,7 @@ const BookingManager = () => {
                                                                             <>
                                                                                 <span><button className="btn btn-danger btn-sm mb-0 me-2" onClick={() => deleteBooking(booking._id)}>Delete</button></span>
                                                                             </>
-                                                                            :""}
+                                                                            : ""}
                                                                         <span><Link to={`/editbookings/${booking._id}`} className="btn btn-primary btn-sm">Edit</Link></span>
                                                                     </div>
                                                                 </td>
