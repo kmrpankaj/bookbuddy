@@ -201,6 +201,7 @@ const BookingManager = () => {
                                                             <th className='fw-bold'>Total Amount</th>
                                                             <th>Seat Details</th>
                                                             <th>Locker</th>
+                                                            <th>Locker Security</th>
                                                             <th>Receipt</th>
                                                             {/* <th>Created At</th> */}
                                                             <th>Sub Total</th>
@@ -265,6 +266,7 @@ const BookingManager = () => {
                                                                     </ul>
                                                                 </td>
                                                                 <td>{booking.locker===true?'Yes': 'No'}</td>
+                                                                <td>{booking.securityDeposit===true?'Yes': 'No'}</td>
                                                                 <td><button className='send-email btn-sm' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{ display: 'none' }} class="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
                                                                 {/* <td>{formatDate(booking.createdAt)}</td> */}
                                                                 <td>{booking.totalPrice}</td>
