@@ -332,7 +332,7 @@ const BookingForm = () => {
     const calculateTotal = () => {
         setBooking((prevBooking) => {
             const seatCost = 400;
-            const lockerCost = prevBooking.locker ? 400 : 0;
+            const lockerCost = prevBooking.locker ? 100 : 0;
             const totalPrice = (prevBooking.seatDetails.length * seatCost)+ lockerCost;
             const discountValue = prevBooking.discountValue || 0;
             const amount = totalPrice - discountValue;
