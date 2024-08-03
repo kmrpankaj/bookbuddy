@@ -49,6 +49,7 @@ const BookingForm = () => {
         amount: '',
         pInfo: '',
         validityInfo: [],
+        locker: false,
         customerName: '',
         customerEmail: '',
         customerMobile: '',
@@ -331,7 +332,8 @@ const BookingForm = () => {
     const calculateTotal = () => {
         setBooking((prevBooking) => {
             const seatCost = 400;
-            const totalPrice = prevBooking.seatDetails.length * seatCost;
+            const lockerCost = prevBooking.locker ? 400 : 0;
+            const totalPrice = (prevBooking.seatDetails.length * seatCost)+ lockerCost;
             const discountValue = prevBooking.discountValue || 0;
             const amount = totalPrice - discountValue;
             return {
@@ -483,28 +485,28 @@ const BookingForm = () => {
     const extendValidity = (index) => {
         const newSeatDetails = [...booking.seatDetails];
         const currentDate = new Date(newSeatDetails[index].seatValidTill);
-    
+
         // Add one month to the current date
         currentDate.setMonth(currentDate.getMonth() + 1);
-    
+
         // If it's the first time extending, save the original date
         if (!newSeatDetails[index].originalSeatValidTill) {
             newSeatDetails[index].originalSeatValidTill = newSeatDetails[index].seatValidTill;
         }
-    
+
         // Calculate the total extension by comparing the original validity with the current extended date
         const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
         const totalExtension = Math.floor((currentDate - originalValidity) / (1000 * 60 * 60 * 24 * 30)); // Convert milliseconds to months
-    
+
         // Update the date and track the extension
         newSeatDetails[index].seatValidTill = currentDate.toISOString().split('T')[0];
         newSeatDetails[index].totalExtension = totalExtension;
-    
+
         // Update the booking state with the new seat details and save the total extension to pInfo array
         setBooking((prevBooking) => {
             const newPInfo = [...(prevBooking.validityInfo || [])];
             newPInfo[index] = totalExtension; // Update pInfo for this seat
-            
+
             return {
                 ...prevBooking,
                 seatDetails: newSeatDetails,
@@ -516,34 +518,44 @@ const BookingForm = () => {
     const handleValidityInputChange = (e, index) => {
         const { value } = e.target;
         const newSeatDetails = [...booking.seatDetails];
-        
+
         // If the original date is not set, set it now
         if (!newSeatDetails[index].originalSeatValidTill) {
             newSeatDetails[index].originalSeatValidTill = newSeatDetails[index].seatValidTill;
         }
-    
+
         // Update the specific field
         newSeatDetails[index].seatValidTill = value;
-    
+
         // Calculate the total extension from the original date
         const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
         const currentValidity = new Date(value);
         const totalExtension = Math.floor((currentValidity - originalValidity) / (1000 * 60 * 60 * 24 * 30)); // Convert milliseconds to months
-    
+
         // Update the total extension
         newSeatDetails[index].totalExtension = totalExtension;
-    
+
         // Update the booking state with the new seat details and save the total extension to pInfo array
         setBooking((prevBooking) => {
             const newPInfo = [...(prevBooking.validityInfo || [])];
             newPInfo[index] = totalExtension; // Update pInfo for this seat
-            
+
             return {
                 ...prevBooking,
                 seatDetails: newSeatDetails,
                 validityInfo: newPInfo, // Update the pInfo array
             };
         });
+    };
+
+    const handleLockerChange = (isLockerSelected) => {
+        setBooking((prevBooking) => ({
+            ...prevBooking,
+            locker: isLockerSelected,
+        }));
+    
+        // Recalculate total after locker selection change
+        calculateTotal();
     };
 
 
@@ -694,7 +706,7 @@ const BookingForm = () => {
                                                             onClick={() => extendValidity(i)}
                                                         >Extend 1 month</button>
                                                         <span className={`btn-xs btn py-2 px-2 start-50 position-absolute ${x.totalExtension > 2 ? 'bg-danger text-light' : x.totalExtension > 1 ? 'bg-warning' : x.totalExtension === 1 ? 'bg-success text-light' : 'bg-warning'
-                                                            }`}>{x.totalExtension?x.totalExtension:'0'} month{x.totalExtension > 1?'s':''} extended.</span>
+                                                            }`}>{x.totalExtension ? x.totalExtension : '0'} month{x.totalExtension > 1 ? 's' : ''} extended.</span>
                                                         <input
                                                             type="date"
                                                             className="form-control"
@@ -721,6 +733,22 @@ const BookingForm = () => {
 
                                         ))}
                                         {/* Other fields would go here */}
+
+                                        <div className="row mb-3">
+                                            <div className="col">
+                                                <div className="form-check-inline">
+                                                    <label className="form-label">Locker</label>
+                                                </div>
+                                                <div className="form-check form-check-inline">
+                                                    <input className="form-check-input" type="radio" name="locker" id="inlineRadio11" value={true} onChange={() => handleLockerChange(true)} checked={booking.locker === true} />
+                                                    <label className="form-check-label" htmlFor="inlineRadio1">Yes</label>
+                                                </div>
+                                                <div className="form-check form-check-inline">
+                                                    <input className="form-check-input" type="radio" name="locker" id="inlineRadio21" value={false} onChange={() => handleLockerChange(false)} checked={booking.locker === false} />
+                                                    <label className="form-check-label" htmlFor="inlineRadio2">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div className="row mb-3">
                                             <div className="col position-relative">
@@ -824,6 +852,7 @@ const BookingForm = () => {
                                                 </div>
                                             </>
                                         )}
+
 
                                         <div className="row mb-3">
                                             <div className="col">
