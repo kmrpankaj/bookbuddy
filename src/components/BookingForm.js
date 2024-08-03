@@ -49,7 +49,8 @@ const BookingForm = () => {
         amount: '',
         pInfo: '',
         validityInfo: [],
-        locker: false,
+        locker:false,
+        securityDeposit: false,
         customerName: '',
         customerEmail: '',
         customerMobile: '',
@@ -333,7 +334,8 @@ const BookingForm = () => {
         setBooking((prevBooking) => {
             const seatCost = 400;
             const lockerCost = prevBooking.locker ? 100 : 0;
-            const totalPrice = (prevBooking.seatDetails.length * seatCost)+ lockerCost;
+            const securityDeposit = prevBooking.securityDeposit ? 100 : 0; // Add 100 if security deposit is selected
+            const totalPrice = (prevBooking.seatDetails.length * seatCost) + lockerCost + securityDeposit;
             const discountValue = prevBooking.discountValue || 0;
             const amount = totalPrice - discountValue;
             return {
@@ -431,6 +433,8 @@ const BookingForm = () => {
                 amount: '',
                 pInfo: '',
                 validityInfo: [],
+                locker:false,
+                securityDeposit: false,
                 customerName: '',
                 customerEmail: '',
                 customerMobile: '',
@@ -553,8 +557,18 @@ const BookingForm = () => {
             ...prevBooking,
             locker: isLockerSelected,
         }));
-    
+
         // Recalculate total after locker selection change
+        calculateTotal();
+    };
+
+    const handleSecurityDepositChange = (isSecurityDepositSelected) => {
+        setBooking((prevBooking) => ({
+            ...prevBooking,
+            securityDeposit: isSecurityDepositSelected,
+        }));
+
+        // Recalculate total after security deposit selection change
         calculateTotal();
     };
 
@@ -746,6 +760,20 @@ const BookingForm = () => {
                                                 <div className="form-check form-check-inline">
                                                     <input className="form-check-input" type="radio" name="locker" id="inlineRadio21" value={false} onChange={() => handleLockerChange(false)} checked={booking.locker === false} />
                                                     <label className="form-check-label" htmlFor="inlineRadio2">No</label>
+                                                </div>
+
+                                                {/* Security Deposit Checkbox */}
+                                                <div className="form-check form-check-inline ms-3">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        name="securityDeposit"
+                                                        id="securityDeposit"
+                                                        value="true"
+                                                        onChange={(e) => handleSecurityDepositChange(e.target.checked)}
+                                                        checked={booking.securityDeposit === true}
+                                                    />
+                                                    <label className="form-check-label" htmlFor="securityDeposit">Security Deposit (₹100)</label>
                                                 </div>
                                             </div>
                                         </div>
