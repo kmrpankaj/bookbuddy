@@ -195,15 +195,15 @@ const BookingManager = () => {
                                                             <th>Client Txn ID</th>
                                                             <th>UHID</th>
                                                             <th>Customer Name</th>
-                                                            <th>Amount</th>
                                                             <th>Payment Mode</th>
                                                             <th>Partial Payment</th>
                                                             <th>Amount Due</th>
+                                                            <th className='fw-bold'>Total Amount</th>
                                                             <th>Seat Details</th>
                                                             <th>Locker</th>
                                                             <th>Receipt</th>
                                                             {/* <th>Created At</th> */}
-                                                            <th>Total Price</th>
+                                                            <th>Sub Total</th>
                                                             <th>Discount Coupon</th>
                                                             <th>Discount Value</th>
                                                             {/* <th>Order Status</th> */}
@@ -245,13 +245,13 @@ const BookingManager = () => {
                                                                 <td>{booking.clientTxnId}</td>
                                                                 <td>{booking.bookedBy}</td>
                                                                 <td>{booking.customerName}</td>
-                                                                <td>{booking.amount}</td>
                                                                 <td>{booking.paymentMode}</td>
                                                                 <td className={`${(parseFloat(booking.udf1) === booking.amount) ? "bg-success-subtle border-dark-subtle border-start border-end" :
                                                                     (parseFloat(booking.udf1) < booking.amount ? 'bg-warning-subtle border-dark-subtle border-start border-end' :
-                                                                        (parseFloat(booking.udf1) === "" ? '' : ''))
-                                                                    }`}>{booking.udf1} </td> {/* partial Payment */}
+                                                                    (parseFloat(booking.udf1) === "" ? '' : ''))
+                                                                }`}>{booking.udf1} </td> {/* partial Payment */}
                                                                 <td className={`${booking.udf2 && booking.udf2 !== '0' ? 'bg-warning-subtle text-danger fw-bold border-dark-subtle border-start border-end' : 'bg-success-subtle border-dark-subtle border-start border-end'}`}>{booking.udf2 ? booking.udf2 : "No Dues"}</td> {/* Amount due */}
+                                                                <td className='fw-bold'>{booking.amount}</td>
                                                                 <td>
                                                                     <ul className='list-unstyled'>
                                                                         {booking.seatDetails.map((seat, seatIndex) => (
