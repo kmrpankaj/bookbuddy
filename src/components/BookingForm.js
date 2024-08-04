@@ -445,7 +445,7 @@ const BookingForm = () => {
                 paymentMode: 'Online',
                 pCash: '',
                 pOnline: '',
-                paymentStatus: 'pending',
+                paymentStatus: 'paid',
                 paymentUrl: '',
                 upiIdHash: '',
                 upiTxnId: '',
