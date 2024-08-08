@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import LoadingContext from '../context/LoadingContext'
 import AlertContext from '../context/AlertContext';
 import { useNavigate } from 'react-router-dom';
+import { formatDate } from './Utilsfunc';
 
 const BookingForm = () => {
 
@@ -19,6 +20,7 @@ const BookingForm = () => {
     const [paymentType, setPaymentType] = useState('Full');
     const [paymentMode, setPaymentMode] = useState('Online');
     const [paybalAmount, setPaybalAmount] = useState('')
+    const [currentValidity, setCurrentValidity] = useState({});
     const formatDateToIST = () => {
         const now = new Date();
         // Convert to milliseconds and adjust for IST (UTC +5:30)
@@ -49,7 +51,7 @@ const BookingForm = () => {
         amount: '',
         pInfo: '',
         validityInfo: [],
-        locker:false,
+        locker: false,
         securityDeposit: false,
         customerName: '',
         customerEmail: '',
@@ -102,7 +104,7 @@ const BookingForm = () => {
             finally {
                 setIsLoading(false);
             }
-        }, 2000), [host]);
+        }, 700), [host]);
 
     useEffect(() => {
         if (searchQuery && shouldSearch) {
@@ -290,10 +292,10 @@ const BookingForm = () => {
                 throw new Error(data.message);
             }
             if (response.ok) {
-                console.log('Coupon data received:', data);
+                //console.log('Coupon data received:', data);
                 applyDiscount(data);
                 setBooking({ ...booking, discountValue: data.discountValue, couponApplied: true })
-                console.log(booking)
+                //console.log(booking)
             }
 
             //console.log(data)
@@ -305,7 +307,7 @@ const BookingForm = () => {
 
     const applyDiscount = (coupon) => {
         setBooking((prevBooking) => {
-            console.log('Previous booking state:', prevBooking);
+            //console.log('Previous booking state:', prevBooking);
             let discountValue = 0;
             const totalPrice = prevBooking.seatDetails.length * 400; // Calculate subTotal based on seat details
 
@@ -315,7 +317,7 @@ const BookingForm = () => {
                 discountValue = (totalPrice * coupon.discountValue) / 100;
             }
 
-            console.log('Calculated discount value:', discountValue);
+            //console.log('Calculated discount value:', discountValue);
             const amount = totalPrice - discountValue;
 
             return {
@@ -388,7 +390,7 @@ const BookingForm = () => {
             }
 
             setOrderResponse(responseData);
-            console.log(responseData, 'responsedata');
+            //console.log(responseData, 'responsedata');
 
             await callDirectWebhook(updatedBooking.clientTxnId);
 
@@ -418,7 +420,7 @@ const BookingForm = () => {
                 throw new Error('Failed to call direct webhook: ' + responseData.message);
             }
 
-            console.log('Direct webhook called successfully');
+            //console.log('Direct webhook called successfully');
             showAlert(responseData.message, 'success'); // Show alert with the response message
             setBooking({
                 bookedBy: '',
@@ -433,7 +435,7 @@ const BookingForm = () => {
                 amount: '',
                 pInfo: '',
                 validityInfo: [],
-                locker:false,
+                locker: false,
                 securityDeposit: false,
                 customerName: '',
                 customerEmail: '',
@@ -485,39 +487,127 @@ const BookingForm = () => {
         }
     };
 
+    function addOneMonth(date) {
+        // Get the current day, month, year, and time from the date object
+        const currentDay = date.getDate();
+        let currentMonth = date.getMonth();
+        let currentYear = date.getFullYear();
+        const currentHours = date.getHours();
+        const currentMinutes = date.getMinutes();
+        const currentSeconds = date.getSeconds();
+        const currentMilliseconds = date.getMilliseconds();
 
-    const extendValidity = (index) => {
-        const newSeatDetails = [...booking.seatDetails];
-        const currentDate = new Date(newSeatDetails[index].seatValidTill);
+        // Define the last day of each month
+        const lastDayOfMonth = {
+            january: 31,
+            february: 28, // We'll adjust this for leap years below
+            march: 31,
+            april: 30,
+            may: 31,
+            june: 30,
+            july: 31,
+            august: 31,
+            september: 30,
+            october: 31,
+            november: 30,
+            december: 31
+        };
 
-        // Add one month to the current date
-        currentDate.setMonth(currentDate.getMonth() + 1);
-
-        // If it's the first time extending, save the original date
-        if (!newSeatDetails[index].originalSeatValidTill) {
-            newSeatDetails[index].originalSeatValidTill = newSeatDetails[index].seatValidTill;
+        // Check if it's a leap year
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
         }
 
-        // Calculate the total extension by comparing the original validity with the current extended date
-        const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
-        const totalExtension = Math.floor((currentDate - originalValidity) / (1000 * 60 * 60 * 24 * 30)); // Convert milliseconds to months
+        // Get the last day of the current month
+        function getLastDayOfMonth(month, year) {
+            const monthNames = Object.keys(lastDayOfMonth);
+            if (monthNames[month] === "february" && isLeapYear(year)) {
+                return 29; // Adjust February for leap years
+            }
+            return lastDayOfMonth[monthNames[month]];
+        }
 
-        // Update the date and track the extension
-        newSeatDetails[index].seatValidTill = currentDate.toISOString().split('T')[0];
-        newSeatDetails[index].totalExtension = totalExtension;
+        // Check if the current day is the last day of the month
+        const lastDayOfCurrentMonth = getLastDayOfMonth(currentMonth, currentYear);
+        const isLastDay = currentDay === lastDayOfCurrentMonth;
 
-        // Update the booking state with the new seat details and save the total extension to pInfo array
+        console.log('Before increment:', currentMonth, currentYear);
+        // Move to the next month
+        currentMonth = (currentMonth + 1) % 12; // Use modulo to wrap around to January
+        if (currentMonth === 0) { // If it's January, increment the year
+            currentYear += 1;
+        }
+        console.log('After increment:', currentMonth, currentYear);
+        let newDay;
+
+        if (isLastDay && currentMonth === 1 && currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)) {
+            // It's the last day of February in a leap year
+            newDay = 29;
+        } else if (isLastDay) {
+            // It's the last day of the month, but not a leap year February
+            newDay = getLastDayOfMonth(currentMonth, currentYear);
+        } else {
+            // Not the last day of the month
+            newDay = Math.min(currentDay, getLastDayOfMonth(currentMonth, currentYear));
+        }
+        
+        // Return the new date with the preserved time
+        return new Date(currentYear, currentMonth, newDay, currentHours, currentMinutes, currentSeconds, currentMilliseconds);
+    }
+
+
+
+
+
+
+    const extendValidity = (index) => {
+        console.log('extendValidity called for index:', index);
         setBooking((prevBooking) => {
+            const newSeatDetails = [...prevBooking.seatDetails];
+            let currentDate = new Date(newSeatDetails[index].seatValidTill);
+
+            console.log('Current Date:', currentDate);
+            console.log('Current Date Month:', currentDate.getMonth());
+            console.log('Current Date Year:', currentDate.getFullYear());
+
+            // If it's the first time extending, save the original date
+            // Check if originalSeatValidTill is not set
+            if (!newSeatDetails[index].originalSeatValidTill) {
+                newSeatDetails[index].originalSeatValidTill = newSeatDetails[index].seatValidTill;
+            }
+
+            const newDate = addOneMonth(currentDate);
+
+
+            console.log('New Date:', newDate);
+            console.log('New Date Month:', newDate.getMonth());
+            console.log('New Date Year:', newDate.getFullYear());
+
+            // Update the date and track the extension
+            newSeatDetails[index].seatValidTill = newDate.toISOString().split('T')[0];
+
+            // Calculate the total extension by comparing the original validity with the current extended date
+            const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
+            const totalExtension = Math.floor((newDate - originalValidity) / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+
+            // Update the date and track the extension
+            newSeatDetails[index].seatValidTill = newDate.toISOString().split('T')[0];
+            newSeatDetails[index].totalExtension = totalExtension;
+
             const newPInfo = [...(prevBooking.validityInfo || [])];
             newPInfo[index] = totalExtension; // Update pInfo for this seat
-
+            const fromToValidity =[...(prevBooking.statusRemark || [])];
+            fromToValidity[index] = 'From ' + formatDate(originalValidity) + ' To ' + formatDate(newDate);
+console.log(fromToValidity, 'fromto')
             return {
                 ...prevBooking,
                 seatDetails: newSeatDetails,
                 validityInfo: newPInfo, // Update the pInfo array
+                statusRemark: fromToValidity,
             };
         });
     };
+
 
     const handleValidityInputChange = (e, index) => {
         const { value } = e.target;
@@ -534,7 +624,7 @@ const BookingForm = () => {
         // Calculate the total extension from the original date
         const originalValidity = new Date(newSeatDetails[index].originalSeatValidTill);
         const currentValidity = new Date(value);
-        const totalExtension = Math.floor((currentValidity - originalValidity) / (1000 * 60 * 60 * 24 * 30)); // Convert milliseconds to months
+        const totalExtension = Math.floor((currentValidity - originalValidity) / (1000 * 60 * 60 * 24)); // Convert milliseconds to months
 
         // Update the total extension
         newSeatDetails[index].totalExtension = totalExtension;
@@ -582,7 +672,7 @@ const BookingForm = () => {
         } else if (paymentType === 'Partial' && booking.udf1) {
             setPaybalAmount(booking.udf1);
         }
-        console.log(booking, 'where is customer name?')
+        //console.log(booking, 'where is customer name?')
     }, [booking, paymentType]);
 
     return (
@@ -719,8 +809,8 @@ const BookingForm = () => {
                                                             className="btn position-absolute btn-success btn-xs py-2"
                                                             onClick={() => extendValidity(i)}
                                                         >Extend 1 month</button>
-                                                        <span className={`btn-xs btn py-2 px-2 start-50 position-absolute ${x.totalExtension > 2 ? 'bg-danger text-light' : x.totalExtension > 1 ? 'bg-warning' : x.totalExtension === 1 ? 'bg-success text-light' : 'bg-warning'
-                                                            }`}>{x.totalExtension ? x.totalExtension : '0'} month{x.totalExtension > 1 ? 's' : ''} extended.</span>
+                                                        <span className={`btn-xs btn py-2 px-2 start-50 position-absolute ${x.totalExtension > 59 ? 'bg-danger text-light' : (x.totalExtension > 31 && x.totalExtension < 59) ? 'bg-warning' : x.totalExtension < 31 ? 'bg-success text-light' : 'bg-warning'
+                                                            }`}>{x.totalExtension ? x.totalExtension : '0'} day{x.totalExtension > 1 ? 's' : ''} extended.</span>
                                                         <input
                                                             type="date"
                                                             className="form-control"

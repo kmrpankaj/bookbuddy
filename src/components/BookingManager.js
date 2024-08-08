@@ -212,6 +212,7 @@ const BookingManager = () => {
                                                             <th>Payment Online</th>
                                                             {/* <th>Payment Info</th> */}
                                                             <th>Extended to</th>
+                                                            <th>Extension Details</th>
                                                             <th>Customer Email</th>
                                                             <th>Customer Mobile</th>
                                                             <th>Notes</th>
@@ -267,7 +268,7 @@ const BookingManager = () => {
                                                                 </td>
                                                                 <td>{booking.locker===true?'Yes': 'No'}</td>
                                                                 <td>{booking.securityDeposit===true?'Yes': 'No'}</td>
-                                                                <td><button className='send-email btn-sm' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{ display: 'none' }} class="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
+                                                                <td><button className='send-email btn-sm' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{ display: 'none' }} className="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
                                                                 {/* <td>{formatDate(booking.createdAt)}</td> */}
                                                                 <td>{booking.totalPrice}</td>
                                                                 <td>{booking.discountCoupon ? booking.discountCoupon : "No"}</td>
@@ -280,7 +281,15 @@ const BookingManager = () => {
                                                                 <td>
                                                                     <ul className='list-unstyled'>
                                                                     {booking.validityInfo.map((info, idx) => (
-                                                                        <li className={`ps-1 mb-1 ${info==='1'?'bg-success text-light': info>'1'?'bg-danger text-light':''}`} key={idx}>{info} Month</li>
+                                                                        <li className={`ps-1 mb-1 ${info<='31'?'bg-success text-light': info>'31'?'bg-danger text-light':''}`} key={idx}>{info} Days</li>
+                                                                    ))}
+                                                                    </ul>
+                                                                </td>
+
+                                                                <td>
+                                                                    <ul className='list-unstyled'>
+                                                                    {booking.statusRemark && booking.statusRemark.map((info, idx) => (
+                                                                        <li className={`ps-1 mb-1 text-nowrap`} key={idx}>{info}</li>
                                                                     ))}
                                                                     </ul>
                                                                 </td>
