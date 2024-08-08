@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { formatDate } from './Utilsfunc';
 import AlertContext from '../context/AlertContext';
 import ClearDuesModal from './ClearDuesModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 
 const BookingManager = () => {
@@ -13,6 +14,8 @@ const BookingManager = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [bookingToDelete, setBookingToDelete] = useState(null);
     const tableRef = useRef(null);
     const adminLoggedIn = localStorage.getItem('role')
 
@@ -91,17 +94,29 @@ const BookingManager = () => {
     //=================================
     // Delete bookings
     const deleteBooking = async (bookingId) => {
+        if (!bookingId) return;
+
         try {
-            await fetch(`${host}/bookings/api/delete/booking/${bookingId}`, {
+            const response = await fetch(`${host}/bookings/api/delete/booking/${bookingId}`, {
                 headers: {
                     "auth-token": localStorage.getItem('token'),
                 },
                 method: 'DELETE',
             });
+
+            if (!response.ok) {
+                const errorData = await response.json(); // If the server responds with an error, log it
+                console.error('Failed to delete booking:', errorData.message);
+                showAlert('Error deleting booking: ' + errorData.message, 'danger');
+                return;
+            }
+
             setBookings(bookings.filter((booking) => booking._id !== bookingId));
-            showAlert('Booking Deleted', 'success')
+            showAlert('Booking Deleted', 'success');
+            setShowDeleteModal(false); // Close the modal after deleting
         } catch (error) {
             console.error('Error deleting booking:', error);
+            showAlert('Error deleting booking: ' + error.message, 'danger');
         }
     };
 
@@ -148,6 +163,20 @@ const BookingManager = () => {
     const handleSendReceipt = (txnId) => {
         sendReceipt(txnId);
     };
+
+    const handleDeleteClick = (booking) => {
+        setBookingToDelete(booking);
+        setShowDeleteModal(true);
+    };
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+        setBookingToDelete(null);
+    };
+
+    useEffect(() => {
+        console.log(bookingToDelete);
+      }, [bookingToDelete]);
 
 
     return (
@@ -223,91 +252,99 @@ const BookingManager = () => {
                                                     <tbody className='bookings-table'>
                                                         {bookings.map((booking, index) => (
                                                             <tr key={index}>
-                                                                <td className={`border-dark-subtle border-start border-end text-capitalize ${(booking.paymentStatus === 'paid') || (booking.paymentStatus === 'success') ? 'bg-success-subtle' : 'bg-warning-subtle'}`}>
-                                                                    <span>{booking.paymentStatus}</span>
-                                                                    {booking.udf2 && booking.udf2 !== '0' && (
-                                                                        <>
-                                                                            <span><button onClick={() => handleOpenModal(booking)} className='badge p-2 text-capitalize mt-1'>Clear Dues</button></span>
-                                                                            {selectedBooking && (
-                                                                                <ClearDuesModal
-                                                                                    bookingId={selectedBooking._id}
-                                                                                    amountDue={selectedBooking.udf2}
-                                                                                    show={showModal}
-                                                                                    handleClose={handleCloseModal}
-                                                                                    handleClearDues={handleClearDues}
-                                                                                    udf2Value={selectedBooking.udf2} // Pass the udf2 value from the booking data
-                                                                                    cashOld={selectedBooking.pCash}
-                                                                                    onlineOld={selectedBooking.pOnline}
-                                                                                />
-                                                                            )}
-                                                                        </>
-                                                                    )}
-                                                                </td>
-                                                                <td>{formatDate(booking.bookingDate)}</td>
-                                                                <td>{booking.clientTxnId}</td>
-                                                                <td>{booking.bookedBy}</td>
-                                                                <td>{booking.customerName}</td>
-                                                                <td>{booking.paymentMode}</td>
-                                                                <td className={`${(parseFloat(booking.udf1) === booking.amount) ? "bg-success-subtle border-dark-subtle border-start border-end" :
-                                                                    (parseFloat(booking.udf1) < booking.amount ? 'bg-warning-subtle border-dark-subtle border-start border-end' :
-                                                                    (parseFloat(booking.udf1) === "" ? '' : ''))
-                                                                }`}>{booking.udf1} </td> {/* partial Payment */}
-                                                                <td className={`${booking.udf2 && booking.udf2 !== '0' ? 'bg-warning-subtle text-danger fw-bold border-dark-subtle border-start border-end' : 'bg-success-subtle border-dark-subtle border-start border-end'}`}>{booking.udf2 ? booking.udf2 : "No Dues"}</td> {/* Amount due */}
-                                                                <td className='fw-bold'>{booking.amount}</td>
-                                                                <td>
-                                                                    <ul className='list-unstyled'>
-                                                                        {booking.seatDetails.map((seat, seatIndex) => (
-
-                                                                            <li className="text-nowrap rounded border py-1 px-2 mb-1 d-flex align-items-center justify-content-between" style={{ 'marginTop': '-1px' }} key={seatIndex}>
-                                                                                <span className='fw-medium'>Seat: </span><span>{seat.seatNumber ? seat.seatNumber : "?"}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 ms-1 text-capitalize text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span>
-                                                                                {/* <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span> */}
-                                                                            </li>
-
-                                                                        ))}
-                                                                    </ul>
-                                                                </td>
-                                                                <td>{booking.locker===true?'Yes': 'No'}</td>
-                                                                <td>{booking.securityDeposit===true?'Yes': 'No'}</td>
-                                                                <td><button className='send-email btn-sm' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{ display: 'none' }} className="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
-                                                                {/* <td>{formatDate(booking.createdAt)}</td> */}
-                                                                <td>{booking.totalPrice}</td>
-                                                                <td>{booking.discountCoupon ? booking.discountCoupon : "No"}</td>
-                                                                <td>{booking.discountValue}</td>
-                                                                {/* <td>{booking.orderStatus ? 'True' : 'False'}</td> */}
-                                                                <td>{booking.pCash}</td>
-                                                                <td>{booking.pOnline}</td>
-                                                                {/* <td>{booking.pInfo}</td> */}
-
-                                                                <td>
-                                                                    <ul className='list-unstyled'>
-                                                                    {booking.validityInfo.map((info, idx) => (
-                                                                        <li className={`ps-1 mb-1 ${info<='31'?'bg-success text-light': info>'31'?'bg-danger text-light':''}`} key={idx}>{info} Days</li>
-                                                                    ))}
-                                                                    </ul>
-                                                                </td>
-
-                                                                <td>
-                                                                    <ul className='list-unstyled'>
-                                                                    {booking.statusRemark && booking.statusRemark.map((info, idx) => (
-                                                                        <li className={`ps-1 mb-1 text-nowrap`} key={idx}>{info}</li>
-                                                                    ))}
-                                                                    </ul>
-                                                                </td>
-
-                                                                <td>{booking.customerEmail}</td>
-                                                                <td>{booking.customerMobile}</td>
-                                                                <td>{booking.udf3 ? booking.udf3 : "No notes"}</td> {/* Notes */}
-                                                                <td>{formatDate(booking.updatedAt)}</td>
-                                                                <td>
-                                                                    <div className='d-flex align-items-center justify-content-between'>
-                                                                        {(adminLoggedIn === "Superadmin") ?
+                                                                <>
+                                                                    <td className={`border-dark-subtle border-start border-end text-capitalize ${(booking.paymentStatus === 'paid') || (booking.paymentStatus === 'success') ? 'bg-success-subtle' : 'bg-warning-subtle'}`}>
+                                                                        <span>{booking.paymentStatus}</span>
+                                                                        {booking.udf2 && booking.udf2 !== '0' && (
                                                                             <>
-                                                                                <span><button className="btn btn-danger btn-sm mb-0 me-2" onClick={() => deleteBooking(booking._id)}>Delete</button></span>
+                                                                                <span><button onClick={() => handleOpenModal(booking)} className='badge p-2 text-capitalize mt-1'>Clear Dues</button></span>
+                                                                                {selectedBooking && (
+                                                                                    <ClearDuesModal
+                                                                                        bookingId={selectedBooking._id}
+                                                                                        amountDue={selectedBooking.udf2}
+                                                                                        show={showModal}
+                                                                                        handleClose={handleCloseModal}
+                                                                                        handleClearDues={handleClearDues}
+                                                                                        udf2Value={selectedBooking.udf2} // Pass the udf2 value from the booking data
+                                                                                        cashOld={selectedBooking.pCash}
+                                                                                        onlineOld={selectedBooking.pOnline}
+                                                                                    />
+                                                                                )}
                                                                             </>
-                                                                            : ""}
-                                                                        <span><Link to={`/editbookings/${booking._id}`} className="btn btn-primary btn-sm">Edit</Link></span>
-                                                                    </div>
-                                                                </td>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>{formatDate(booking.bookingDate)}</td>
+                                                                    <td>{booking.clientTxnId}</td>
+                                                                    <td>{booking.bookedBy}</td>
+                                                                    <td>{booking.customerName}</td>
+                                                                    <td>{booking.paymentMode}</td>
+                                                                    <td className={`${(parseFloat(booking.udf1) === booking.amount) ? "bg-success-subtle border-dark-subtle border-start border-end" :
+                                                                        (parseFloat(booking.udf1) < booking.amount ? 'bg-warning-subtle border-dark-subtle border-start border-end' :
+                                                                            (parseFloat(booking.udf1) === "" ? '' : ''))
+                                                                        }`}>{booking.udf1} </td> {/* partial Payment */}
+                                                                    <td className={`${booking.udf2 && booking.udf2 !== '0' ? 'bg-warning-subtle text-danger fw-bold border-dark-subtle border-start border-end' : 'bg-success-subtle border-dark-subtle border-start border-end'}`}>{booking.udf2 ? booking.udf2 : "No Dues"}</td> {/* Amount due */}
+                                                                    <td className='fw-bold'>{booking.amount}</td>
+                                                                    <td>
+                                                                        <ul className='list-unstyled'>
+                                                                            {booking.seatDetails.map((seat, seatIndex) => (
+
+                                                                                <li className="text-nowrap rounded border py-1 px-2 mb-1 d-flex align-items-center justify-content-between" style={{ 'marginTop': '-1px' }} key={seatIndex}>
+                                                                                    <span className='fw-medium'>Seat: </span><span>{seat.seatNumber ? seat.seatNumber : "?"}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 ms-1 text-capitalize text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span>
+                                                                                    {/* <span className='fw-medium'>Seat Number: </span><span>{seat.seatNumber}</span> | <span className='fw-medium'>Slot: </span> <span className='text-capitalize'>{seat.slot}</span> |  <span className='fw-medium'>Valid Till:  </span><span>{seat.seatValidTill ? formatDate(seat.seatValidTill) : seat.seatValidTill}</span> |  <span className='fw-medium'>Type:</span> <span className={`px-1 text-capitalize rounded text-bg-${seat.type === 'new' ? 'warning' : 'success'}`}>{seat.type}</span> */}
+                                                                                </li>
+
+                                                                            ))}
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>{booking.locker === true ? 'Yes' : 'No'}</td>
+                                                                    <td>{booking.securityDeposit === true ? 'Yes' : 'No'}</td>
+                                                                    <td><button className='send-email btn-sm' onClick={() => handleSendReceipt(booking.clientTxnId)}><span id={`loading-${booking.clientTxnId}`} style={{ display: 'none' }} className="spinner-border spinner-border-sm" aria-hidden="true"></span>Send</button></td>
+                                                                    {/* <td>{formatDate(booking.createdAt)}</td> */}
+                                                                    <td>{booking.totalPrice}</td>
+                                                                    <td>{booking.discountCoupon ? booking.discountCoupon : "No"}</td>
+                                                                    <td>{booking.discountValue}</td>
+                                                                    {/* <td>{booking.orderStatus ? 'True' : 'False'}</td> */}
+                                                                    <td>{booking.pCash}</td>
+                                                                    <td>{booking.pOnline}</td>
+                                                                    {/* <td>{booking.pInfo}</td> */}
+
+                                                                    <td>
+                                                                        <ul className='list-unstyled'>
+                                                                            {booking.validityInfo.map((info, idx) => (
+                                                                                <li className={`ps-1 mb-1 ${info <= '31' ? 'bg-success text-light' : info > '31' ? 'bg-danger text-light' : ''}`} key={idx}>{info === '1' ? ('3' + info) : info} Days</li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <ul className='list-unstyled'>
+                                                                            {booking.statusRemark && booking.statusRemark.map((info, idx) => (
+                                                                                <li className={`ps-1 mb-1 text-nowrap`} key={idx}>{info}</li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </td>
+
+                                                                    <td>{booking.customerEmail}</td>
+                                                                    <td>{booking.customerMobile}</td>
+                                                                    <td>{booking.udf3 ? booking.udf3 : "No notes"}</td> {/* Notes */}
+                                                                    <td>{formatDate(booking.updatedAt)}</td>
+                                                                    <td>
+                                                                        <div className='d-flex align-items-center justify-content-between'>
+                                                                            {(adminLoggedIn === "Superadmin") ?
+                                                                                <>
+                                                                                    <span><button className="btn btn-danger btn-sm mb-0 me-2" onClick={() => handleDeleteClick(booking)}>Delete</button></span>
+                                                                                    <DeleteConfirmationModal
+                                                                                        show={showDeleteModal}
+                                                                                        handleClose={handleCloseDeleteModal}
+                                                                                        handleConfirm={() => deleteBooking(bookingToDelete._id)}
+                                                                                        bookingDetails={bookingToDelete}
+                                                                                    />
+                                                                                </>
+                                                                                : ""}
+                                                                            <span><Link to={`/editbookings/${booking._id}`} className="btn btn-primary btn-sm">Edit</Link></span>
+                                                                        </div>
+                                                                    </td>
+                                                                </>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -321,6 +358,8 @@ const BookingManager = () => {
                     </div>
                 </div>
             </div>
+
+
         </div>
     );
 };

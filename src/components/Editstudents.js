@@ -26,7 +26,7 @@ const Editstudents = forwardRef((props, ref) => {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="m-sm-3">
-                                        <form enctype="multipart/form-data" method="post" className='text-start'>
+                                        <form encType="multipart/form-data" method="post" className='text-start'>
                                             <div className="mb-3">
                                                 <label className="form-label">Full name</label>
                                                 <input className="form-control form-control-lg" type="text" value={student.ename} name="ename" placeholder="Enter your name" onChange={onChangeEdit} />

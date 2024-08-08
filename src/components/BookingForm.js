@@ -531,13 +531,13 @@ const BookingForm = () => {
         const lastDayOfCurrentMonth = getLastDayOfMonth(currentMonth, currentYear);
         const isLastDay = currentDay === lastDayOfCurrentMonth;
 
-        console.log('Before increment:', currentMonth, currentYear);
+        //console.log('Before increment:', currentMonth, currentYear);
         // Move to the next month
         currentMonth = (currentMonth + 1) % 12; // Use modulo to wrap around to January
         if (currentMonth === 0) { // If it's January, increment the year
             currentYear += 1;
         }
-        console.log('After increment:', currentMonth, currentYear);
+        //console.log('After increment:', currentMonth, currentYear);
         let newDay;
 
         if (isLastDay && currentMonth === 1 && currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)) {
@@ -550,7 +550,7 @@ const BookingForm = () => {
             // Not the last day of the month
             newDay = Math.min(currentDay, getLastDayOfMonth(currentMonth, currentYear));
         }
-        
+
         // Return the new date with the preserved time
         return new Date(currentYear, currentMonth, newDay, currentHours, currentMinutes, currentSeconds, currentMilliseconds);
     }
@@ -566,9 +566,9 @@ const BookingForm = () => {
             const newSeatDetails = [...prevBooking.seatDetails];
             let currentDate = new Date(newSeatDetails[index].seatValidTill);
 
-            console.log('Current Date:', currentDate);
-            console.log('Current Date Month:', currentDate.getMonth());
-            console.log('Current Date Year:', currentDate.getFullYear());
+            // console.log('Current Date:', currentDate);
+            // console.log('Current Date Month:', currentDate.getMonth());
+            // console.log('Current Date Year:', currentDate.getFullYear());
 
             // If it's the first time extending, save the original date
             // Check if originalSeatValidTill is not set
@@ -579,9 +579,9 @@ const BookingForm = () => {
             const newDate = addOneMonth(currentDate);
 
 
-            console.log('New Date:', newDate);
-            console.log('New Date Month:', newDate.getMonth());
-            console.log('New Date Year:', newDate.getFullYear());
+            // console.log('New Date:', newDate);
+            // console.log('New Date Month:', newDate.getMonth());
+            // console.log('New Date Year:', newDate.getFullYear());
 
             // Update the date and track the extension
             newSeatDetails[index].seatValidTill = newDate.toISOString().split('T')[0];
@@ -596,9 +596,9 @@ const BookingForm = () => {
 
             const newPInfo = [...(prevBooking.validityInfo || [])];
             newPInfo[index] = totalExtension; // Update pInfo for this seat
-            const fromToValidity =[...(prevBooking.statusRemark || [])];
+            const fromToValidity = [...(prevBooking.statusRemark || [])];
             fromToValidity[index] = 'From ' + formatDate(originalValidity) + ' To ' + formatDate(newDate);
-console.log(fromToValidity, 'fromto')
+            // console.log(fromToValidity, 'fromto')
             return {
                 ...prevBooking,
                 seatDetails: newSeatDetails,
@@ -809,7 +809,7 @@ console.log(fromToValidity, 'fromto')
                                                             className="btn position-absolute btn-success btn-xs py-2"
                                                             onClick={() => extendValidity(i)}
                                                         >Extend 1 month</button>
-                                                        <span className={`btn-xs btn py-2 px-2 start-50 position-absolute ${x.totalExtension > 59 ? 'bg-danger text-light' : (x.totalExtension > 31 && x.totalExtension < 59) ? 'bg-warning' : x.totalExtension < 31 ? 'bg-success text-light' : 'bg-warning'
+                                                        <span className={`btn-xs btn py-2 px-2 start-50 position-absolute ${x.totalExtension > 61 ? 'bg-danger text-light' : (x.totalExtension > 31 && x.totalExtension <= 61) ? 'bg-warning' : x.totalExtension <= 31 ? 'bg-success text-light' : 'bg-warning'
                                                             }`}>{x.totalExtension ? x.totalExtension : '0'} day{x.totalExtension > 1 ? 's' : ''} extended.</span>
                                                         <input
                                                             type="date"
