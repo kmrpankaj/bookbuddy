@@ -33,6 +33,7 @@ import '@fontsource/jost/700.css'; // Bold
 import BookingManager from './components/BookingManager';
 import BookingEdit from './components/BookingEdit';
 import BookingReceipt from './components/BookingReceipt';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
                     <Route path="/receipt" element={<BookingReceipt />} />
 
                   </Routes>
+                  <Footer/>
                 </EmailProvider>
               </BrowserRouter>
             </SeatState>
