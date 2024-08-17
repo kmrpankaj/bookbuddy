@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# BookBuddy
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**BookBuddy** is a self-study library seat and user management system designed to streamline the allocation of seats in a library setting. This system allows users to register, book seats, and renew them online. Additionally, the admin side of the application can generate billing receipts and manage user operations effectively.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Seat Management:** Users can book and renew library seats online.
+- **User Registration:** Easy registration and management of users.
+- **Admin Dashboard:** Admins can generate billing receipts and manage user details.
+- **Notification System:** Users receive notifications for seat renewal and other updates.
+- **Responsive UI:** Built using ReactJS for a dynamic and responsive user experience.
+- **RESTful API:** Backend is powered by Express and MongoDB, ensuring scalable and robust performance.
 
-### `npm start`
+## Technology Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend:** ReactJS, HTML5, CSS3
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **Version Control:** Git and GitHub
+- **Deployment:** Deployed on Heroku (or other platforms, if applicable)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation and Setup
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js and npm installed on your machine.
+- MongoDB installed or access to a MongoDB Atlas cluster.
 
-### `npm run build`
+### Frontend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the frontend repository:
+   ```bash
+   git clone https://github.com/kmrpankaj/bookbuddy.git
+   cd bookbuddy
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install dependencies:
+   ```bash
+   npm install
+This command will install the following dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Dependencies:
+- @fontsource/jost: ^5.0.18
+- @react-email/render: 0.0.13
+- @testing-library/jest-dom: ^5.17.0
+- @testing-library/react: ^13.4.0
+- @testing-library/user-event: ^13.5.0
+- archiver: ^7.0.1
+- bootstrap: ^5.3.3
+- concurrently: ^8.2.2
+- csv-parser: ^3.0.0
+- dotenv: ^16.4.1
+- html2canvas: ^1.4.1
+- jspdf: ^2.5.1
+- node-fetch: ^3.3.2
+- react: ^18.2.0
+- react-bootstrap: ^2.10.4
+- react-dom: ^18.2.0
+- react-router-dom: ^6.21.2
+- react-scripts: 5.0.1
+- web-vitals: ^2.1.4
+- DevDependencies:
+- nodemon: ^3.1.4
 
-### `npm run eject`
+3. Set up environment variables:
+Create a .env file and add your MongoDB URI and other environment variables as needed.
+4. Start the server:
+   ```bash
+   npm run start
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Usage
+1. Visit the frontend URL (usually http://localhost:3000) to interact with the BookBuddy application.
+2. Admins can log in to access the dashboard and manage users and seat allocations.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Contributing
+We welcome contributions! Please fork the repository and submit a pull request.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
