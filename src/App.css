@@ -1,7 +1,8 @@
 /* Base font setup */
 body {
   font-family: 'Jost', sans-serif;
-  font-weight: 300; /* Regular weight for body text */
+  font-weight: 300;
+  /* Regular weight for body text */
   line-height: 1.6;
   color: #333;
   margin: 0;
@@ -9,9 +10,15 @@ body {
 }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Jost', sans-serif;
-  font-weight: 500; /* Bold weight for headings */
+  font-weight: 500;
+  /* Bold weight for headings */
   margin: 0 0 1rem 0;
   color: #222;
 }
@@ -49,7 +56,8 @@ p {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
   font-family: 'Jost', sans-serif;
   font-weight: 300;
   margin: 0 0 1.5rem 0;
@@ -58,7 +66,10 @@ ul, ol {
 }
 
 /* Forms */
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-family: 'Jost', sans-serif;
   font-weight: 300;
   line-height: 1.5;
@@ -70,13 +81,16 @@ input, textarea, select, button {
 }
 
 button {
-  font-weight: 500; /* Medium weight for buttons */
+  font-weight: 500;
+  /* Medium weight for buttons */
   background-color: #007bff;
   color: #fff;
   border: none;
   cursor: pointer;
 }
-.btn-group-xs > .btn, .btn-xs {
+
+.btn-group-xs>.btn,
+.btn-xs {
   padding: .25rem .4rem;
   font-size: .875rem;
   line-height: .5;
@@ -111,7 +125,7 @@ body {
   font-size: .92rem;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 
@@ -124,60 +138,73 @@ button.btn.btn-secondary.active.filterbtn.cursor-pointer {
 }
 
 .form-control:focus {
-  border-color: none; 
+  border-color: none;
   outline: none;
   box-shadow: none;
 }
 
 .sidebar .nav-link svg {
   padding-right: 7px;
+  width: 21px;
+  vertical-align: top;
 }
+
 .sidebar .nav-link {
-  color:#575757;
+  color: #575757;
 }
+
 .sidebar .nav-link.active {
-  color:#000;
+  color: #000;
 }
-:-ms-input-placeholder { 
-  color: #797c7f;     /* Internet Explorer 10-11 */
-}	  
-::-ms-input-placeholder { 
-  color: #797c7f;    /* Microsoft Edge */
+
+:-ms-input-placeholder {
+  color: #797c7f;
+  /* Internet Explorer 10-11 */
 }
-::placeholder { 
-  color: #797c7f;     /* Firefox, Chrome, Opera */
+
+::-ms-input-placeholder {
+  color: #797c7f;
+  /* Microsoft Edge */
+}
+
+::placeholder {
+  color: #797c7f;
+  /* Firefox, Chrome, Opera */
 }
 
 /* Profile page */
 .gradient-custom {
   /* fallback for old browsers */
   background: #f6d365;
-  
+
   /* Chrome 10-25, Safari 5.1-6 */
   background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
-  
+
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
-  }
+}
 
-  .gradient-background {
-    background: #0A2342; /* Fallback for older browsers */
-    background: -webkit-linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
-    background: linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
+.gradient-background {
+  background: #0A2342;
+  /* Fallback for older browsers */
+  background: -webkit-linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
+  background: linear-gradient(to bottom right, #0A2342, #4B1E4D, #FF6188);
 
 }
 
 /* svg adjustment css*/
-svg.bi-house, svg.bi.envelope, svg.bi.phone {
+svg.bi-house,
+svg.bi.envelope,
+svg.bi.phone {
   margin-bottom: 2px;
 }
 
-@media (max-width: 1024px){
-.alert {
-  position: sticky;
-  top: 0;
-  /* other styles like width, z-index, etc. */
-}
+@media (max-width: 1024px) {
+  .alert {
+    position: sticky;
+    top: 0;
+    /* other styles like width, z-index, etc. */
+  }
 }
 
 
@@ -199,29 +226,33 @@ svg.bi-house, svg.bi.envelope, svg.bi.phone {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.0); /* Semi-transparent background */
-  z-index: 100; /* Ensure overlay is above other content */
+  background-color: rgba(0, 0, 0, 0.0);
+  /* Semi-transparent background */
+  z-index: 100;
+  /* Ensure overlay is above other content */
 }
 
-/* Animations */ 
+/* Animations */
 @keyframes fadeInDown {
   from {
-      opacity: 0;
-      transform: translate3d(0, -100%, 0);
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
   }
+
   to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes fadeOutDown {
   from {
-      opacity: 1;
+    opacity: 1;
   }
+
   to {
-      opacity: 0;
-      transform: translate3d(0, 100%, 0);
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
   }
 }
 
@@ -235,20 +266,23 @@ svg.bi-house, svg.bi.envelope, svg.bi.phone {
 
 .collapsible .card-title {
   width: 100%;
-  position:relative;
+  position: relative;
   z-index: 1;
 }
+
 span.collapsible svg {
-  transition: transform 0.5s ease-in-out; /* Animation properties */
+  transition: transform 0.5s ease-in-out;
+  /* Animation properties */
   fill: #bab5b5;
   width: 13px;
-  z-index:0;
+  z-index: 0;
   right: 0;
   top: 4px;
 }
 
-span.collapsible:hover  svg {
-  transform: rotate(180deg); /* Rotation on hover */
+span.collapsible:hover svg {
+  transform: rotate(180deg);
+  /* Rotation on hover */
   fill: #303030;
 }
 
@@ -263,12 +297,15 @@ span.collapsible:hover  svg {
   transition: all 1s ease-in-out;
   z-index: 1;
 }
+
 .floater.top {
   top: 56px;
 }
+
 .hidden {
   visibility: hidden;
 }
+
 .floater.hidden {
   right: -100px
 }
@@ -282,25 +319,30 @@ span.collapsible:hover  svg {
   background: white;
   text-align: center;
 }
+
 .coupon-title {
   font-size: 24px;
   margin-bottom: 15px;
   font-weight: bold;
   color: red;
 }
+
 .coupon-discount {
   font-size: 48px;
   margin-bottom: 15px;
   color: red;
 }
+
 .coupon-detail {
   font-size: 16px;
   margin-bottom: 15px;
 }
+
 .coupon-code {
   font-size: 18px;
   margin: 10px 0;
 }
+
 .coupon-cta {
   font-size: 16px;
   color: white;
@@ -311,57 +353,74 @@ span.collapsible:hover  svg {
   text-decoration: none;
   border-radius: 4px;
 }
+
 .coupon-cta:hover {
   background: rgb(15, 29, 83);
   color: white;
   text-decoration: none;
 }
+
 span.badge.badge-info {
   background: #0dcaf0;
 }
 
 @media print {
   body * {
-    visibility: hidden; /* Hides everything initially */
+    visibility: hidden;
+    /* Hides everything initially */
   }
-  .print-container, .print-container * {
-    visibility: visible; /* Ensures only the print container and its contents are visible */
+
+  .print-container,
+  .print-container * {
+    visibility: visible;
+    /* Ensures only the print container and its contents are visible */
     print-color-adjust: exact;
   }
+
   .print-container {
     position: absolute;
     left: 0;
     top: 0;
-    height: auto; /* Adjust height as needed */
+    height: auto;
+    /* Adjust height as needed */
     /* background-color: white; /* Change background to white for printing */
   }
 
   /* Specific styles to match your design */
 
-  .print-container h1, .print-container h3 {
-    color: black; /* Ensuring text is readable in black for printers */
+  .print-container h1,
+  .print-container h3 {
+    color: black;
+    /* Ensuring text is readable in black for printers */
   }
+
   .print-container .table {
-    width: 100%; /* Tables should take full width */
+    width: 100%;
+    /* Tables should take full width */
   }
+
   .print-container .card-footer {
     print-color-adjust: exact;
   }
+
   .print-container .printcontainer-row.row.d-flex {
     width: 1200px;
     margin: 0px auto;
     justify-content: center !important;
-}
-.print-pdf.position-absolute {
-  display: none;
-}
+  }
+
+  .print-pdf.position-absolute {
+    display: none;
+  }
+
   @media (min-width: 576px) {
     .no-responsive {
       padding-right: 15px;
       padding-left: 15px;
       margin-right: auto;
       margin-left: auto;
-      width: 1200px; /* Fixed width */
+      width: 1200px;
+      /* Fixed width */
     }
   }
 }
@@ -371,12 +430,14 @@ span.badge.badge-info {
 .sidebar-sticky.collapsed {
   width: 0;
   overflow: hidden;
-  height:0px;
+  height: 0px;
 }
 
 .sidebar-sticky.open {
-  width: 100%; /* Adjust based on your design */
+  width: 100%;
+  /* Adjust based on your design */
 }
+
 .sidebar-toggle {
   display: none;
 }
@@ -390,10 +451,12 @@ span.badge.badge-info {
     border-color: var(--bs-btn-hover-border-color);
   }
 }
+
 .svg-open {
   transform: rotate(180deg);
   transition: transform 0.3s;
 }
+
 .svg-closed {
   transform: rotate(360deg);
   transition: transform 0.3s;
@@ -405,16 +468,20 @@ a.payment-icon {
   text-decoration: none;
   color: #585c5f;
 }
+
 a.payment-icon img.bhim {
   padding: 14px 4px;
 }
+
 a.payment-icon img {
   border: 2px solid #f37a27;
   padding: 2px 4px;
 }
+
 a.payment-icon img.gpay {
   padding: 4px 4px;
 }
+
 a.payment-icon span {
   text-align: center;
 }
@@ -426,6 +493,7 @@ a.payment-icon span {
   width: 100%;
   display: block;
 }
+
 .spinner-wrap .spinner-border {
   position: absolute;
   right: -21px;
@@ -447,10 +515,12 @@ select#couponResSelect {
   border: 1px solid #dee2e6;
   padding-bottom: 4.3px;
 }
+
 .couponRestriction label {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
 }
+
 .coupongo:active {
   border: 0;
   border-color: transparent !important;
@@ -468,10 +538,7 @@ select#couponResSelect {
   font-size: 14px;
   font-weight: 300;
 }
+
 .bookings-table-head th {
   font-weight: 400;
 }
-
-
-
-
