@@ -872,13 +872,13 @@ const BookingForm = () => {
                                             <div className="col position-relative">
                                                 <label className="form-label">Enter a Coupon</label>
                                                 <input type="text" name='discountCoupon' onChange={(e) => setBooking({ ...booking, discountCoupon: e.target.value })} value={booking.discountCoupon} className="form-control" placeholder="Coupon code" aria-label="DiscountCoupon" />
-                                                <button className='btn coupongo btn-sm position-absolute bottom-0 p-0' style={{ right: "20px", top: '26px' }} onClick={(e) => validateCoupon(booking.discountCoupon, e)}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-right-square" viewBox="0 0 16 16">
+                                                <button className='btn coupongo btn-sm position-absolute bottom-0 p-0' style={{ right: "12px", top: '31px' }} onClick={(e) => validateCoupon(booking.discountCoupon, e)}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="currentColor" className="bi bi-arrow-right-square" viewBox="0 0 16 16">
                                                         <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
                                                     </svg>
                                                 </button>
                                                 {booking.couponApplied && (
-                                                    <span onClick={removeCoupon} className="position-absolute cursor-pointer translate-middle" style={{ right: "34px", top: "56%" }}>
+                                                    <span onClick={removeCoupon} className="position-absolute cursor-pointer translate-middle" style={{ right: "48px", top: "56%" }}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000" className="bi bi-x-square-fill" viewBox="0 0 16 16">
                                                             <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708" />
                                                         </svg>
