@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Sidedash from './Sidedash'
-import { formatDate, convertToIST } from './Utilsfunc';
+import Sidedash from '../uicomponents/Sidedash'
+import { formatDate, convertToIST } from '../utils/Utilsfunc';
 
 const ActivityLog = () => {
     const host = process.env.REACT_APP_BACKEND_URL;

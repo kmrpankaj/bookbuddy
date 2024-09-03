@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import StudentContext from '../context/StudentContext'
-import useStudentData from './Usestudentdata'
+import StudentContext from '../../context/StudentContext'
+import useStudentData from '../students/Usestudentdata'
 
 const Sidedash = ({ onSetActive, onSetInactive, onSetAll, onSetExpired, onSetHasBooking }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to handle sidebar visibility

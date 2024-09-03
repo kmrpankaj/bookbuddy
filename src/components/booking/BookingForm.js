@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import Sidedash from './Sidedash';
+import Sidedash from '../uicomponents/Sidedash';
 import debounce from 'lodash.debounce';
-import LoadingContext from '../context/LoadingContext'
-import AlertContext from '../context/AlertContext';
+import LoadingContext from '../../context/LoadingContext'
+import AlertContext from '../../context/AlertContext';
 import { useNavigate } from 'react-router-dom';
-import { formatDate } from './Utilsfunc';
+import { formatDate } from '../utils/Utilsfunc';
 
 const BookingForm = () => {
 

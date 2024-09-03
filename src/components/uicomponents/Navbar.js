@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import AlertContext from '../context/AlertContext'
+import AlertContext from '../../context/AlertContext'
 
 const Navbar = () => {
   const { showAlert } = useContext(AlertContext)

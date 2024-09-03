@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import StudentContext from '../context/StudentContext'
-import Sidedash from './Sidedash'
-import useStudentData from './Usestudentdata'
+import StudentContext from '../../context/StudentContext'
+import Sidedash from '../uicomponents/Sidedash'
+import useStudentData from '../students/Usestudentdata'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import { convertSlotToTimings } from './Utilsfunc'
+import { convertSlotToTimings } from '../utils/Utilsfunc'
 
 
 const Profile = () => {

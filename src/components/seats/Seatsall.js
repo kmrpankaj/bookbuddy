@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import SeatContext from '../context/SeatContext'
+import SeatContext from '../../context/SeatContext'
 import { useNavigate } from 'react-router-dom'
-import AlertContext from '../context/AlertContext'
-import Sidedash from './Sidedash'
+import AlertContext from '../../context/AlertContext'
+import Sidedash from '../uicomponents/Sidedash'
 import Editslot from './Editslot'
 
 const Seatsall = (props) => {

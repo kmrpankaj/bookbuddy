@@ -1,12 +1,12 @@
 // TransactionReceipt.js
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import Sidedash from './Sidedash';
-import { formatDate } from './Utilsfunc';
-import useStudentData from './Usestudentdata'
-import StudentContext from '../context/StudentContext'
-import { capitalizeFirstLetter } from './Utilsfunc';
-import { convertSlotToTimings } from './Utilsfunc';
+import Sidedash from '../uicomponents/Sidedash';
+import { formatDate } from '../utils/Utilsfunc';
+import useStudentData from '../students/Usestudentdata'
+import StudentContext from '../../context/StudentContext'
+import { capitalizeFirstLetter } from '../utils/Utilsfunc';
+import { convertSlotToTimings } from '../utils/Utilsfunc';
 
 const TransactionReceipt = () => {
     const { id } = useParams();

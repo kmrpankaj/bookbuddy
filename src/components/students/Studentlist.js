@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import StudentContext from '../context/StudentContext'
-import getRandomAvatar from './uidGen'
-import Sidedash from './Sidedash'
+import StudentContext from '../../context/StudentContext'
+import getRandomAvatar from '../utils/uidGen'
+import Sidedash from '../uicomponents/Sidedash'
 import Editstudents from './Editstudents'
-import AlertContext from '../context/AlertContext'
-import { capitalizeFirstLetter } from './Utilsfunc'
-import { copyToClipboard } from './Utilsfunc'
-import ScrollButton from './ScrollButton'
-import LoadingContext from '../context/LoadingContext'
+import AlertContext from '../../context/AlertContext'
+import { capitalizeFirstLetter } from '../utils/Utilsfunc'
+import { copyToClipboard } from '../utils/Utilsfunc'
+import ScrollButton from '../uicomponents/ScrollButton'
+import LoadingContext from '../../context/LoadingContext'
 
 const Studentlist = (props) => {
     const context = useContext(StudentContext)

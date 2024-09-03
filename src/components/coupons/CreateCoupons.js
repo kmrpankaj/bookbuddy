@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-import AlertContext from '../context/AlertContext'
-import Sidedash from './Sidedash'
+import AlertContext from '../../context/AlertContext'
+import Sidedash from '../uicomponents/Sidedash'
 
 const CreateCoupons = () => {
     const host = process.env.REACT_APP_BACKEND_URL;

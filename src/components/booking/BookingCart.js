@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { capitalizeFirstLetter, oneMonthValidity, convertSlotToTimings } from './Utilsfunc';
-import Sidedash from './Sidedash';
-import useStudentData from './Usestudentdata'
-import StudentContext from '../context/StudentContext'
-import AlertContext from '../context/AlertContext';
+import { capitalizeFirstLetter, oneMonthValidity, convertSlotToTimings } from '../utils/Utilsfunc';
+import Sidedash from '../uicomponents/Sidedash';
+import useStudentData from '../students/Usestudentdata'
+import StudentContext from '../../context/StudentContext'
+import AlertContext from '../../context/AlertContext';
 
 
 const BookingCart = () => {

@@ -1,10 +1,10 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import StudentContext from '../context/StudentContext'
+import StudentContext from '../../context/StudentContext'
 import generateStrongPassword from './Strongpassword'
-import { copyToClipboard } from './Utilsfunc'
-import AlertContext from '../context/AlertContext'
-import { useEmail } from '../context/EmailContext'
+import { copyToClipboard } from '../utils/Utilsfunc'
+import AlertContext from '../../context/AlertContext'
+import { useEmail } from '../../context/EmailContext'
 
 const Signup = () => {
 	const history = useNavigate()

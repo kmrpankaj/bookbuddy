@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext, useEffect } from 'react'
-import AlertContext from '../context/AlertContext'
+import AlertContext from '../../context/AlertContext'
 
 const Editstudents = forwardRef((props, ref) => {
     const { student, onChangeEdit, handleClickEdit, editLoader } = props

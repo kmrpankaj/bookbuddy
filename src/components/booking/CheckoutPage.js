@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom';
-import Sidedash from './Sidedash';
-import { formatDate } from './Utilsfunc';
-import { capitalizeFirstLetter } from './Utilsfunc';
-import { convertSlotToTimings } from './Utilsfunc';
+import Sidedash from '../uicomponents/Sidedash';
+import { formatDate } from '../utils/Utilsfunc';
+import { capitalizeFirstLetter } from '../utils/Utilsfunc';
+import { convertSlotToTimings } from '../utils/Utilsfunc';
 
 
 const CheckoutPage = () => {

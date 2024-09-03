@@ -1,5 +1,5 @@
 import React from 'react'
-import Sidedash from './Sidedash'
+import Sidedash from '../uicomponents/Sidedash'
 
 const Account = () => {
   return (

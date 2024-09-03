@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Assuming you are using react-router-dom
-import Sidedash from './Sidedash';
+import Sidedash from '../uicomponents/Sidedash';
 
 const BookingEdit = () => {
   const { id } = useParams();

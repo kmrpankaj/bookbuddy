@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import Sidedash from './Sidedash';
+import Sidedash from '../uicomponents/Sidedash';
 import { Link } from 'react-router-dom';
-import { formatDate } from './Utilsfunc';
-import AlertContext from '../context/AlertContext';
-import ClearDuesModal from './ClearDuesModal';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
+import { formatDate } from '../utils/Utilsfunc';
+import AlertContext from '../../context/AlertContext';
+import ClearDuesModal from '../modals/ClearDuesModal';
+import DeleteConfirmationModal from '../modals/DeleteConfirmationModal';
 
 
 const BookingManager = () => {

@@ -1,7 +1,7 @@
 import React, { forwardRef, useState, useEffect, useContext } from 'react'
-import { capitalizeFirstLetter } from './Utilsfunc'
-import { copyToClipboard } from './Utilsfunc'
-import AlertContext from '../context/AlertContext'
+import { capitalizeFirstLetter } from '../utils/Utilsfunc'
+import { copyToClipboard } from '../utils/Utilsfunc'
+import AlertContext from '../../context/AlertContext'
 
 
 const Editslot = forwardRef((props, ref) => {

@@ -1,39 +1,39 @@
 import './App.css';
-import Home from './components/Home';
+import Home from './components/pages/Home';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from './components/Navbar';
-import Account from './components/Account';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Profile from './components/Profile';
-import Studentlist from './components/Studentlist';
-import Seatsall from './components/Seatsall';
+import Navbar from './components/uicomponents/Navbar';
+import Account from './components/pages/Account';
+import Login from './components/auth/Login';
+import Signup from './components/auth/Signup';
+import Profile from './components/pages/Profile';
+import Studentlist from './components/students/Studentlist';
+import Seatsall from './components/seats/Seatsall';
 import StudentState from './context/StudentState';
 import AlertState from './context/AlertState';
-import Alerts from './components/Alerts';
+import Alerts from './components/uicomponents/Alerts';
 import SeatState from './context/SeatState';
 import { EmailProvider } from './context/EmailContext';
-import Forgotpassword from './components/Forgotpassword';
-import Passwordreset from './components/Passwordreset';
-import CreateCoupons from './components/CreateCoupons';
-import Couponsall from './components/Couponsall';
-import BookingForm from './components/BookingForm';
-import TransactionStatus from './components/TransactionStatus';
-import PaymentResult from './components/PaymentResult';
-import BookingCart from './components/BookingCart';
-import CheckoutPage from './components/CheckoutPage';
-import TransactionReceipt from './components/TransactionReceipt';
-import ActivityLog from './components/ActivityLog';
+import Forgotpassword from './components/auth/Forgotpassword';
+import Passwordreset from './components/auth/Passwordreset';
+import CreateCoupons from './components/coupons/CreateCoupons';
+import Couponsall from './components/coupons/Couponsall';
+import BookingForm from './components/booking/BookingForm';
+import TransactionStatus from './components/transactions/TransactionStatus';
+import PaymentResult from './components/booking/PaymentResult';
+import BookingCart from './components/booking/BookingCart';
+import CheckoutPage from './components/booking/CheckoutPage';
+import TransactionReceipt from './components/transactions/TransactionReceipt';
+import ActivityLog from './components/logs/ActivityLog';
 import { LoadingProvider } from './context/LoadingContext';
 import '@fontsource/jost';
 import '@fontsource/jost/300.css'; // Light
 import '@fontsource/jost/400.css'; // Regular
 import '@fontsource/jost/500.css'; // Medium
 import '@fontsource/jost/700.css'; // Bold
-import BookingManager from './components/BookingManager';
-import BookingEdit from './components/BookingEdit';
-import BookingReceipt from './components/BookingReceipt';
-import Footer from './components/Footer';
+import BookingManager from './components/booking/BookingManager';
+import BookingEdit from './components/booking/BookingEdit';
+import BookingReceipt from './components/booking/BookingReceipt';
+import Footer from './components/uicomponents/Footer';
 
 
 function App() {

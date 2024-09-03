@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AlertContext from '../context/AlertContext';
+import AlertContext from '../../context/AlertContext';
 
 const Passwordreset = () => {
   const {showAlert} = useContext(AlertContext)
